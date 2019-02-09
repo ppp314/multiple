@@ -40,9 +40,8 @@ SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 
 
 ```sh
-(venv) createdb mysite
-(venv) set -x DATABASE_URL 'postgres://$user@localhost/mysite
-(venv) $ set -x DATABASE postgres://$user@localhost/mysite
+(venv) $ createdb mysite
+(venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite
 (venv) $ python manage.py runserver
 ```
 
