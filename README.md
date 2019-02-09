@@ -30,20 +30,24 @@ STATIC_ROOT = '/static/'
 import django_heroku
     django_heroku.settings(locals())
 ```
+Remove secret key
+
+Create file "local_settings.py" with secret key
+```sh
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
+```
+
 
 ```sh
-(venv) $ set -x DATABASE=postgres://yoka@localhost/mysite
-(venv) 
+(venv) createdb mysite
+(venv) set -x DATABASE_URL 'postgres://$user@localhost/mysite
+(venv) $ set -x DATABASE postgres://$user@localhost/mysite
 (venv) $ python manage.py runserver
 ```
 
-Add Procfile following.  
 
-```sh
-web: gunicorn mysite.wsgi --reload --log-file -
-```
-
-#Push to Bitbucket
+#Push to github
 
 Make .gitignore  
 
@@ -55,6 +59,7 @@ myvenv
 db.sqlite3
 /static
 .DS_Store
+local_settings.py
 ```
 
 ```sh
@@ -62,9 +67,18 @@ $ git init
 $ git add -A
 $ git commit -m "Initialize repository"
 
-git remote add origin git@bitbucket.org:<username>/mysite.git
+git remote add origin https://github.com/<username>/mysite.git
 git push -u origin --all
 ````
+
+
+Add Procfile following.  
+
+```sh
+web: gunicorn mysite.wsgi --reload --log-file -
+```
+
+
 
 ```sh
 $ heroku local web
