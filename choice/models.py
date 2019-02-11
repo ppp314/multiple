@@ -1,8 +1,6 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 
-
-
 # Create your models here.
 MY_CHOICES = (('item_key1', 'Item title 1.1'),
               ('item_key2', 'Item title 1.2'),
