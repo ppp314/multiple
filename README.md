@@ -1,8 +1,6 @@
-Django Tutorial  
+# Multi field Demo
 
-# Python: Django tutorial  
-
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
+This application is inspired bye the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
 
 ## Running Locally  
 
@@ -13,7 +11,7 @@ $ mkdir mysite
 $ cd mysite
 $ python3 -m venv venv
 $ source venv/bin/activate.fish
-(venv) $ pip install django django-heroku gunicorn
+(venv) $ pip install django django-heroku gunicorn django-multiselectfield
 (venv) $ django-admin.py startproject mysite .
 (venv) $ pip freeze > requirements.txt
 ```
