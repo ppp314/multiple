@@ -1,6 +1,6 @@
 # Multi field Demo
 
-This application is inspired bye the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
+This application is inspired by the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
 
 ## Running Locally  
 
@@ -11,6 +11,7 @@ $ mkdir mysite
 $ cd mysite
 $ python3 -m venv venv
 $ source venv/bin/activate.fish
+(venv) $ pip install --upgrade pip
 (venv) $ pip install django django-heroku gunicorn django-multiselectfield
 (venv) $ django-admin.py startproject mysite .
 (venv) $ pip freeze > requirements.txt
@@ -39,7 +40,7 @@ SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 
 ```sh
 (venv) $ createdb mysite
-(venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite
+(venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite'
 (venv) $ python manage.py runserver
 ```
 
