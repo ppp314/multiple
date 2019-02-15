@@ -30,7 +30,9 @@ class MyChoice(models.Model):
     no = models.IntegerField(default=0)
     my_choice = MultiSelectField(choices=MY_CHOICES2,max_choices=1, max_length=6)
     point = models.IntegerField(default=0)
-    
+
+    def __str__(self):
+        return self.my_choice
     
 
 class MyModel(models.Model):
