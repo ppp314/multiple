@@ -26,9 +26,11 @@ class MyExam(models.Model):
         return self.title
 
 class MyChoice(models.Model):
-    Exam = models.ForeignKey('MyExam', on_delete=models.CASCADE)
+    exam = models.ForeignKey('MyExam', on_delete=models.CASCADE)
     no = models.IntegerField(default=0)
     my_choice = MultiSelectField(choices=MY_CHOICES2,max_choices=1, max_length=6)
+    point = models.IntegerField(default=0)
+    
     
 
 class MyModel(models.Model):
