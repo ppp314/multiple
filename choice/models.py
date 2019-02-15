@@ -1,7 +1,7 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 from django.utils import timezone
-# -*- coding:utf-8 mode:python -*-
+# -*- coding:utf-8 -*-
 
 # Create your models here.
 MY_CHOICES = (('item_key1', 'Item title 1.1'),
@@ -28,6 +28,7 @@ class MyExam(models.Model):
 class MyChoice(models.Model):
     exam = models.ForeignKey('MyExam', on_delete=models.CASCADE)
     no = models.IntegerField(default=0)
+    sub_no = models.IntegerField(default=0)
     my_choice = MultiSelectField(choices=MY_CHOICES2,max_choices=1, max_length=6)
     point = models.IntegerField(default=0)
 
