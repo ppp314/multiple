@@ -1,0 +1,10 @@
+{# -*- coding:utf-8 -*-#}
+{% if latest_exam_list %}
+    <ul>
+    {% for exam in latest_exam_list %}
+        <li><a href="/polls/{{ exam.id }}/">{{ exam.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
