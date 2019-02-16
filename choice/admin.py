@@ -10,7 +10,12 @@ class ChoiceInline(admin.StackedInline):
 class MyExamAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, { 'fields': ['author']}),
-        ('Date info', { 'fields': ['created_date']}), ]
+        ('Contents of MyExam created_date',
+             { 'fields': ['created_date']}),
+        ('Contents of MyExm title',
+             { 'fields': ['title']}),
+
+        ]
     inlines = [ChoiceInline]
         
 admin.site.register(MyExam, MyExamAdmin)
