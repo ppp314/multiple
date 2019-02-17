@@ -16,10 +16,12 @@ limitations under the License.
 
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your tests here.
 
 from .models import MyExam
+
 
 def create_exam(exam_auther, exam_title):
     """
@@ -33,9 +35,12 @@ class ExamIndexViews(TestCase):
         # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains("No exam is available")
+        self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
-    
 
-
-
+    def test_create_user_logged_in_user_with_no_exam(self):
+        User.objects.create_user(username='ss')
+        response = self.client.post(reverse('admin:login'), {'username': 'ss', 'password': ''})
+        response = self.client.get(reverse('choice:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['latest_exam_list'], [])
