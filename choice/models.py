@@ -30,7 +30,7 @@ MY_CHOICES2 = ((1, 'Item title 2.1'),
                (5, 'Item title 2.5'))
 
 
-class MyExam(models.Model):
+class Exam(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
@@ -39,12 +39,19 @@ class MyExam(models.Model):
         return self.title
 
 
-class MyChoice(models.Model):
-    exam = models.ForeignKey('MyExam', on_delete=models.CASCADE)
+class Question(models.Model):
+    question = models.ForeignKey('Exam', on_delete=models.CASCADE)
     no = models.IntegerField(default=0)
     sub_no = models.IntegerField(default=0)
-    my_choice = MultiSelectField(choices=MY_CHOICES2, max_choices=1, max_length=6)
     point = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.no) + '-' + str(self.sub_no)
+
+
+class Choice(models.Model):
+    choice = models.ForeignKey('Question', on_delete=models.CASCADE)
+    my_choice = MultiSelectField(choices=MY_CHOICES2, max_choices=1, max_length=6)
 
     def __str__(self):
         return self.my_choice

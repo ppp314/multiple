@@ -20,14 +20,14 @@ from django.contrib.auth.models import User
 
 # Create your tests here.
 
-from .models import MyExam
+from .models import Exam
 
 
 def create_exam(exam_author, exam_title):
     """
     Create a exam with tthe given exam_author and exam_title.
     """
-    return MyExam.objects.create(author=exam_author, title=exam_title)
+    return Exam.objects.create(author=exam_author, title=exam_title)
 
 
 class ExamIndexViews(TestCase):
@@ -53,4 +53,4 @@ class ExamIndexViews(TestCase):
         create_exam(author, TEXTEXAMPLE)
         response = self.client.get(reverse('choice:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['latest_exam_list'], ['<MyExam: ' + TEXTEXAMPLE + '>'])
+        self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
