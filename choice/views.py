@@ -20,7 +20,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 
-from .models import MyExam
+from .models import Exam
 
 
 class IndexView(generic.ListView):
@@ -29,7 +29,5 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return MyExam.objects.order_by('-created_date')[:5]
-
-
+        return Exam.objects.order_by('-created_date')[:5]
 

@@ -15,25 +15,30 @@ limitations under the License.
 """
 
 from django.contrib import admin
-from .models import MyExam, MyChoice
+from .models import Exam, Question, Choice
 
 # Register your models here.
 
 
 class ChoiceInline(admin.StackedInline):
-    model = MyChoice
+    model = Choice
+
+
+class QuestionInline(admin.StackedInline):
+    model = Question
+
 
 
 class MyExamAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['author']}),
-        ('Contents of MyExam created_date',
+        ('Contents of Exam created_date',
              {'fields': ['created_date']}),
-        ('Contents of MyExm title',
+        ('Contents of Exam title',
              {'fields': ['title']}),
 
         ]
-    inlines = [ChoiceInline]
+    inlines = [QuestionInline]
 
 
-admin.site.register(MyExam, MyExamAdmin)
+admin.site.register(Exam, MyExamAdmin)
