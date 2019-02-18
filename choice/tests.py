@@ -23,11 +23,11 @@ from django.contrib.auth.models import User
 from .models import MyExam
 
 
-def create_exam(exam_auther, exam_title):
+def create_exam(exam_author, exam_title):
     """
     Create a exam with tthe given exam_author and exam_title.
     """
-    return Myexam.objects.create(author=exam_author, title=exam_title)
+    return MyExam.objects.create(author=exam_author, title=exam_title)
 
 
 class ExamIndexViews(TestCase):
@@ -44,3 +44,13 @@ class ExamIndexViews(TestCase):
         response = self.client.get(reverse('choice:index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
+
+    def test_create_user_logged_in_user_with_one_exam(self):
+        TEXTEXAMPLE = 'test one'
+        USERNAMEEXAMPLE = 'ss'
+        author = User.objects.create_user(username='ss')
+        response = self.client.post(reverse('admin:login'), {'username': USERNAMEEXAMPLE, 'password': ''})
+        create_exam(author, TEXTEXAMPLE)
+        response = self.client.get(reverse('choice:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['latest_exam_list'], ['<MyExam: ' + TEXTEXAMPLE + '>'])
