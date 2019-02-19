@@ -1,5 +1,5 @@
 """
-Copyright 2019 Akashia Shop
+Copyright 2019 Acacia Shop
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,4 +30,3 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         """Return the last five published questions."""
         return Exam.objects.order_by('-created_date')[:5]
-
