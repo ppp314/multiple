@@ -15,18 +15,13 @@ limitations under the License.
 """
 
 from django.contrib import admin
-from .models import Exam, Question, Choice
+from .models import Exam, Question
 
 # Register your models here.
 
 
-class ChoiceInline(admin.StackedInline):
-    model = Choice
-
-
 class QuestionInline(admin.StackedInline):
     model = Question
-
 
 
 class MyExamAdmin(admin.ModelAdmin):
