@@ -21,5 +21,6 @@ from . import views
 app_name = 'choice'
 
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+   path('', views.ExamIndexView.as_view(), name='exam_index'),
+   path('<int:pk>/', views.QuestionIndexView.as_view(), name='question_index'),
 ]
