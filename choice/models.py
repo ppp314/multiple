@@ -40,7 +40,7 @@ class Exam(models.Model):
 
 
 class Question(models.Model):
-    question = models.ForeignKey('Exam', on_delete=models.CASCADE)
+    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
     no = models.IntegerField(default=0)
     sub_no = models.IntegerField(default=0)
     point = models.IntegerField(default=0)

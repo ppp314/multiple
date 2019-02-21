@@ -36,5 +36,5 @@ class QuestionIndexView(generic.ListView):
     context_object_name = 'question_list'
 
     def get_queryset(self):
-        """Return the questions order by no"""
-        return Question.objects.order_by('-no')
+        self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
+        return Question.objects.filter(exam=self.exam)
