@@ -16,7 +16,7 @@ limitations under the License.
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
 
@@ -38,3 +38,8 @@ class QuestionIndexView(generic.ListView):
     def get_queryset(self):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
         return Question.objects.filter(exam=self.exam)
+
+    def get_context_object(self, **kwargs):
+        context = super().get_context_object(**kwargs)
+        context['Exam'] = self.exam
+        return context
