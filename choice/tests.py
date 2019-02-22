@@ -22,6 +22,8 @@ from django.contrib.auth.models import User
 
 from .models import Exam
 
+TEXTEXAMPLE = 'test one'
+
 
 def create_exam(exam_author, exam_title):
     """
@@ -46,7 +48,6 @@ class ExamIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
     def test_create_user_logged_in_user_with_one_exam(self):
-        TEXTEXAMPLE = 'test one'
         USERNAMEEXAMPLE = 'ss'
         author = User.objects.create_user(username='ss')
         response = self.client.post(reverse('admin:login'), {'username': USERNAMEEXAMPLE, 'password': ''})
@@ -57,10 +58,20 @@ class ExamIndexViews(TestCase):
 
 
 class QuestionIndexViews(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.ss = User.objects.create_user(username='ss')
+        cls.examss = Exam.objects.create(author=cls.ss, title=TEXTEXAMPLE)
+
     def test_no_question(self):
         # If no question exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:question_index', kwargs={'pk': '1'}))
+        response = self.client.get(reverse('choice:question_index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No question is available")
         self.assertQuerysetEqual(response.context['question_list'], [])
-        
+
+
+def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
+        response = self.client.get(reverse('choice:exam_index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
