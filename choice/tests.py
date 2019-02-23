@@ -20,7 +20,7 @@ from django.contrib.auth.models import User
 
 # Create your tests here.
 
-from .models import Exam
+from .models import Exam, Question
 
 TEXTEXAMPLE = 'test one'
 
@@ -70,8 +70,15 @@ class QuestionIndexViews(TestCase):
         self.assertContains(response, "No question is available")
         self.assertQuerysetEqual(response.context['question_list'], [])
 
-
-def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
+    def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
         response = self.client.get(reverse('choice:exam_index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
+
+    def test_one_question(self):
+        Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1, my_choice='item_key1')
+        response = self.client.get(reverse('choice:question_index', kwargs={'pk': self.examss.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['question_list'], ['<Question: 1-1>'])
+        #self.assertQuerysetEqual((response.context['question_list']).exam, ['<Exam: ' + TEXTEXAMPLE + '>'])
+        
