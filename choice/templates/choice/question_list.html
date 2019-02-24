@@ -22,11 +22,7 @@
     <ul>
     {% for question in question_list %}
       <li>{{ question.exam.title }}<a href="{{ question.id }}/">{{ question.no }}
-	{{ question.sub_no }}</a></li>
-      {% for value, text in question.my_choice%}
-	{{ value }} {{ text }} <br>
-	
-      {% endfor %}
+	{{ question.sub_no }} mychoice {{ question.my_choice }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

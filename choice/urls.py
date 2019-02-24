@@ -23,4 +23,5 @@ app_name = 'choice'
 urlpatterns = [
    path('', views.ExamIndexView.as_view(), name='exam_index'),
    path('<int:pk>/', views.QuestionIndexView.as_view(), name='question_index'),
+   path('add/', views.ExamCreate.as_view(), name='exam_add'),
 ]
