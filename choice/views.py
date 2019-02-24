@@ -17,8 +17,9 @@ limitations under the License.
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django.views.generic.edit import CreateView
 
 from .models import Exam, Question
 
@@ -43,3 +44,12 @@ class QuestionIndexView(generic.ListView):
         context = super(QuestionIndexView, self).get_context_data(**kwargs)
         context['Exam'] = self.exam
         return context
+
+
+class ExamCreate(CreateView):
+    model = Exam
+    fields = ['title', 'author']
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)

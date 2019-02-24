@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 from django.db import models
+from django.urls import reverse
 from multiselectfield import MultiSelectField
 from django.utils import timezone
 
@@ -37,6 +38,9 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('choice:question_index', kwargs={'pk': self.pk})
 
 
 class Question(models.Model):
