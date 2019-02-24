@@ -23,8 +23,21 @@
     {% for question in question_list %}
       <li>{{ question.exam.title }}<a href="{{ question.id }}/">{{ question.no }}
 	{{ question.sub_no }}</a></li>
+      {% for value, text in question.my_choice%}
+	{{ value }} {{ text }} <br>
+	
+      {% endfor %}
     {% endfor %}
     </ul>
 {% else %}
     <p>No question is available</p>
 {% endif %}
+
+<!-- 
+     {% for value, text in form.providers.field.choices %}
+     <div class="ui slider checkbox">
+     <input id="id_providers_{{ forloop.counter0 }}" name="{{ form.providers.name }}" type="checkbox" value="{{ value }}"{% if value in checked_providers %} checked="checked"{% endif %}>
+     <label>{{ text }}</label>
+     </div>
+     {% endfor %}
+-->
