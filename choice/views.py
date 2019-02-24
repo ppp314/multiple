@@ -39,7 +39,7 @@ class QuestionIndexView(generic.ListView):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
         return Question.objects.filter(exam=self.exam)
 
-    def get_context_object(self, **kwargs):
-        context = super().get_context_object(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(QuestionIndexView, self).get_context_data(**kwargs)
         context['Exam'] = self.exam
         return context
