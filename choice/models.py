@@ -40,7 +40,7 @@ class Exam(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('choice:question_index', kwargs={'pk': self.pk})
+        return reverse('choice:question-index', kwargs={'pk': self.pk})
 
 
 class Question(models.Model):

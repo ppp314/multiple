@@ -19,7 +19,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.detail import DetailView
 
 from .models import Exam, Question
 
@@ -50,6 +51,14 @@ class ExamCreate(CreateView):
     model = Exam
     fields = ['title', 'author']
 
-    # def form_valid(self, form):
-    #     form.instance.created_by = self.request.user
-    #     return super().form_valid(form)
+
+class ExamDetailView(DetailView):
+
+    model = Exam
+    context_object_name = 'exam_detail'
+
+
+class ExamDeleteView(DeleteView):
+
+    model = Exam
+    success_url = reverse_lazy('choice:exam-index')
