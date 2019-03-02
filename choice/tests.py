@@ -35,7 +35,7 @@ def create_exam(exam_author, exam_title):
 class ExamIndexViews(TestCase):
     def test_no_exam(self):
         # If no exam exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:exam_index'))
+        response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
@@ -43,7 +43,7 @@ class ExamIndexViews(TestCase):
     def test_create_user_logged_in_user_with_no_exam(self):
         User.objects.create_user(username='ss')
         response = self.client.post(reverse('admin:login'), {'username': 'ss', 'password': ''})
-        response = self.client.get(reverse('choice:exam_index'))
+        response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
@@ -52,7 +52,7 @@ class ExamIndexViews(TestCase):
         author = User.objects.create_user(username='ss')
         response = self.client.post(reverse('admin:login'), {'username': USERNAMEEXAMPLE, 'password': ''})
         create_exam(author, TEXTEXAMPLE)
-        response = self.client.get(reverse('choice:exam_index'))
+        response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
@@ -65,19 +65,19 @@ class QuestionIndexViews(TestCase):
 
     def test_no_question(self):
         # If no question exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:question_index', kwargs={'pk': self.examss.id}))
+        response = self.client.get(reverse('choice:question-index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No question is available")
         self.assertQuerysetEqual(response.context['question_list'], [])
 
     def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
-        response = self.client.get(reverse('choice:exam_index'))
+        response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
     def test_one_question(self):
         Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1, my_choice='item_key1')
-        response = self.client.get(reverse('choice:question_index', kwargs={'pk': self.examss.id}))
+        response = self.client.get(reverse('choice:question-index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['question_list'], ['<Question: 1-1>'])
         #self.assertQuerysetEqual((response.context['question_list']).exam, ['<Exam: ' + TEXTEXAMPLE + '>'])
