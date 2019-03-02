@@ -30,7 +30,7 @@ class ExamIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('-created_date')[:5]
+        return Exam.objects.order_by('-created_date')
 
 
 class QuestionIndexView(generic.ListView):
