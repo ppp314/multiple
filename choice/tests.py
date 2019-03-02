@@ -80,5 +80,36 @@ class QuestionIndexViews(TestCase):
         response = self.client.get(reverse('choice:question_index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['question_list'], ['<Question: 1-1>'])
-        #self.assertQuerysetEqual((response.context['question_list']).exam, ['<Exam: ' + TEXTEXAMPLE + '>'])
-        
+        # self.assertQuerysetEqual((response.context['question_list']).exam, ['<Exam: ' + TEXTEXAMPLE + '>'])
+
+
+class ExamCreateViews(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.ss = User.objects.create_user(username='ss')
+        cls.examss = Exam.objects.create(author=cls.ss, title=TEXTEXAMPLE)
+
+    # BROKEN TEST
+    # def test_create_exam(self):
+    #     # First, we should know a number of Exam in the database.
+    #     response = self.client.post(reverse('admin:login'), {'username': 'ss', 'password': ''})
+    #     self.assertEqual(response.status_code, 200)
+    #     response = self.client.get(reverse('choice:exam_index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
+    #     b = Exam.objects.count()
+    #     self.assertEqual(b, 1)
+    #     before = len(response.context['latest_exam_list'])
+    #     self.assertEqual(before, 1)
+
+    #     self.client.force_login(self.ss)
+    #     response = self.client.post('/add/', {'title': TEXTEXAMPLE, 'author': self.ss})
+    #     self.assertEqual(response.status_code, 200)
+
+    #     response = self.client.get(reverse('choice:exam_index'))
+    #     self.assertEqual(response.status_code, 200)
+
+    #     self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
+
+    #     after = len(response.context['latest_exam_list'])
+    #     self.assertEqual(after, 1)

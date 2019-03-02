@@ -29,7 +29,7 @@ class ExamIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('-created_date')[:5]
+        return Exam.objects.order_by('-created_date')
 
 
 class QuestionIndexView(generic.ListView):
@@ -50,6 +50,6 @@ class ExamCreate(CreateView):
     model = Exam
     fields = ['title', 'author']
 
-    def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     form.instance.created_by = self.request.user
+    #     return super().form_valid(form)
