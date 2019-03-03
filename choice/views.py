@@ -19,8 +19,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView
-from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 
 from .models import Exam, Question
 
@@ -62,3 +62,25 @@ class ExamDeleteView(DeleteView):
 
     model = Exam
     success_url = reverse_lazy('choice:exam-index')
+
+
+class ExamUpdateView(UpdateView):
+
+    model = Exam
+    fields = ['title', 'author']
+
+
+class ExamQuestionView(SingleObjectMixin, generic.ListView):
+    template_name = "choice/exam_question_list.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Exam.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['exam'] = self.object
+        return context
+
+    def get_queryset(self):
+        return self.object.question_set.all()
