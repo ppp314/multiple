@@ -12,6 +12,8 @@ $ cd mysite
 $ python3 -m venv venv
 $ source venv/bin/activate.fish
 (venv) $ pip install --upgrade pip
+(venv) $ pip install ipython
+(venv) $ pip install djang-extensions
 (venv) $ pip install django django-heroku gunicorn django-multiselectfield
 ```
 If you create your source tree from scratch, you need to django project first.
@@ -26,6 +28,15 @@ If you create your source tree from scratch, you need to django project first.
 Add following in settings.py  
 
 ```sh
+
+INSTALLED_APPS = (
+...
+...
+
+  'django_extensions', #<--- Insert this line
+...
+)
+
 TIME_ZONE = 'Asia/Tokyo'
 
 LANGUAGE_CODE = 'ja-JP'
@@ -48,6 +59,12 @@ SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 (venv) $ createdb mysite
 (venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite'
 (venv) $ python manage.py runserver
+```
+
+Use shell_plus.
+
+```sh
+(venv) $ ./manage.py shell_plus --print-sql
 ```
 
 
