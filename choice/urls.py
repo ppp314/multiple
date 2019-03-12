@@ -16,7 +16,8 @@ limitations under the License.
 
 from django.urls import path
 
-from .views import ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView
+
+from .views import ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
 
 app_name = 'choice'
 
@@ -27,5 +28,7 @@ urlpatterns = [
    path('delete/<int:pk>/', ExamDeleteView.as_view(), name='exam-delete'),
    path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
    path('new/<int:pk>/', ExamQuestionView.as_view(), name='exam-question-view'),
+   path('vote/<int:pk>/', vote, name='exam-vote'),
    path('add/', ExamCreate.as_view(), name='exam-add'),
+   path('testform/', testform, name='test-form'),
 ]

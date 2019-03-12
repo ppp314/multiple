@@ -36,6 +36,9 @@ class Exam(models.Model):
     title = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return self.title
 
@@ -49,6 +52,14 @@ class Question(models.Model):
     sub_no = models.IntegerField(default=0)
     point = models.IntegerField(default=0)
     my_choice = MultiSelectField(choices=MY_CHOICES, default=1)
+    choice1 = models.BooleanField(null=False, default=False)
+    choice2 = models.BooleanField(null=False, default=False)
+    choice3 = models.BooleanField(null=False, default=False)
+    choice4 = models.BooleanField(null=False, default=False)
+    choice5 = models.BooleanField(null=False, default=False)
+
+    class Meta:
+        ordering = ['pk']
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)

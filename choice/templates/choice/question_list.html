@@ -23,8 +23,8 @@
     {% for question in question_list %}
       <li>{{ question.exam.title }}<a href="{{ question.id }}/">{{ question.no }}
 	{{ question.sub_no }} mychoice {{ question.my_choice }}</a></li>
-    {% endfor %}
     </ul>
+    {% endfor %}
 {% else %}
     <p>No question is available</p>
 {% endif %}
