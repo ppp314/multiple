@@ -1,4 +1,4 @@
-# Multi field Demo
+#  Demo
 
 This application is inspired by the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
 
@@ -12,7 +12,7 @@ $ cd mysite
 $ python3 -m venv venv
 $ source venv/bin/activate.fish
 (venv) $ pip install --upgrade pip
-(venv) $ pip install django django-heroku gunicorn django-multiselectfield
+(venv) $ pip install django django-heroku gunicorn
 ```
 If you create your source tree from scratch, you need to django project first.
 ```sh
