@@ -76,7 +76,7 @@ class QuestionIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
     def test_one_question(self):
-        Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1, my_choice='item_key1')
+        Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1)
         response = self.client.get(reverse('choice:question-index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['question_list'], ['<Question: 1-1>'])
