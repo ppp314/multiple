@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from django.test import TestCase
+
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 
 # Create your tests here.
 
 from .models import Exam, Question
+
 
 TEXTEXAMPLE = 'test one'
 
@@ -33,6 +35,10 @@ def create_exam(exam_author, exam_title):
 
 
 class ExamIndexViews(TestCase):
+    def setUp(self):
+        ssUser = User.objects.create_user(username='ss', password='')
+        ssUser.save()
+
     def test_no_exam(self):
         # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:exam-index'))
@@ -41,21 +47,34 @@ class ExamIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
     def test_create_user_logged_in_user_with_no_exam(self):
-        User.objects.create_user(username='ss')
-        response = self.client.post(reverse('admin:login'), {'username': 'ss', 'password': ''})
+        #    User.objects.create_user(username='ss')
+        #    Login as 'ss'
+        ret = self.client.login(username='ss', password='')
+        self.assertEqual(ret, True)
         response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
     def test_create_user_logged_in_user_with_one_exam(self):
         USERNAMEEXAMPLE = 'ss'
-        author = User.objects.create_user(username='ss')
         response = self.client.post(reverse('admin:login'), {'username': USERNAMEEXAMPLE, 'password': ''})
+        author = User.objects.create_user(username='sss')
         create_exam(author, TEXTEXAMPLE)
         response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
+        response = self.client.get(reverse('choice:exam-index'), pk=1)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('choice:exam-detail', kwargs={'pk': 1})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('choice:exam-detail', kwargs={'pk': 2})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
 
 class QuestionIndexViews(TestCase):
     @classmethod
@@ -113,3 +132,5 @@ class ExamCreateViews(TestCase):
 
     #     after = len(response.context['latest_exam_list'])
     #     self.assertEqual(after, 1)
+
+    
