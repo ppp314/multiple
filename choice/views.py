@@ -16,21 +16,30 @@ limitations under the License.
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
 from .models import Exam, Question
+from .forms import MultipleQuestionChoiceForm
 
 
 class ExamIndexView(generic.ListView):
     context_object_name = 'latest_exam_list'
+    template_name = 'choice/exam_list.html'
 
     def get_queryset(self):
         """Return the last five published questions."""
         return Exam.objects.order_by('-created_date')
+
+
+class ExamTrialView(generic.ListView):
+    template_name = 'choice/exam_list.html'
+
+    def get_queryset(self):
+        return Exam.objects.question_set.all()
 
 
 class QuestionIndexView(generic.ListView):
@@ -84,3 +93,23 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
 
     def get_queryset(self):
         return self.object.question_set.all()
+
+
+def vote(request, pk):
+    exam = get_object_or_404(Exam, pk=pk)
+    try:
+        selected_question = exam.question_set.get(pk=request.POST['question'])
+    except (KeyError, Question.DoesNotExist):
+        return render(request, 'choice/detail.html', {
+            'exam': exam,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_question.no += 1
+        return redirect('choice:exam-index')
+
+
+def testform(request):
+    form = MultipleQuestionChoiceForm()
+
+    return render(request, 'choice/name.html', {'form': form})

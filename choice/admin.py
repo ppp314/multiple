@@ -22,18 +22,21 @@ from .models import Exam, Question
 
 class QuestionInline(admin.StackedInline):
     model = Question
+    list_display = ('pk', 'no', 'sub_no', 'Point', 'My choice')
 
-
+   
 class MyExamAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['author']}),
         ('Contents of Exam created_date',
-             {'fields': ['created_date']}),
+         {'fields': ['created_date']}),
         ('Contents of Exam title',
-             {'fields': ['title']}),
+         {'fields': ['title']}),
 
         ]
     inlines = [QuestionInline]
+    list_display = ('pk', 'author', 'created_date', 'title')
 
 
 admin.site.register(Exam, MyExamAdmin)
+admin.site.register(Question)

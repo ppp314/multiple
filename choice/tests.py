@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from django.test import TestCase
+
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 
 # Create your tests here.
 
 from .models import Exam, Question
+
 
 TEXTEXAMPLE = 'test one'
 
@@ -32,7 +34,7 @@ def create_exam(exam_author, exam_title):
     return Exam.objects.create(author=exam_author, title=exam_title)
 
 
-class ExamIndexViews(TestCase):
+class ExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
         # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:exam-index'))
@@ -40,21 +42,60 @@ class ExamIndexViews(TestCase):
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
-    def test_create_user_logged_in_user_with_no_exam(self):
-        User.objects.create_user(username='ss')
-        response = self.client.post(reverse('admin:login'), {'username': 'ss', 'password': ''})
-        response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
-    def test_create_user_logged_in_user_with_one_exam(self):
-        USERNAMEEXAMPLE = 'ss'
-        author = User.objects.create_user(username='ss')
-        response = self.client.post(reverse('admin:login'), {'username': USERNAMEEXAMPLE, 'password': ''})
-        create_exam(author, TEXTEXAMPLE)
+class ExamIndexViews(TestCase):
+    fixtures = ['fixtures.json']
+
+    def setUp(self):
+        author = User.objects.get_or_create(username='ss')[0]
+        self.client.force_login(author)
+
+    def test_no_exam(self):
+        # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
+        self.assertEqual(len(response.context['latest_exam_list']), 5)
+
+    def test_create_user_logged_in_user_with_no_exam(self):
+        #    User.objects.create_user(username='ss')
+        #    Login as 'ss' without password
+
+        response = self.client.get(reverse('choice:exam-index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['latest_exam_list']), 5)
+
+    def test_create_user_logged_in_user_with_add_one_exam(self):
+        Uauthor = User.objects.get(username='ss')
+        create_exam(Uauthor, "Test exam")
+        response = self.client.get(reverse('choice:exam-index'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['latest_exam_list']), 6)
+        self.assertContains(response, "Test exam")
+
+
+class ExamDetailViews(TestCase):
+    fixtures = ['fixtures.json']
+
+    def setUp(self):
+        author = User.objects.get_or_create(username='ss')[0]
+        self.client.force_login(author)
+
+    def test_exam_detail_view_not_found(self):
+        url = reverse('choice:exam-detail', args=(2,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_exam_detail_view(self):
+        test_pk = 1
+        url = reverse('choice:exam-detail', args=(test_pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.context['exam_detail'], [])
+
+        # Test if the view contains the links to the delete page and the update page
+        self.assertContains(response, reverse('choice:exam-delete', args=(test_pk,)))
+        self.assertContains(response, reverse('choice:exam-update', args=(test_pk,)))
 
 
 class QuestionIndexViews(TestCase):
@@ -76,7 +117,7 @@ class QuestionIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
     def test_one_question(self):
-        Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1, my_choice='item_key1')
+        Question.objects.create(exam=self.examss, no=1, sub_no=1, point=1)
         response = self.client.get(reverse('choice:question-index', kwargs={'pk': self.examss.id}))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['question_list'], ['<Question: 1-1>'])
@@ -113,3 +154,5 @@ class ExamCreateViews(TestCase):
 
     #     after = len(response.context['latest_exam_list'])
     #     self.assertEqual(after, 1)
+
+    

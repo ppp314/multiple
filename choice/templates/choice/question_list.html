@@ -1,4 +1,4 @@
-<!-- 
+`><!-- 
      Copyright 2019 Acacia Shop
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +23,22 @@
     {% for question in question_list %}
       <li>{{ question.exam.title }}<a href="{{ question.id }}/">{{ question.no }}
 	{{ question.sub_no }} mychoice {{ question.my_choice }}</a></li>
-    {% endfor %}
     </ul>
+    {% endfor %}
 {% else %}
     <p>No question is available</p>
 {% endif %}
 
+<p> Test check box</p>
+
+<div>
+  <div class="ui slider checkbox">
+    <label for="scales">1.</label><input type="checkbox" id="id_providers" name="scales" value="tick">
+    <label for="scales">2.</label><input type="checkbox" id="id_providers" name="scales">
+    <label for="scales">3.</label><input type="checkbox" id="id_providers" name="scales">
+  </div>
+</div>
+    
 <!-- 
      {% for value, text in form.providers.field.choices %}
      <div class="ui slider checkbox">
