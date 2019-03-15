@@ -28,6 +28,7 @@ from .forms import MultipleQuestionChoiceForm
 
 class ExamIndexView(generic.ListView):
     context_object_name = 'latest_exam_list'
+    template_name = 'choice/exam_list.html'
 
     def get_queryset(self):
         """Return the last five published questions."""
