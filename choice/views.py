@@ -65,6 +65,7 @@ class ExamDetailView(DetailView):
 
     model = Exam
     context_object_name = 'exam_detail'
+    template_name = 'choice/detail.html'
 
 
 class ExamDeleteView(DeleteView):
@@ -101,7 +102,7 @@ def vote(request, pk):
         selected_question = exam.question_set.get(pk=request.POST['question'])
     except (KeyError, Question.DoesNotExist):
         return render(request, 'choice/detail.html', {
-            'exam': exam,
+            'exam_detail': exam,
             'error_message': "You didn't select a choice.",
         })
     else:

@@ -14,21 +14,24 @@
      limitations under the License.
 -->
 {# -*- coding:utf-8 -*-#}
-<h1>{{ exam.author }}</h1>
-<p>{{ exam.author }}</p>
-<p>{{ exam.title }}</p>
-<p>Created on: {{ exam.created_date|date }}</p>
+<h1>template detail.html</h1>
+<h1>{{ exam_detail.author }}</h1>
+<p>{{ exam_detail.author }}</p>
+<p>{{ exam_detail.title }}</p>
+<p>Created on: {{ exam_detail.created_date|date }}</p>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<p><a href="{% url 'choice:exam-delete' exam.id %}"> delete </a></p>
-<p><a href="{% url 'choice:exam-update' exam.id %}"> update </a></p>
+<p><a href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
+<p><a href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>
+<p><a href="{% url 'choice:exam-index' %}"> index </a></p>
 
-<form action="{% url 'choice:exam-vote' exam.id %}" method="post">
+
+<form action="{% url 'choice:exam-vote' exam_detail.id %}" method="post">
   {% csrf_token %}
-  {% for question in exam.question_set.all %}
-  <input type="checkbox" name="question" id="question{{ forloop.counter }}" value="{{ question.id }}" />
-  <label for="question{{ forloop.counter }}">{{ question.no }}- {{quesion.sub_no}}</label><br />
+  {% for question in exam_detail.question_set.all %}
+    <input type="checkbox" name="question" id="question{{ forloop.counter }}" value="{{ question.id }}" />
+    <label for="question{{ forloop.counter }}">{{ question.no }}- {{quesion.sub_no}}</label>
   {% endfor %}
   <input type="submit" value="Vote" />
 </form>

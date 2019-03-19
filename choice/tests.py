@@ -38,7 +38,6 @@ class ExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
         # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
@@ -69,7 +68,6 @@ class ExamIndexViews(TestCase):
         create_exam(Uauthor, "Test exam")
         response = self.client.get(reverse('choice:exam-index'))
 
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['latest_exam_list']), 6)
         self.assertContains(response, "Test exam")
 
@@ -90,12 +88,13 @@ class ExamDetailViews(TestCase):
         test_pk = 1
         url = reverse('choice:exam-detail', args=(test_pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.context['exam_detail'], [])
 
-        # Test if the view contains the links to the delete page and the update page
+        # Test if the view contains the links to the delete page, the index page and the update page
         self.assertContains(response, reverse('choice:exam-delete', args=(test_pk,)))
         self.assertContains(response, reverse('choice:exam-update', args=(test_pk,)))
+        self.assertContains(response, reverse('choice:exam-index'))
+        self.assertTemplateUsed(response, 'choice/detail.html')
 
 
 class QuestionIndexViews(TestCase):
@@ -107,7 +106,6 @@ class QuestionIndexViews(TestCase):
     def test_no_question(self):
         # If no question exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:question-index', kwargs={'pk': self.examss.id}))
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No question is available")
         self.assertQuerysetEqual(response.context['question_list'], [])
 
