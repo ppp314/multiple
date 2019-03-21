@@ -14,7 +14,31 @@
      limitations under the License.
 -->
 {# -*- coding:utf-8 -*-#}
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+{% extends "choice/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">データ削除</h2>
+    <p>このデータを削除します。よろしいですか？</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right">
+                    <a class="btn btn-outline-secondary" href="{% url 'choice:exam-index' %}">戻る</a>
+                    <input type="submit" class="btn btn-outline-secondary" value="削除" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right">
+                    <a class="btn btn-outline-secondary" href="{% url 'choice:exam-index' %}">戻る</a>
+                    <input type="submit" class="btn btn-outline-secondary" value="削除" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

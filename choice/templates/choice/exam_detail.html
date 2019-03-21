@@ -14,11 +14,15 @@
      limitations under the License.
 -->
 {# -*- coding:utf-8 -*-#}
-<h1>{{ exam_detail.author }}</h1>
-<p>{{ exam_detail.author }}</p>
-<p>{{ exam_detail.title }}</p>
-<p>Created on: {{ exam_detail.created_date|date }}</p>
-<p><a href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
-<p><a href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>
+{% extends "choice/base.html" %}
+
+{% block content %}
+  <h1>{{ exam_detail.author }}</h1>
+  <p>{{ exam_detail.author }}</p>
+  <p>{{ exam_detail.title }}</p>
+  <p>Created on: {{ exam_detail.created_date|date }}</p>
+  <p><a href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
+  <p><a href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>
+{% endblock %}
 
 
