@@ -13,9 +13,19 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+{% extends "choice/base.html" %}
+{% load bootstrap4 %}
+<!-- -  -->
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+	<form method="post">
+	  {% csrf_token %}
+	  {{ form.as_p }}
+	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
+	</form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
