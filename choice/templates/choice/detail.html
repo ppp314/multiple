@@ -19,7 +19,24 @@
 <!--  -->
 
 {% block content %}
+{% if messages %}
+  {# Django のメッセージに記録している内容があればここで表示 #}
   <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="messages mt-3">
+          {% for message in messages %}
+            <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<div class="container">
     <div class="row">
       <div class="col-3">
 	<p>作成者</p>
@@ -36,7 +53,25 @@
     </div>
     <p>{{ exam_detail.title }}</p>
 
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if messages %}
+  {# Django のメッセージに記録している内容があればここで表示 #}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="messages mt-3">
+          {% for message in messages %}
+	    {% if message %}
+	      <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{ message }}
+	      </div>
+	    {% endif %}
+	  {% endfor %}
+	</div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 
     <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
     <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>

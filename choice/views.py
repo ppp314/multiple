@@ -30,6 +30,8 @@ class ExamIndexView(generic.ListView):
     context_object_name = 'latest_exam_list'
     template_name = 'choice/exam_list.html'
 
+    paginate_by = 10
+   
     def get_queryset(self):
         """Return the last five published questions."""
         return Exam.objects.order_by('-created_date')
@@ -45,6 +47,8 @@ class ExamTrialView(generic.ListView):
 class QuestionIndexView(generic.ListView):
     model = Question
     context_object_name = 'question_list'
+
+    paginate_by = 10
 
     def get_queryset(self):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])

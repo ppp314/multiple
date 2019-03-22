@@ -25,7 +25,11 @@
 	<h2 class="float-right">データ入力</h2>
       </div>
     </div>
-    
+    <div class="row" >
+      <div class="col-12">
+	{% include 'choice/pagination.html' %}
+      </div>
+    </div>    
   {% if latest_exam_list %}
       {% for exam in latest_exam_list %}
         <h1><a class="btn btn-default" href="{{ exam.id }}/">{{ exam.title }}</a></h1><i class="far fa-thumbs-up"></i>

@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">アプリケーション名</a>
+        <a class="navbar-brand" href="{% url 'choice:exam-index' %}">アプリケーション名</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false"
             aria-label="ナビゲーションの切替">
             <span class="navbar-toggler-icon"></span>
@@ -24,10 +24,10 @@
         <div class="collapse navbar-collapse" id="Navber">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:index'%}">管理サイト</a>
+                    <a class="nav-link" href="{% url 'admin:index' %}">管理サイト</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:logout'%}">ログアウト</a>
+                    <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
                 </li>
             </ul>
         </div>
