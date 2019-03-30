@@ -15,13 +15,16 @@ limitations under the License.
 """
 
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+import unittest
+
 
 # Create your tests here.
 
-from .models import Exam, Question
+from .models import Exam, Question, BookmarkFormSet
+
 
 
 TEXTEXAMPLE = 'test one'
@@ -154,3 +157,49 @@ class ExamCreateViews(TestCase):
     #     self.assertEqual(after, 1)
 
     
+class ExamListTemplate(TestCase):
+
+    def test_shinki(self):
+        ''' Test if ExamListView contains a set of links. '''
+        response = self.client.get(reverse('choice:exam-index'))
+        self.assertContains(response, reverse('choice:exam-create'))
+        self.assertContains(response, reverse('admin:index'))
+        self.assertContains(response, reverse('admin:logout'))
+
+
+class ToRomanBadInput(unittest.TestCase):
+    def test_too_large(self):
+        '''to_roman should fail with large input'''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-0-title': '',
+                'form-0-url': 'http://www.yahoo.co.jp',
+                'form-1-title': 'Yahoo! Japan',
+                'form-1-url': 'http://www.yahoo.co.jp',
+                }
+
+        fs = BookmarkFormSet(data)
+        print(fs.errors)
+        print(fs.non_form_errors())
+
+        self.assertFalse(fs.is_valid())
+
+
+class ToRomanGoodInput(unittest.TestCase):
+    def test_too_large(self):
+        '''to_roman should pass with same input'''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-0-title': 'Google',
+                'form-0-url': 'http://www.google.com',
+                'form-1-title': 'Yahoo! Japan',
+                'form-1-url': 'http://www.yahoo.co.jp',
+                }
+
+        fs = BookmarkFormSet(data)
+        print(fs.errors)
+        print(fs.non_form_errors())
+
+        self.assertTrue(fs.is_valid())

@@ -17,6 +17,8 @@ limitations under the License.
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.forms.formsets import formset_factory, BaseFormSet
+from django import forms
 
 
 class Exam(models.Model):
@@ -83,3 +85,20 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
+
+
+class BookmarkForm(forms.Form):
+    title = forms.CharField(max_length=100)
+    url = forms.CharField(max_length=100)
+
+
+class BaseBookmarkFormSet(BaseFormSet):
+    def clean(self):
+        url_list = [form['url'].value() for form in self.forms]
+
+        if len(url_list) > len(set(url_list)):
+            raise forms.ValidationError("duplicate url")
+
+
+BookmarkFormSet = formset_factory(BookmarkForm, formset=BaseBookmarkFormSet, extra=1, max_num=100)
+   
