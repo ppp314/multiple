@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import pdb
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -62,7 +63,10 @@ class QuestionIndexView(generic.ListView):
 
 class ExamCreate(CreateView):
     model = Exam
-    fields = ['title', 'author']
+    fields = ['title', 'author', 'number_of_question']
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class ExamDetailView(DetailView):

@@ -20,11 +20,12 @@ from .models import Exam, Question
 # Register your models here.
 
 
-class QuestionInline(admin.StackedInline):
+class QuestionInline(admin.TabularInline):
     model = Question
-    list_display = ('pk', 'no', 'sub_no', 'Point', 'My choice')
+    extra = 0
+    ordering = ['no', 'sub_no']
 
-   
+
 class MyExamAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['author']}),

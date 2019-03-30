@@ -20,11 +20,28 @@ from django.utils import timezone
 
 
 class Exam(models.Model):
+
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    created_date = models.DateTimeField(default=timezone.now)
+
+    title = models.CharField(
+        verbose_name='テスト名',
+        max_length=200
+        )
+
+    created_date = models.DateTimeField(
+        verbose_name='作成日',
+        default=timezone.now
+        )
+
+    number_of_question = models.IntegerField(
+        verbose_name='問題数',
+        default=1
+        )
 
     class Meta:
+
+        verbose_name = '試験'
+        verbose_name_plural = '試験'
         ordering = ['pk']
 
     def __str__(self):
@@ -35,10 +52,24 @@ class Exam(models.Model):
 
 
 class Question(models.Model):
+
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
-    no = models.IntegerField(default=0)
-    sub_no = models.IntegerField(default=0)
-    point = models.IntegerField(default=0)
+
+    no = models.IntegerField(
+        verbose_name='大問',
+        default=0
+        )
+
+    sub_no = models.IntegerField(
+        verbose_name='小問',
+        default=0
+        )
+
+    point = models.IntegerField(
+        verbose_name='配点',
+        default=0
+        )
+
     choice1 = models.BooleanField(null=False, default=False)
     choice2 = models.BooleanField(null=False, default=False)
     choice3 = models.BooleanField(null=False, default=False)
@@ -46,6 +77,8 @@ class Question(models.Model):
     choice5 = models.BooleanField(null=False, default=False)
 
     class Meta:
+        verbose_name = '問題'
+        verbose_name_plural = '問題'
         ordering = ['pk']
 
     def __str__(self):

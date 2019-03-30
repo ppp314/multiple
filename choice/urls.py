@@ -29,6 +29,6 @@ urlpatterns = [
    path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
    path('new/<int:pk>/', ExamQuestionView.as_view(), name='exam-question-view'),
    path('vote/<int:pk>/', vote, name='exam-vote'),
-   path('add/', ExamCreate.as_view(), name='exam-add'),
+   path('create/', ExamCreate.as_view(), name='exam-create'),
    path('testform/', testform, name='test-form'),
 ]

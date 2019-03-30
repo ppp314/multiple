@@ -36,7 +36,7 @@ def create_exam(exam_author, exam_title):
 
 class ExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
-        # If no exam exists, an approperiate messages is to be displayed
+        ''' If no exam exists, an approperiate messages is to be displayed '''
         response = self.client.get(reverse('choice:exam-index'))
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])

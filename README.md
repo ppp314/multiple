@@ -13,7 +13,7 @@ $ python3 -m venv venv
 $ source venv/bin/activate.fish
 (venv) $ pip install --upgrade pip
 (venv) $ pip install ipython
-(venv) $ pip install djang-extensions
+(venv) $ pip install django-extensions
 (venv) $ pip install django django-heroku gunicorn django-multiselectfield
 ```
 If you create your source tree from scratch, you need to django project first.
