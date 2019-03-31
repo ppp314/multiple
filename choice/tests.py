@@ -15,13 +15,16 @@ limitations under the License.
 """
 
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+import unittest
+
 
 # Create your tests here.
 
-from .models import Exam, Question
+from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
+
 
 
 TEXTEXAMPLE = 'test one'
@@ -36,7 +39,7 @@ def create_exam(exam_author, exam_title):
 
 class ExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
-        # If no exam exists, an approperiate messages is to be displayed
+        ''' If no exam exists, an approperiate messages is to be displayed '''
         response = self.client.get(reverse('choice:exam-index'))
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
@@ -154,3 +157,87 @@ class ExamCreateViews(TestCase):
     #     self.assertEqual(after, 1)
 
     
+class ExamListTemplate(TestCase):
+
+    def test_shinki(self):
+        ''' Test if ExamListView contains a set of links. '''
+        response = self.client.get(reverse('choice:exam-index'))
+        self.assertContains(response, reverse('choice:exam-create'))
+        self.assertContains(response, reverse('admin:index'))
+        self.assertContains(response, reverse('admin:logout'))
+
+
+class ToRomanBadInput(unittest.TestCase):
+    def test_too_large(self):
+        '''to_roman should fail with large input'''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-0-title': '',
+                'form-0-url': 'http://www.yahoo.co.jp',
+                'form-1-title': 'Yahoo! Japan',
+                'form-1-url': 'http://www.yahoo.co.jp',
+                }
+
+        fs = BookmarkFormSet(data)
+        self.assertFalse(fs.is_valid())
+
+
+class ToRomanGoodInput(unittest.TestCase):
+    def test_too_large(self):
+        '''to_roman should pass with same input'''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-0-title': 'Google',
+                'form-0-url': 'http://www.google.com',
+                'form-1-title': 'Yahoo! Japan',
+                'form-1-url': 'http://www.yahoo.co.jp',
+                }
+
+        fs = BookmarkFormSet(data)
+        self.assertTrue(fs.is_valid())
+
+
+class QuestionFormSetGoodInput(unittest.TestCase):
+    def test_good_input(self):
+        '''Test if this form formset is valid '''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-MIN_NUM_FORMS': '2',
+                'form-MAX_NUM_FORMS': '100',
+                'form-0-choice1': 'Google',
+                'form-0-choice2': True,
+                'form-1-choice1': 'Yahoo! Japan',
+                'form-1-choice2': True,
+                }
+        fs = QuestionFormSet(data)
+        self.assertTrue(fs.is_valid())
+
+    def test_bad_input(self):
+        '''Test if this formset is not valid '''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-MIN_NUM_FORMS': '2',
+                'form-MAX_NUM_FORMS': '100',
+                'form-0-choice1': 'Google',
+                'form-0-choice2': '',
+                'form-1-choice1': 'Yahoo! Japan',
+                'form-1-choice2': 'jjjj',
+                }
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "Null and True")
+
+        data['form-0-choice2'] = True
+        data['form-1-choice2'] = ''
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "True and Null")
+
+        data['form-0-choice2'] = ''
+        data['form-1-choice2'] = ''
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "Null and Null")
+        
+

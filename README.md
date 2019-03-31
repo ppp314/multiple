@@ -13,7 +13,7 @@ $ python3 -m venv venv
 $ source venv/bin/activate.fish
 (venv) $ pip install --upgrade pip
 (venv) $ pip install ipython
-(venv) $ pip install djang-extensions
+(venv) $ pip install django-extensions
 (venv) $ pip install django django-heroku gunicorn django-multiselectfield
 ```
 If you create your source tree from scratch, you need to django project first.
@@ -61,10 +61,10 @@ SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 (venv) $ python manage.py runserver
 ```
 
-Use shell_plus.
+Use ipython
 
 ```sh
-(venv) $ ./manage.py shell_plus --print-sql
+(venv) $ python manage.py shell -i ipython
 ```
 
 
