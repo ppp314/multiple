@@ -126,3 +126,5 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+SHELL_PLUS = "ipython"

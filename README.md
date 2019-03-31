@@ -61,10 +61,10 @@ SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 (venv) $ python manage.py runserver
 ```
 
-Use shell_plus.
+Use ipython
 
 ```sh
-(venv) $ ./manage.py shell_plus --print-sql
+(venv) $ python manage.py shell -i ipython
 ```
 
 

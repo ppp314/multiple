@@ -23,7 +23,7 @@ import unittest
 
 # Create your tests here.
 
-from .models import Exam, Question, BookmarkFormSet
+from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
 
 
 
@@ -180,9 +180,6 @@ class ToRomanBadInput(unittest.TestCase):
                 }
 
         fs = BookmarkFormSet(data)
-        print(fs.errors)
-        print(fs.non_form_errors())
-
         self.assertFalse(fs.is_valid())
 
 
@@ -199,7 +196,48 @@ class ToRomanGoodInput(unittest.TestCase):
                 }
 
         fs = BookmarkFormSet(data)
-        print(fs.errors)
-        print(fs.non_form_errors())
-
         self.assertTrue(fs.is_valid())
+
+
+class QuestionFormSetGoodInput(unittest.TestCase):
+    def test_good_input(self):
+        '''Test if this form formset is valid '''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-MIN_NUM_FORMS': '2',
+                'form-MAX_NUM_FORMS': '100',
+                'form-0-choice1': 'Google',
+                'form-0-choice2': True,
+                'form-1-choice1': 'Yahoo! Japan',
+                'form-1-choice2': True,
+                }
+        fs = QuestionFormSet(data)
+        self.assertTrue(fs.is_valid())
+
+    def test_bad_input(self):
+        '''Test if this formset is not valid '''
+
+        data = {'form-TOTAL_FORMS': '2',
+                'form-INITIAL_FORMS': '2',
+                'form-MIN_NUM_FORMS': '2',
+                'form-MAX_NUM_FORMS': '100',
+                'form-0-choice1': 'Google',
+                'form-0-choice2': '',
+                'form-1-choice1': 'Yahoo! Japan',
+                'form-1-choice2': 'jjjj',
+                }
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "Null and True")
+
+        data['form-0-choice2'] = True
+        data['form-1-choice2'] = ''
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "True and Null")
+
+        data['form-0-choice2'] = ''
+        data['form-1-choice2'] = ''
+        fs = QuestionFormSet(data)
+        #self.assertFalse(fs.is_valid(), "Null and Null")
+        
+
