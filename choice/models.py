@@ -1,4 +1,6 @@
-"""
+'''
+Copyright 2019 Acacia Shop
+
 This file is part of multiple.
 
     Multiple is free software: you can redistribute it and/or modify
@@ -13,7 +15,7 @@ This file is part of multiple.
 
     You should have received a copy of the GNU General Public License
     along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-"""
+'''
 
 from django.db import models
 from django.urls import reverse
