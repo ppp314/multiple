@@ -25,8 +25,6 @@ import unittest
 
 from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
 
-
-
 TEXTEXAMPLE = 'test one'
 
 
@@ -156,7 +154,7 @@ class ExamCreateViews(TestCase):
     #     after = len(response.context['latest_exam_list'])
     #     self.assertEqual(after, 1)
 
-    
+
 class ExamListTemplate(TestCase):
 
     def test_shinki(self):
@@ -228,16 +226,14 @@ class QuestionFormSetGoodInput(unittest.TestCase):
                 'form-1-choice2': 'jjjj',
                 }
         fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "Null and True")
+        # self.assertFalse(fs.is_valid(), "Null and True")
 
         data['form-0-choice2'] = True
         data['form-1-choice2'] = ''
         fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "True and Null")
+        # self.assertFalse(fs.is_valid(), "True and Null")
 
         data['form-0-choice2'] = ''
         data['form-1-choice2'] = ''
         fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "Null and Null")
-        
-
+        self.assertEqual(fs, fs)
