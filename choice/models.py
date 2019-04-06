@@ -102,6 +102,14 @@ class Question(models.Model):
         return str(self.no) + '-' + str(self.sub_no)
 
 
+class Bookmark(models.Model):
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.title)
+
+
 class BookmarkForm(forms.Form):
     title = forms.CharField(max_length=100)
     url = forms.CharField(max_length=100)
@@ -116,12 +124,3 @@ class BaseBookmarkFormSet(BaseFormSet):
 
 
 BookmarkFormSet = formset_factory(BookmarkForm, formset=BaseBookmarkFormSet, extra=1, max_num=100)
-
-
-class Question2Form(forms.Form):
-    class Meta:
-        model = Question
-        fields = ('no', 'sub_no', 'choice1', 'choice2', 'choice3', 'choice4', 'choice5')
-
-
-QuestionFormSet = formset_factory(Question2Form, formset=BaseFormSet, extra=2, max_num=10)

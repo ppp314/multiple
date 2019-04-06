@@ -18,7 +18,7 @@ This file is part of Multiple.
 """
 
 
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 import unittest
@@ -26,7 +26,8 @@ import unittest
 
 # Create your tests here.
 
-from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
+from .models import Exam, Question, BookmarkFormSet
+from .views import ExamDetailView
 
 TEXTEXAMPLE = 'test one'
 
@@ -239,4 +240,8 @@ class QuestionFormSetGoodInput(unittest.TestCase):
         data['form-0-choice2'] = ''
         data['form-1-choice2'] = ''
         fs = QuestionFormSet(data)
+<<<<<<< Updated upstream
         self.assertEqual(fs, fs)
+=======
+        #self.assertFalse(fs.is_valid(), "Null and Null")
+>>>>>>> Stashed changes

@@ -18,7 +18,8 @@ This file is part of Multiple.
 """
 
 from django import forms
-from .models import Exam
+from django.forms import inlineformset_factory
+from .models import Exam, Question
 
 
 class MultipleQuestionChoiceForm(forms.Form):
@@ -27,3 +28,23 @@ class MultipleQuestionChoiceForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['foo_select'].queryset = Exam.objects.all()
+
+
+class ExamForm(forms.Form):
+    class Meta:
+        model = Exam
+        fields = ['title', 'number_of_question']
+
+
+class QuestionForm(forms.Form):
+    class Meta:
+        model = Question
+        fields = ['no', 'sub_no', 'point']
+
+
+# ExamQuestionFormSet = inlineformset_factory(
+#     parent_model=Exam,
+#     model=Question,
+#     form=QuestionForm,
+#     extra=1,
+#     min_num=1)
