@@ -79,6 +79,5 @@ class ExamModel(TestCase):
                  'form-MIN_NUM_FORMS': '1',
                  'form-MAX_NUM_FORMS': '1',
                  'form-0-title': 'Django is now open ',
-                 'form-0-url': 'http://www',
-                })
+                 'form-0-url': 'http://www'})
         self.assertTrue(fs.is_valid())

@@ -1,15 +1,4 @@
 '''
-<<<<<<< HEAD
-    Multiple is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
-'''
-
-=======
 Copyright 2019 Acacia Shop
 
 This file is part of multiple.
@@ -25,9 +14,8 @@ This file is part of multiple.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+    Along with multiple.  If not, see <https://www.gnu.org/licenses/>.
 '''
->>>>>>> master
 
 from django.db import models
 from django.urls import reverse
