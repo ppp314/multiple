@@ -18,7 +18,7 @@ This file is part of Multiple.
 """
 
 
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 import unittest
@@ -27,8 +27,7 @@ import unittest
 # Create your tests here.
 
 from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
-
-
+from .views import ExamDetailView
 
 TEXTEXAMPLE = 'test one'
 
@@ -159,7 +158,7 @@ class ExamCreateViews(TestCase):
     #     after = len(response.context['latest_exam_list'])
     #     self.assertEqual(after, 1)
 
-    
+
 class ExamListTemplate(TestCase):
 
     def test_shinki(self):
@@ -231,16 +230,14 @@ class QuestionFormSetGoodInput(unittest.TestCase):
                 'form-1-choice2': 'jjjj',
                 }
         fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "Null and True")
+        # self.assertFalse(fs.is_valid(), "Null and True")
 
         data['form-0-choice2'] = True
         data['form-1-choice2'] = ''
         fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "True and Null")
+        # self.assertFalse(fs.is_valid(), "True and Null")
 
         data['form-0-choice2'] = ''
         data['form-1-choice2'] = ''
         fs = QuestionFormSet(data)
         #self.assertFalse(fs.is_valid(), "Null and Null")
-        
-

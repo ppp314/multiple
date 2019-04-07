@@ -14,7 +14,7 @@ This file is part of multiple.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+    Along with multiple.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
 from django.db import models
@@ -88,6 +88,14 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
+
+
+class Bookmark(models.Model):
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.title)
 
 
 class BookmarkForm(forms.Form):
