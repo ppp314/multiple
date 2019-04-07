@@ -19,7 +19,7 @@ This file is part of Multiple.
 
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Exam, Question
+from .models import Exam, Question, Bookmark
 
 
 class MultipleQuestionChoiceForm(forms.Form):
@@ -48,3 +48,21 @@ class QuestionForm(forms.Form):
 #     form=QuestionForm,
 #     extra=1,
 #     min_num=1)
+
+
+class PostCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Bookmark
+        fields = '__all__'
+
+
+# これがモデルフォームセット
+PostCreateFormSet = forms.modelformset_factory(
+    Bookmark, form=PostCreateForm, extra=3
+)

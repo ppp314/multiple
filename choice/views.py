@@ -17,7 +17,6 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import pdb
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -25,9 +24,12 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
-
+from django import forms
 from .models import Exam, Question
-from .forms import MultipleQuestionChoiceForm
+from .models import Bookmark
+from .forms import MultipleQuestionChoiceForm, formset_factory
+from .forms import PostCreateFormSet
+
 
 
 class ExamIndexView(generic.ListView):
@@ -125,3 +127,16 @@ def testform(request):
     form = MultipleQuestionChoiceForm()
 
     return render(request, 'choice/name.html', {'form': form})
+
+
+def add(request):
+    formset = PostCreateFormSet(request.POST or None)
+    if request.method == 'POST' and formset.is_valid():
+        formset.save()
+        return redirect('choice:test-form')
+
+    context = {
+        'formset': formset
+    }
+
+    return render(request, 'choice/post_formset.html', context)
