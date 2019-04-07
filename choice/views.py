@@ -27,7 +27,7 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django import forms
 from .models import Exam, Question
 from .models import Bookmark
-from .forms import MultipleQuestionChoiceForm, formset_factory
+from .forms import MultipleQuestionChoiceForm
 from .forms import PostCreateFormSet
 
 
