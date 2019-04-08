@@ -24,11 +24,13 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from .models import Exam, Question
 from .models import Bookmark
 from .forms import MultipleQuestionChoiceForm
 from .forms import PostCreateFormSet
+
 
 
 
@@ -129,14 +131,48 @@ def testform(request):
     return render(request, 'choice/name.html', {'form': form})
 
 
-def add(request):
-    formset = PostCreateFormSet(request.POST or None)
+def paginate_queryset(request, queryset, count):
+    """Pageオブジェクトを返す。
+
+    ページングしたい場合に利用してください。
+
+    countは、1ページに表示する件数です。
+    返却するPgaeオブジェクトは、以下のような感じで使えます。::
+
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+        {% endif %}
+
+    また、page_obj.object_list で、count件数分の絞り込まれたquerysetが取得できます。
+
+    """
+    paginator = Paginator(queryset, count)
+    page = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return page_obj
+
+
+def index(request):
+    post_list = Bookmark.objects.order_by('-url')
+    search_keyword = request.GET.get('keyword')
+    if search_keyword:
+        post_list = post_list.filter(title__icontains=search_keyword)
+
+    page_obj = paginate_queryset(request, post_list, 3)
+    formset = PostCreateFormSet(request.POST or None,
+                                queryset=page_obj.object_list)
     if request.method == 'POST' and formset.is_valid():
         formset.save()
         return redirect('choice:test-form')
 
     context = {
-        'formset': formset
+        'formset': formset,
+        'page_obj': page_obj,
     }
 
     return render(request, 'choice/post_formset.html', context)
