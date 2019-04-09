@@ -29,7 +29,7 @@ from django import forms
 from .models import Exam, Question
 from .models import Bookmark
 from .forms import MultipleQuestionChoiceForm
-from .forms import PostCreateFormSet
+from .forms import PostCreateForm
 
 
 
@@ -164,6 +164,16 @@ def index(request):
         post_list = post_list.filter(title__icontains=search_keyword)
 
     page_obj = paginate_queryset(request, post_list, 3)
+
+    if page_obj.number == 1:
+        PostCreateFormSet = forms.modelformset_factory(
+            Bookmark, form=PostCreateForm,
+            extra=3, can_delete=True,)
+    else:
+        PostCreateFormSet = forms.modelformset_factory(
+            Bookmark, form=PostCreateForm,
+            extra=0, can_delete=True,)
+        
     formset = PostCreateFormSet(request.POST or None,
                                 queryset=page_obj.object_list)
     if request.method == 'POST' and formset.is_valid():

@@ -64,5 +64,5 @@ class PostCreateForm(forms.ModelForm):
 
 # これがモデルフォームセット
 PostCreateFormSet = forms.modelformset_factory(
-    Bookmark, form=PostCreateForm, extra=0, can_delete=True,
+    Bookmark, form=PostCreateForm, extra=3, can_delete=True,
 )
