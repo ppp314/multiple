@@ -29,3 +29,24 @@ class FormSetCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'INITIAL_FORMS')
         self.assertContains(response, 'TOTAL_FORMS')
+
+
+class InlineViewTest(TestCase):
+    """
+        Test inlineformset_factory.
+    """
+    def test_file_formset(self):
+        url = reverse('choice:add-post')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'INITIAL_FORMS')
+        self.assertContains(response, 'TOTAL_FORMS')
+
+    def test_file_formset_update(self):
+        url = reverse('choice:update_post')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'INITIAL_FORMS')
+        self.assertContains(response, 'TOTAL_FORMS')
+
+        
