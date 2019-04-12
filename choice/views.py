@@ -26,10 +26,11 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
+from django.forms import inlineformset_factory
 from .models import Exam, Question
 from .models import Bookmark
 from .forms import MultipleQuestionChoiceForm
-from .forms import PostCreateForm, FileFormset
+from .forms import PostCreateForm, FileFormset, MyExamForm
 
 
 
@@ -186,6 +187,27 @@ def index(request):
     }
 
     return render(request, 'choice/post_formset.html', context)
+
+
+def add_question(request):
+    form = MyExamForm(request.POST or None)
+    QuestionFormSet = inlineformset_factory(Exam, Question, fields='__all__', extra=5, max_num=5, can_delete=False)
+    if request.method == 'POST' and form.is_valid():
+        exam = form.save(commit=False)
+        formset = QuestionFormSet(request.POST, request.FILES, instance=exam)
+        if formset.is_valid():
+            exam.save()
+            formset.save()
+            return redirect('choice:exam-index')
+
+        else:
+            formset = QuestionFormSet(request.POST, request.FILES, instance=exam)
+    else:
+        formset = QuestionFormSet()
+
+    return render(request, 'choice/post_form.html',
+                  {'form': form,
+                   'formset': formset})
 
 
 def add_post(request):
