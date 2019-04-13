@@ -54,3 +54,11 @@ class ExaamQuestionInlineViewTest(TestCase):
         url = reverse('choice:add-question')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
+
+
+class HomeViewTest(TestCase):
+    """ Test if teh page Home is available"""
+    def test_get_home_view(self):
+        url = reverse('choice:home')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)

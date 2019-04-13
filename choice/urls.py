@@ -20,13 +20,28 @@ This file is part of Multiple.
 from django.urls import path
 
 
-from .views import ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
+from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
 from .views import add_question
 
 app_name = 'choice'
 
+"""
+    Page URL name
+    Home  /      'home'
+    About /about 'about'
+    Help  /help  'help'
+    Login /login 'login'
+    Index /mypage/  'exam-index'
+    DetailExam /detail/<int:pk> 'exam-detail'
+    UpdateExam /update/<int:pk> 'exam-update'
+    DeleteExam /delete/<int:pk> 'exam-delete'
+    CreateExam /create/<int:pk> 'exam-create'
+"""
+
 urlpatterns = [
-    path('', ExamIndexView.as_view(), name='exam-index'),
+    path('', HomeView.as_view(), name='home'),
+    path('about/', AboutView.as_view(), name='about'),
+    path('mypage/', ExamIndexView.as_view(), name='exam-index'),
     path('<int:pk>/', ExamDetailView.as_view(), name='exam-detail'),
     path('update/<int:pk>/', ExamUpdateView.as_view(), name='exam-update'),
     path('delete/<int:pk>/', ExamDeleteView.as_view(), name='exam-delete'),

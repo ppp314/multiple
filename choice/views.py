@@ -22,6 +22,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -149,3 +150,11 @@ def add_question(request):
     return render(request, 'choice/post_form.html',
                   {'form': form,
                    'formset': formset})
+
+
+class HomeView(TemplateView):
+    template_name = "choice/home.html"
+
+
+class AboutView(TemplateView):
+    template_name = "choice/about.html"
