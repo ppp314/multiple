@@ -161,7 +161,6 @@ class ExamListTemplate(TestCase):
     def test_shinki(self):
         ''' Test if ExamListView contains a set of links. '''
         response = self.client.get(reverse('choice:exam-index'))
-        self.assertContains(response, reverse('choice:exam-create'))
         self.assertContains(response, reverse('admin:index'))
         self.assertContains(response, reverse('admin:logout'))
 

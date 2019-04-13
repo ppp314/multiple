@@ -34,10 +34,26 @@
       </div>
     </div>    
     {% if latest_exam_list %}
-      {% for exam in latest_exam_list %}
-        <h1><a class="btn btn-default" href="{{ exam.id }}/">{{ exam.title }}</a></h1><i class="far fa-thumbs-up"></i>
-      {% endfor %}
-      
+      <table class="table table-sm">
+	<thead>
+	  <tr>
+	    <th scope="col">pk</th>
+	    <th scope="col">Title</th>
+	    <th scope="col">Number of Question</th>
+	    <th scope="col">Created Date</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for exam in latest_exam_list %}
+	    <tr>
+	      <th scope="row">{{ exam.id }}</th>
+	      <td><a class="btn btn-default" href="{% url 'choice:exam-detail' exam.id %}">{{ exam.title }}</a></td>
+	      <td>{{ exam.number_of_question }}</td>
+	      <td>{{ exam.created_date }}</td>
+	    </tr>
+	  {% endfor %}
+	</tbody>
+      </table>
     {% else %}
       <p>No exam is available.</p>
     {% endif %}
