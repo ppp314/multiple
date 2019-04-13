@@ -24,14 +24,8 @@ from django.contrib.auth.models import User
 
 class FormSetCreateViewTest(TestCase):
     """ Test if FormSet Create view contains the management form piece."""
-    def test_exam_detail_view_not_found(self):
-        url = reverse('choice:test-formset')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'INITIAL_FORMS')
-        self.assertContains(response, 'TOTAL_FORMS')
 
-
+   
 class ExaamQuestionInlineViewTest(TestCase):
     """
         Test inlineformset_factory.

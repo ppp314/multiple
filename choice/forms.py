@@ -42,29 +42,6 @@ class QuestionForm(forms.Form):
         fields = ['no', 'sub_no', 'point']
 
 
-class PostCreateForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
-    class Meta:
-        model = Bookmark
-        fields = '__all__'
-
-
-# これがモデルフォームセット
-PostCreateFormSet = forms.modelformset_factory(
-    Bookmark, form=PostCreateForm, extra=3, can_delete=True,
-)
-
-FileFormset = inlineformset_factory(
-    Bookmark, File, fields='__all__',
-    extra=5, max_num=5, can_delete=False
-)
-
-
 class MyExamForm(ModelForm):
     class Meta:
         model = Exam
