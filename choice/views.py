@@ -210,29 +210,6 @@ def add_question(request):
                    'formset': formset})
 
 
-def add_post(request):
-    form = PostCreateForm(request.POST or None)
-    context = {'form': form}
-    if request.method == 'POST' and form.is_valid():
-        post = form.save(commit=False)
-        formset = FileFormset(request.POST, request.FILES, instance=post)  # 今回はファイルなのでrequest.FILESが必要
-        if formset.is_valid():
-            post.save()
-            formset.save()
-            return redirect('choice:exam-index')
-
-        # エラーメッセージつきのformsetをテンプレートへ渡すため、contextに格納
-        else:
-            context['formset'] = formset
-
-    # GETのとき
-    else:
-        # 空のformsetをテンプレートへ渡す
-        context['formset'] = FileFormset()
-
-    return render(request, 'choice/post_form.html', context)
-
-
 def update_post(request, pk):
     post = get_object_or_404(Bookmark, pk=pk)
     form = PostCreateForm(request.POST or None, instance=post)

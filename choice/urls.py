@@ -21,7 +21,7 @@ from django.urls import path
 
 
 from .views import ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
-from .views import index, add_post, update_post, add_question
+from .views import index, update_post, add_question
 
 app_name = 'choice'
 
@@ -36,7 +36,6 @@ urlpatterns = [
     path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', testform, name='test-form'),
     path('testformset/', index, name='test-formset'),
-    path('addpost/', add_post, name='add-post'),
     path('updatepost/<int:pk>', update_post, name='update_post'),
     path('addquestion/', add_question, name='add-question'),
 ]
