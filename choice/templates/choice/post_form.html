@@ -1,0 +1,36 @@
+<!-- 
+Copyright 2019 Acacia Shop
+This file is part of Multiple.
+    Multiple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Multiple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
+-->
+{# -*- coding:utf-8 -*-#}
+ {% extends "choice/base.html" %}
+
+ {% block content %}
+   <div class="container mt-3">
+     <form action="" method="post" enctype="multipart/form-data">
+       <h2>記事</h2>
+       {{ form.as_p }}
+
+       <h2>添付ファイル</h2>
+       {{ formset.management_form }}
+       {% for file_form in formset %}
+         {{ file_form.as_p }}
+         <hr>
+       {% endfor %}
+
+       {% csrf_token %}
+       <button type="submit" class="btn btn-primary">送信</button>
+     </form>
+   </div>
+ {% endblock %}
+

@@ -48,8 +48,6 @@ class ExamIndexViewsNoExam(TestCase):
 
 
 class ExamIndexViews(TestCase):
-    fixtures = ['fixtures.json']
-
     def setUp(self):
         author = User.objects.get_or_create(username='ss')[0]
         self.client.force_login(author)
@@ -58,7 +56,7 @@ class ExamIndexViews(TestCase):
         # If no exam exists, an approperiate messages is to be displayed
         response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 5)
+        self.assertEqual(len(response.context['latest_exam_list']), 0)
 
     def test_create_user_logged_in_user_with_no_exam(self):
         #    User.objects.create_user(username='ss')
@@ -66,23 +64,22 @@ class ExamIndexViews(TestCase):
 
         response = self.client.get(reverse('choice:exam-index'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 5)
+        self.assertEqual(len(response.context['latest_exam_list']), 0)
 
     def test_create_user_logged_in_user_with_add_one_exam(self):
         Uauthor = User.objects.get(username='ss')
         create_exam(Uauthor, "Test exam")
         response = self.client.get(reverse('choice:exam-index'))
 
-        self.assertEqual(len(response.context['latest_exam_list']), 6)
+        self.assertEqual(len(response.context['latest_exam_list']), 1)
         self.assertContains(response, "Test exam")
 
 
 class ExamDetailViews(TestCase):
-    fixtures = ['fixtures.json']
 
     def setUp(self):
-        author = User.objects.get_or_create(username='ss')[0]
-        self.client.force_login(author)
+        self.author = User.objects.get_or_create(username='ss')[0]
+        self.client.force_login(self.author)
 
     def test_exam_detail_view_not_found(self):
         url = reverse('choice:exam-detail', args=(2,))
@@ -90,14 +87,14 @@ class ExamDetailViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_exam_detail_view(self):
-        test_pk = 1
-        url = reverse('choice:exam-detail', args=(test_pk,))
+        exam = Exam.objects.create(author=self.author, title="exam_title")
+        url = reverse('choice:exam-detail', args=(exam.id,))
         response = self.client.get(url)
         self.assertNotEqual(response.context['exam_detail'], [])
 
         # Test if the view contains the links to the delete page, the index page and the update page
-        self.assertContains(response, reverse('choice:exam-delete', args=(test_pk,)))
-        self.assertContains(response, reverse('choice:exam-update', args=(test_pk,)))
+        self.assertContains(response, reverse('choice:exam-delete', args=(exam.id,)))
+        self.assertContains(response, reverse('choice:exam-update', args=(exam.id,)))
         self.assertContains(response, reverse('choice:exam-index'))
         self.assertTemplateUsed(response, 'choice/detail.html')
 

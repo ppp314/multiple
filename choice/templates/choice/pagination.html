@@ -1,51 +1,53 @@
 <!-- 
-Copyright 2019 Acacia Shop
-This file is part of Multiple.
-    Multiple is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    Multiple is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
+     Copyright 2019 Acacia Shop
+     This file is part of Multiple.
+     Multiple is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     Multiple is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+     You should have received a copy of the GNU General Public License
+     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 -->
 {# -*- coding:utf-8 -*-#}
 {% load item_extras %}
-<ul class="pagination">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
     {% if page_obj.has_previous %}
-        <li class="page-item pagination-prev">
-            <a class="page-link" href="?{% url_replace request 'page' page_obj.previous_page_number %}">&laquo;</a>
-        </li>
+      <li class="page-item pagination-prev">
+	<a class="page-link" href="?{% url_replace request 'page' page_obj.previous_page_number %}">&laquo;</a>
+      </li>
     {% else %}
-        <li class="disabled page-item pagination-next">
-            <span class="page-link">&laquo;</span>
-        </li>
+      <li class="disabled page-item pagination-next">
+	<span class="page-link">&laquo;</span>
+      </li>
     {% endif %}
     {% for page in page_obj.paginator.page_range %}
-        {% if page %}
-            {% ifequal page page_obj.number %}
-                <li class="active page-item">
-                    <span class="page-link">{{ page }}
-                        <span class="page-link sr-only">(current)</span>
-                    </span>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?{% url_replace request 'page' page %}">{{ page }}</a>
-                </li>
-            {% endifequal %}
-        {% endif %}
+      {% if page %}
+	{% ifequal page page_obj.number %}
+          <li class="active page-item">
+            <span class="page-link">{{ page }}
+              <span class="page-link sr-only">(current)</span>
+            </span>
+          </li>
+	{% else %}
+          <li class="page-item">
+            <a class="page-link" href="?{% url_replace request 'page' page %}">{{ page }}</a>
+          </li>
+	{% endifequal %}
+      {% endif %}
     {% endfor %}
     {% if page_obj.has_next %}
-        <li class="page-item pagination-next">
-            <a class="page-link" href="?{% url_replace request 'page' page_obj.next_page_number %}">&raquo;</a>
-        </li>
+      <li class="page-item pagination-next">
+	<a class="page-link" href="?{% url_replace request 'page' page_obj.next_page_number %}">&raquo;</a>
+      </li>
     {% else %}
-        <li class="disabled page-item pagination-next">
-            <span class="page-link ">&raquo;</span>
-        </li>
+      <li class="disabled page-item pagination-next">
+	<span class="page-link ">&raquo;</span>
+      </li>
     {% endif %}
-</ul>
+  </ul>
+</nav>

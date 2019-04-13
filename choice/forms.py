@@ -18,8 +18,8 @@ This file is part of Multiple.
 """
 
 from django import forms
-from django.forms import inlineformset_factory
-from .models import Exam, Question, Bookmark
+from django.forms import inlineformset_factory, ModelForm
+from .models import Exam, Question, Bookmark, File
 
 
 class MultipleQuestionChoiceForm(forms.Form):
@@ -42,14 +42,6 @@ class QuestionForm(forms.Form):
         fields = ['no', 'sub_no', 'point']
 
 
-# ExamQuestionFormSet = inlineformset_factory(
-#     parent_model=Exam,
-#     model=Question,
-#     form=QuestionForm,
-#     extra=1,
-#     min_num=1)
-
-
 class PostCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -66,3 +58,14 @@ class PostCreateForm(forms.ModelForm):
 PostCreateFormSet = forms.modelformset_factory(
     Bookmark, form=PostCreateForm, extra=3, can_delete=True,
 )
+
+FileFormset = inlineformset_factory(
+    Bookmark, File, fields='__all__',
+    extra=5, max_num=5, can_delete=False
+)
+
+
+class MyExamForm(ModelForm):
+    class Meta:
+        model = Exam
+        fields = '__all__'

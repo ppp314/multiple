@@ -81,3 +81,5 @@ class ExamModel(TestCase):
                  'form-0-title': 'Django is now open ',
                  'form-0-url': 'http://www'})
         self.assertTrue(fs.is_valid())
+
+
