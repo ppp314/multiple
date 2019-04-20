@@ -111,25 +111,16 @@ class BaseBookmarkFormSet(BaseFormSet):
             raise forms.ValidationError("duplicate url")
 
 
-class File(models.Model):
-    name = models.CharField('ファイル名', max_length=255)
-    src = models.FileField('添付ファイル')
-    target = models.ForeignKey(
-        Bookmark, verbose_name='紐づく記事',
-        blank=True, null=True,
-        on_delete=models.SET_NULL
-    )
-
-
-BookmarkFormSet = formset_factory(BookmarkForm, formset=BaseBookmarkFormSet, extra=1, max_num=100)
+BookmarkFormSet = formset_factory(BookmarkForm, formset=BaseBookmarkFormSet,
+                                  extra=1, max_num=100)
 
 
 class Question2Form(forms.Form):
     class Meta:
         model = Question
-        fields = ('no', 'sub_no', 'choice1', 'choice2', 'choice3', 'choice4', 'choice5')
+        fields = ('no', 'sub_no',
+                  'choice1', 'choice2', 'choice3', 'choice4', 'choice5')
 
 
-QuestionFormSet = formset_factory(Question2Form, formset=BaseFormSet, extra=2, max_num=10)
-
-
+QuestionFormSet = formset_factory(Question2Form, formset=BaseFormSet, extra=2,
+                                  max_num=10)

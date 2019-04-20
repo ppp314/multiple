@@ -18,8 +18,8 @@ This file is part of Multiple.
 """
 
 from django import forms
-from django.forms import inlineformset_factory, ModelForm
-from .models import Exam, Question, Bookmark, File
+from django.forms import ModelForm
+from .models import Exam, Question
 
 
 class MultipleQuestionChoiceForm(forms.Form):
