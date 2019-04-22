@@ -20,7 +20,12 @@ This file is part of Multiple.
 from django.urls import path
 
 
-from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
+from .views import (
+    HomeView, AboutView, ExamIndexView, ExamDetailView, ExamDeleteView,
+    ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView,
+    vote, testform,
+)
+
 from .views import add_question
 
 app_name = 'choice'

@@ -39,17 +39,10 @@ class ExamIndexView(generic.ListView):
     template_name = 'choice/exam_list.html'
 
     paginate_by = 10
-   
+
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('-created_date')
-
-
-class ExamTrialView(generic.ListView):
-    template_name = 'choice/exam_list.html'
-
-    def get_queryset(self):
-        return Exam.objects.question_set.all()
+        return Exam.objects.order_by('created_date')
 
 
 class QuestionIndexView(generic.ListView):
@@ -60,7 +53,7 @@ class QuestionIndexView(generic.ListView):
 
     def get_queryset(self):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
-        return Question.objects.filter(exam=self.exam)
+        return Question.objects.filter(exam=self.exam).order_by('no', 'sub_no')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,7 +101,7 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        return self.object.question_set.all()
+        return self.object.question_set.order_by('no', 'sub_no')
 
 
 def vote(request, pk):
