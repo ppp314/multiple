@@ -30,19 +30,6 @@ from .views import add_question
 
 app_name = 'choice'
 
-"""
-    Page URL name
-    Home  /      'home'
-    About /about 'about'
-    Help  /help  'help'
-    Login /login 'login'
-    Index /mypage/  'exam-index'
-    DetailExam /detail/<int:pk> 'exam-detail'
-    UpdateExam /update/<int:pk> 'exam-update'
-    DeleteExam /delete/<int:pk> 'exam-delete'
-    CreateExam /create/<int:pk> 'exam-create'
-"""
-
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),

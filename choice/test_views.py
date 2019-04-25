@@ -21,6 +21,19 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+"""
+    Page URL name
+    Home  /      'home'
+    About /about 'about'
+    Help  /help  'help'
+    Login /login 'login'
+    Index /mypage/  'exam-index'
+    DetailExam /detail/<int:pk> 'exam-detail'
+    UpdateExam /update/<int:pk> 'exam-update'
+    DeleteExam /delete/<int:pk> 'exam-delete'
+    CreateExam /create/<int:pk> 'exam-create'
+"""
+
 
 class FormSetCreateViewTest(TestCase):
     """ Test if FormSet Create view contains the management form piece."""
