@@ -20,18 +20,31 @@ This file is part of Multiple.
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.forms import inlineformset_factory, formset_factory
 from .models import Exam, Question
-from .models import Bookmark, BookmarkForm, BaseBookmarkFormSet
-from .forms import QuestionForm
 
 
 # Create your tests here.
 class ExamModel(TestCase):
-    """
-    Test a view function the same way as you would test any other
-    fuction
-    """
+    """ Test Exam model. """
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='jacob',
+            email='jacob@example.com',
+            password='top_secret')
+        
+    def test_create_exam(self):
+        self.exam = Exam.objects.create(
+            author=self.user, title='Test',
+            number_of_question=1)
+
+    def test_no_exam(self):
+        with self.assertRaises(Exam.DoesNotExist):
+            self.exam = Exam.objects.get(author=self.user)
+
+
+class QuestionModel(TestCase):
+    """ Test Question model. """
+
     def setUp(self):
         self.user = User.objects.create_user(
             username='jacob',
@@ -40,46 +53,17 @@ class ExamModel(TestCase):
         self.exam = Exam.objects.create(
             author=self.user, title='Test',
             number_of_question=1)
+
+    def test_create_question(self):
         self.question = Question.objects.create(
-            exam=self.exam, no=1,
-            sub_no=1, point=5)
+            exam=self.exam,
+            no=1, sub_no=1, point=5,
+            choice1=True,
+            choice2=True,
+            choice3=True,
+            choice4=True,
+            choice5=True)
 
-    def test_exam(self):
-        jacob = Exam.objects.get(author=self.user)
-        self.assertEquals(jacob.title, 'Test')
-
-    def test_question(self):
-        q = Question.objects.get(exam=self.exam)
-        self.assertEquals(q.point, 5)
-
-    def test_exam_question_formset(self):
-        QuestionFormSet = inlineformset_factory(
-            parent_model=Exam,
-            model=Question,
-            form=QuestionForm,
-            extra=1,
-            min_num=1)
-        exam = Exam.objects.get(author=self.user)
-
-        #formset = QuestionFormSet()
-
-        #self.assertTrue(formset.is_valid())
-
-    def test_book_mark_Formset(self):
-        self.bookmark = Bookmark.objects.create(
-            title='Django project',
-            url='http://www.google.com/')
-
-        BookmarkFormSet = formset_factory(
-            BookmarkForm, formset=BaseBookmarkFormSet,
-            extra=1, max_num=1)
-        fs=BookmarkFormSet(
-                {'form-TOTAL_FORMS': '1',
-                 'form-INITIAL_FORMS': '1',
-                 'form-MIN_NUM_FORMS': '1',
-                 'form-MAX_NUM_FORMS': '1',
-                 'form-0-title': 'Django is now open ',
-                 'form-0-url': 'http://www'})
-        self.assertTrue(fs.is_valid())
-
-
+    def test_no_question(self):
+        with self.assertRaises(Question.DoesNotExist):
+            self.question = Question.objects.get(exam=self.exam)
