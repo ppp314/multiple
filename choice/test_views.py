@@ -22,10 +22,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 """
-    Page URL name
-    Home  /      'home'
-    About /about 'about'
-    Help  /help  'help'
+    Page URL name temmplate
+    Home  /      'home'    choice/home.html
+    About /about 'about'   choice/about.html
+    Help  /help  'help'    choice/help.html
     Login /login 'login'
     Index /mypage/  'exam-index'
     DetailExam /detail/<int:pk> 'exam-detail'
@@ -74,4 +74,16 @@ class HomeViewTest(TestCase):
     def test_get_home_view(self):
         url = reverse('choice:home')
         response = self.client.get(url)
+        self.assertTemplateUsed(response, 'choice/home.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
+        self.assertEqual(response.status_code, 200)
+
+
+class AboutViewTest(TestCase):
+    """ Test if teh page about is available"""
+    def test_get_home_view(self):
+        url = reverse('choice:about')
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'choice/about.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
         self.assertEqual(response.status_code, 200)
