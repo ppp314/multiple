@@ -74,7 +74,7 @@ This file is part of Multiple.
 
     <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
     <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>
-    <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-index' %}"> index </a></p>
+    <p><a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}"> index </a></p>
 
 
     <form action="{% url 'choice:exam-vote' exam_detail.id %}" method="post">

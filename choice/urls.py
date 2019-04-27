@@ -33,7 +33,7 @@ app_name = 'choice'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),
-    path('mypage/', ExamIndexView.as_view(), name='exam-index'),
+    path('list/', ExamIndexView.as_view(), name='exam-list'),
     path('detail/<int:pk>/',
          ExamQuestionView.as_view(), name='exam-question-view'),
     path('update/<int:pk>/', ExamUpdateView.as_view(), name='exam-update'),

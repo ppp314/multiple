@@ -42,37 +42,9 @@ def create_exam(exam_author, exam_title):
 class ExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
         ''' If no exam exists, an approperiate messages is to be displayed '''
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
-
-
-class ExamIndexViews(TestCase):
-    def setUp(self):
-        author = User.objects.get_or_create(username='ss')[0]
-        self.client.force_login(author)
-
-    def test_no_exam(self):
-        # If no exam exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
-
-    def test_create_user_logged_in_user_with_no_exam(self):
-        #    User.objects.create_user(username='ss')
-        #    Login as 'ss' without password
-
-        response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
-
-    def test_create_user_logged_in_user_with_add_one_exam(self):
-        Uauthor = User.objects.get(username='ss')
-        create_exam(Uauthor, "Test exam")
-        response = self.client.get(reverse('choice:exam-index'))
-
-        self.assertEqual(len(response.context['latest_exam_list']), 1)
-        self.assertContains(response, "Test exam")
 
 
 class ExamDetailViews(TestCase):
@@ -95,7 +67,7 @@ class ExamDetailViews(TestCase):
         # Test if the view contains the links to the delete page, the index page and the update page
         self.assertContains(response, reverse('choice:exam-delete', args=(exam.id,)))
         self.assertContains(response, reverse('choice:exam-update', args=(exam.id,)))
-        self.assertContains(response, reverse('choice:exam-index'))
+        self.assertContains(response, reverse('choice:exam-list'))
         self.assertTemplateUsed(response, 'choice/detail.html')
 
 
@@ -112,7 +84,7 @@ class QuestionIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['question_list'], [])
 
     def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
@@ -160,7 +132,7 @@ class ExamListTemplate(TestCase):
 
     def test_shinki(self):
         ''' Test if ExamListView contains a set of links. '''
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertContains(response, reverse('admin:index'))
         self.assertContains(response, reverse('admin:logout'))
 

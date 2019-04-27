@@ -20,6 +20,7 @@ This file is part of Multiple.
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from .models import Exam, Question
 
 """
     Page URL name temmplate
@@ -27,7 +28,7 @@ from django.contrib.auth.models import User
     About /about 'about'   choice/about.html
     Help  /help  'help'    choice/help.html
     Login /login 'login'
-    Index /mypage/  'exam-index'
+    Index /list/  'exam-list'  choice/exam-list.html
     DetailExam /detail/<int:pk> 'exam-detail'
     UpdateExam /update/<int:pk> 'exam-update'
     DeleteExam /delete/<int:pk> 'exam-delete'
@@ -39,7 +40,7 @@ class FormSetCreateViewTest(TestCase):
     """ Test if FormSet Create view contains the management form piece."""
 
    
-class ExaamQuestionInlineViewTest(TestCase):
+class ExamQuestionInlineViewTest(TestCase):
     """
         Test inlineformset_factory.
     """
@@ -87,3 +88,46 @@ class AboutViewTest(TestCase):
         self.assertTemplateUsed(response, 'choice/about.html')
         self.assertTemplateUsed(response, 'choice/base.html')
         self.assertEqual(response.status_code, 200)
+
+
+class ExamListViews(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='jacob',
+            email='jacob@example.com',
+            password='top_secret')
+
+    def test_no_exam_and_one_exam(self):
+        # If no exam exists, an approperiate messages is to be displayed
+        response = self.client.get(reverse('choice:exam-list'))
+        self.assertTemplateUsed(response, 'choice/exam_list.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['latest_exam_list']), 0)
+        self.assertContains(response, "No exam is available")
+
+        self.exam = Exam.objects.create(
+            author=self.user, title='Test',
+            number_of_question=1)
+        response = self.client.get(reverse('choice:exam-list'))
+        self.assertTemplateUsed(response, 'choice/exam_list.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['latest_exam_list']), 1)
+
+
+def test_create_user_logged_in_user_with_no_exam(self):
+        #    User.objects.create_user(username='ss')
+        #    Login as 'ss' without password
+
+        response = self.client.get(reverse('choice:exam-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['latest_exam_list']), 0)
+
+def test_create_user_logged_in_user_with_add_one_exam(self):
+        Uauthor = User.objects.get(username='ss')
+        create_exam(Uauthor, "Test exam")
+        response = self.client.get(reverse('choice:exam-list'))
+
+        self.assertEqual(len(response.context['latest_exam_list']), 1)
+        self.assertContains(response, "Test exam")
