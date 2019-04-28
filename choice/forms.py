@@ -46,3 +46,8 @@ class MyExamForm(ModelForm):
     class Meta:
         model = Exam
         fields = '__all__'
+
+    q_tobemade = forms.IntegerField(
+        max_value=60,
+        min_value=1,
+    )
