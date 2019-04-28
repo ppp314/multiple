@@ -63,7 +63,7 @@ class QuestionIndexView(generic.ListView):
 
 class ExamCreate(CreateView):
     model = Exam
-    fields = ['title', 'author', 'number_of_question']
+    form_class = MyExamForm
 
     def form_valid(self, form):
         return super().form_valid(form)

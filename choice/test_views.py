@@ -17,10 +17,14 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+import pdb
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam, Question
+from .forms import MyExamForm
+import unittest
 
 """
     Page URL name temmplate
@@ -116,18 +120,45 @@ class ExamListViews(TestCase):
         self.assertEqual(len(response.context['latest_exam_list']), 1)
 
 
-def test_create_user_logged_in_user_with_no_exam(self):
+        def test_create_user_logged_in_user_with_no_exam(self):
         #    User.objects.create_user(username='ss')
         #    Login as 'ss' without password
+            response = self.client.get(reverse('choice:exam-list'))
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(response.context['latest_exam_list']), 0)
 
-        response = self.client.get(reverse('choice:exam-list'))
+        def test_create_user_logged_in_user_with_add_one_exam(self):
+            Uauthor = User.objects.get(username='ss')
+            create_exam(Uauthor, "Test exam")
+
+            response = self.client.get(reverse('choice:exam-list'))
+            self.assertEqual(len(response.context['latest_exam_list']), 1)
+            self.assertContains(response, "Test exam")
+
+
+class ExamCreateViewsTest(TestCase):
+    """Test create exam views"""
+    def test_create_exam_form_display(self):
+        response = self.client.get(reverse('choice:exam-create'))
+        self.assertTemplateUsed(response, 'choice/exam_form.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
 
-def test_create_user_logged_in_user_with_add_one_exam(self):
-        Uauthor = User.objects.get(username='ss')
-        create_exam(Uauthor, "Test exam")
-        response = self.client.get(reverse('choice:exam-list'))
 
-        self.assertEqual(len(response.context['latest_exam_list']), 1)
-        self.assertContains(response, "Test exam")
+class ExamCreateViewsUnitTest(unittest.TestCase):
+    """Test create exam views"""
+    def test_create_exam_by_post(self):
+        self.assertEqual(Exam.objects.count(), 0)
+        test_author = User.objects.create_user(
+            username='jacob',
+            email='jacob@example.com',
+            password='top_secret')
+
+        form_data = {'title': "Test One",
+                     'author': test_author.id,
+                     'created_date': timezone.now(),
+                     'number_of_question': 10}
+
+        form = MyExamForm(data=form_data)
+        print(form.errors)
+        self.assertTrue(form.is_valid())
