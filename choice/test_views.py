@@ -17,6 +17,7 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+import pytest
 import pdb
 from django.test import TestCase
 from django.urls import reverse
@@ -145,24 +146,23 @@ class ExamCreateViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ExamCreateViewsUnitTest(unittest.TestCase):
-    """Test create exam views"""
-    def test_create_exam_by_post(self):
-        self.assertEqual(Exam.objects.count(), 0)
-        test_author = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
+@pytest.mark.django_db
+def test_create_exam_by_post():
+    assert Exam.objects.count() == 0
+    test_author = User.objects.create_user(
+        username='jacob',
+        email='jacob@example.com',
+        password='top_secret')
 
-        form_data = {'title': "Test One",
-                     'author': test_author.id,
-                     'created_date': timezone.now(),
-                     'number_of_question': 10,
-                     'q_tobemade': 15, }
+    form_data = {'title': "Test One",
+                 'author': test_author.id,
+                 'created_date': timezone.now(),
+                 'number_of_question': 10,
+                 'q_tobemade': 15, }
 
-        form = MyExamForm(data=form_data)
-        print(form.errors)
-        self.assertTrue(form.is_valid())
+    form = MyExamForm(data=form_data)
+    print(form.errors)
+    assert form.is_valid()
 
 
 class SuccessViewTest(TestCase):
