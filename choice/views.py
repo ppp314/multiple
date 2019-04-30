@@ -28,7 +28,8 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.forms import inlineformset_factory
-from extra_views import CreateWithInlinesView, InlineFormSet
+from extra_views import CreateWithInlinesView, InlineFormSet, \
+    InlineFormSetFactory
 from .models import Exam, Question
 from .models import Bookmark, Car, Person
 from .forms import MultipleQuestionChoiceForm
@@ -172,7 +173,7 @@ class ParentCreateView(CreateWithInlinesView):
     success_url = "/"
 
 
-class CarInlineFormSet(InlineFormSet):
+class CarInlineFormSet(InlineFormSetFactory):
     model = Car
     fields = ("color", )
 
