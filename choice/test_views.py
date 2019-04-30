@@ -41,11 +41,11 @@ import unittest
 """
 
 
-class FormSetCreateViewTest(TestCase):
+class TestFormSetCreateView(TestCase):
     """ Test if FormSet Create view contains the management form piece."""
 
    
-class ExamQuestionInlineViewTest(TestCase):
+class TestExamQuestionInlineView(TestCase):
     """
         Test inlineformset_factory.
     """
@@ -75,7 +75,7 @@ class ExamQuestionInlineViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class HomeViewTest(TestCase):
+class TestHomeView(TestCase):
     """ Test if teh page Home is available"""
     def test_get_home_view(self):
         url = reverse('choice:home')
@@ -85,7 +85,7 @@ class HomeViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class AboutViewTest(TestCase):
+class TestAboutView(TestCase):
     """ Test if teh page about is available"""
     def test_get_home_view(self):
         url = reverse('choice:about')
@@ -95,7 +95,7 @@ class AboutViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ExamListViews(TestCase):
+class TestExamListViews(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='jacob',
@@ -137,7 +137,7 @@ class ExamListViews(TestCase):
             self.assertContains(response, "Test exam")
 
 
-class ExamCreateViewsTest(TestCase):
+class TestExamCreateViews(TestCase):
     """Test create exam views"""
     def test_create_exam_form_display(self):
         response = self.client.get(reverse('choice:exam-create'))
@@ -165,7 +165,7 @@ def test_create_exam_by_post():
     assert form.is_valid()
 
 
-class SuccessViewTest(TestCase):
+class TestSuccessView(TestCase):
     """ Test if the page about is available"""
     def test_get_success_view(self):
         url = reverse('choice:success')
@@ -175,7 +175,7 @@ class SuccessViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ExamInlineViewTest(TestCase):
+class TestExamInlineView(TestCase):
     """ Test if the page is displayed."""
     def test_get_exam_inline_page(self):
         url = reverse('choice:exam-ppp')

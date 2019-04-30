@@ -24,7 +24,7 @@ from .models import Exam, Question
 
 
 # Create your tests here.
-class ExamModel(TestCase):
+class TestExamModel(TestCase):
     """ Test Exam model. """
     def setUp(self):
         self.user = User.objects.create_user(
@@ -42,7 +42,7 @@ class ExamModel(TestCase):
             self.exam = Exam.objects.get(author=self.user)
 
 
-class QuestionModel(TestCase):
+class TestQuestionModel(TestCase):
     """ Test Question model. """
 
     def setUp(self):
