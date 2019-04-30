@@ -20,11 +20,10 @@ This file is part of Multiple.
 from django.urls import path
 
 
-from .views import (
-    HomeView, AboutView, ExamIndexView, ExamDetailView, ExamDeleteView,
-    ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView,
-    vote, testform,
-)
+from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
+    ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, \
+    ExamQuestionView, vote, testform, SuccessView, ParentCreateView, \
+    PersonCarCreateFormsetView
 
 from .views import add_question
 
@@ -44,4 +43,6 @@ urlpatterns = [
     path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', testform, name='test-form'),
     path('addquestion/', add_question, name='add-question'),
+    path('success/', SuccessView.as_view(), name='success'),
+    path('examcreate/', PersonCarCreateFormsetView.as_view(), name='exam-ppp'),
 ]

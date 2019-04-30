@@ -124,3 +124,15 @@ class Question2Form(forms.Form):
 
 QuestionFormSet = formset_factory(Question2Form, formset=BaseFormSet, extra=2,
                                   max_num=10)
+
+
+class Person(models.Model):
+
+    name = models.CharField(max_length=255)
+    age = models.IntegerField(default=25)
+
+
+class Car(models.Model):
+
+    owner = models.ForeignKey(Person, on_delete=models.CASCADE)
+    color = models.CharField(max_length=10)

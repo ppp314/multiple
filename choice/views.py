@@ -28,8 +28,9 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.forms import inlineformset_factory
+from extra_views import CreateWithInlinesView, InlineFormSet
 from .models import Exam, Question
-from .models import Bookmark
+from .models import Bookmark, Car, Person
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
 
@@ -151,3 +152,34 @@ class HomeView(TemplateView):
 
 class AboutView(TemplateView):
     template_name = "choice/about.html"
+
+
+class SuccessView(TemplateView):
+    template_name = "choice/success.html"
+
+
+class ChildInLines(InlineFormSet):
+    model = Question
+    fields = ('no', 'sub_no', 'point', )
+
+
+class ParentCreateView(CreateWithInlinesView):
+    model = Exam
+    fields = ['title']
+    context_object_name = 'exam'
+    inlines = ['ChildInLines', ]
+    template_name = 'choice/parent.html'
+    success_url = "/"
+
+
+class CarInlineFormSet(InlineFormSet):
+    model = Car
+    fields = ("color", )
+
+
+class PersonCarCreateFormsetView(CreateWithInlinesView):
+    model = Person
+    fields = ("name", "age")  # self.model の fields
+    inlines = [CarInlineFormSet, ]
+    template_name = "choice/person_formset.html"
+    success_url = reverse_lazy('choice:success')

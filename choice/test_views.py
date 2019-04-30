@@ -163,3 +163,25 @@ class ExamCreateViewsUnitTest(unittest.TestCase):
         form = MyExamForm(data=form_data)
         print(form.errors)
         self.assertTrue(form.is_valid())
+
+
+class SuccessViewTest(TestCase):
+    """ Test if the page about is available"""
+    def test_get_success_view(self):
+        url = reverse('choice:success')
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'choice/success.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
+        self.assertEqual(response.status_code, 200)
+
+
+class ExamInlineViewTest(TestCase):
+    """ Test if the page is displayed."""
+    def test_get_exam_inline_page(self):
+        url = reverse('choice:exam-ppp')
+        response = self.client.get(url)
+        """
+        self.assertTemplateUsed(response, 'choice/parent.html')
+        self.assertTemplateUsed(response, 'choice/base.html')
+        self.assertEqual(response.status_code, 200)
+        """

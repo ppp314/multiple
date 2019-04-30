@@ -1,0 +1,21 @@
+{% extends "choice/base.html" %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+
+　　　　　　　　　　　　　　　 {# インラインはinlinesという変数にリストで入っている #}
+        <p>Car Color</p>
+        <table>
+            {% for form in inlines %}
+                {{ form.as_table }}
+            {% endfor %}
+        </table>
+        <button type="submit">save</button>
+    </form>
+
+{% endblock %}
