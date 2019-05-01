@@ -85,14 +85,12 @@ class TestHomeView(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestAboutView(TestCase):
+def test_get_home_view(client):
     """ Test if teh page about is available"""
-    def test_get_home_view(self):
-        url = reverse('choice:about')
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'choice/about.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
+    url = reverse('choice:about')
+    response = client.get(url)
+    assert 'choice/about.html' in response.template_name
+    assert response.status_code == 200
 
 
 class TestExamListViews(TestCase):
