@@ -24,8 +24,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam, Question
+from .views import PersonCarCreateFormsetView
 from .forms import MyExamForm
-import unittest
 
 """
     Page URL name temmplate
@@ -75,21 +75,20 @@ class TestExamQuestionInlineView(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestHomeView(TestCase):
-    """ Test if teh page Home is available"""
-    def test_get_home_view(self):
-        url = reverse('choice:home')
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'choice/home.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-
-
-def test_get_home_view(client):
-    """ Test if teh page about is available"""
-    url = reverse('choice:about')
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_url,expected_template", [
+        ("choice:about", "choice/about.html"),
+        ("choice:home", "choice/home.html"),
+        ("choice:exam-create", "choice/exam_form.html"),
+        ("choice:success", "choice/success.html"),
+        ("choice:exam-ppp", "choice/person_formset.html"),
+    ],)
+def test_get_simple_view(client, test_url, expected_template):
+    """ Test if the page about is available"""
+    url = reverse(test_url)
     response = client.get(url)
-    assert 'choice/about.html' in response.template_name
+    assert expected_template in response.template_name
     assert response.status_code == 200
 
 
@@ -135,15 +134,6 @@ class TestExamListViews(TestCase):
             self.assertContains(response, "Test exam")
 
 
-class TestExamCreateViews(TestCase):
-    """Test create exam views"""
-    def test_create_exam_form_display(self):
-        response = self.client.get(reverse('choice:exam-create'))
-        self.assertTemplateUsed(response, 'choice/exam_form.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-
-
 @pytest.mark.django_db
 def test_create_exam_by_post():
     assert Exam.objects.count() == 0
@@ -163,23 +153,8 @@ def test_create_exam_by_post():
     assert form.is_valid()
 
 
-class TestSuccessView(TestCase):
-    """ Test if the page about is available"""
-    def test_get_success_view(self):
-        url = reverse('choice:success')
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'choice/success.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-
-
-class TestExamInlineView(TestCase):
-    """ Test if the page is displayed."""
-    def test_get_exam_inline_page(self):
-        url = reverse('choice:exam-ppp')
-        response = self.client.get(url)
-        """
-        self.assertTemplateUsed(response, 'choice/parent.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-        """
+def test_many_formset_view(client):
+    form = PersonCarCreateFormsetView(
+        factory_kwargs={'extra': 30}
+        )
+    print(form.inlines)
