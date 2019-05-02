@@ -39,43 +39,15 @@ def create_exam(exam_author, exam_title):
     return Exam.objects.create(author=exam_author, title=exam_title)
 
 
-class ExamIndexViewsNoExam(TestCase):
+class TestExamIndexViewsNoExam(TestCase):
     def test_no_exam(self):
         ''' If no exam exists, an approperiate messages is to be displayed '''
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertContains(response, "No exam is available")
         self.assertQuerysetEqual(response.context['latest_exam_list'], [])
 
 
-class ExamIndexViews(TestCase):
-    def setUp(self):
-        author = User.objects.get_or_create(username='ss')[0]
-        self.client.force_login(author)
-
-    def test_no_exam(self):
-        # If no exam exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
-
-    def test_create_user_logged_in_user_with_no_exam(self):
-        #    User.objects.create_user(username='ss')
-        #    Login as 'ss' without password
-
-        response = self.client.get(reverse('choice:exam-index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
-
-    def test_create_user_logged_in_user_with_add_one_exam(self):
-        Uauthor = User.objects.get(username='ss')
-        create_exam(Uauthor, "Test exam")
-        response = self.client.get(reverse('choice:exam-index'))
-
-        self.assertEqual(len(response.context['latest_exam_list']), 1)
-        self.assertContains(response, "Test exam")
-
-
-class ExamDetailViews(TestCase):
+class TestExamDetailViews(TestCase):
 
     def setUp(self):
         self.author = User.objects.get_or_create(username='ss')[0]
@@ -95,11 +67,11 @@ class ExamDetailViews(TestCase):
         # Test if the view contains the links to the delete page, the index page and the update page
         self.assertContains(response, reverse('choice:exam-delete', args=(exam.id,)))
         self.assertContains(response, reverse('choice:exam-update', args=(exam.id,)))
-        self.assertContains(response, reverse('choice:exam-index'))
+        self.assertContains(response, reverse('choice:exam-list'))
         self.assertTemplateUsed(response, 'choice/detail.html')
 
 
-class QuestionIndexViews(TestCase):
+class TestQuestionIndexViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.ss = User.objects.create_user(username='ss')
@@ -112,7 +84,7 @@ class QuestionIndexViews(TestCase):
         self.assertQuerysetEqual(response.context['question_list'], [])
 
     def test_create_user_loged_in_user_with_one_exam_and_no_question(self):
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['latest_exam_list'], ['<Exam: ' + TEXTEXAMPLE + '>'])
 
@@ -124,7 +96,7 @@ class QuestionIndexViews(TestCase):
         # self.assertQuerysetEqual((response.context['question_list']).exam, ['<Exam: ' + TEXTEXAMPLE + '>'])
 
 
-class ExamCreateViews(TestCase):
+class TestExamCreateViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.ss = User.objects.create_user(username='ss')
@@ -156,16 +128,16 @@ class ExamCreateViews(TestCase):
     #     self.assertEqual(after, 1)
 
 
-class ExamListTemplate(TestCase):
+class TestExamListTemplate(TestCase):
 
     def test_shinki(self):
         ''' Test if ExamListView contains a set of links. '''
-        response = self.client.get(reverse('choice:exam-index'))
+        response = self.client.get(reverse('choice:exam-list'))
         self.assertContains(response, reverse('admin:index'))
         self.assertContains(response, reverse('admin:logout'))
 
 
-class ToRomanBadInput(unittest.TestCase):
+class TestToRomanBadInput(unittest.TestCase):
     def test_too_large(self):
         '''to_roman should fail with large input'''
 
@@ -181,7 +153,7 @@ class ToRomanBadInput(unittest.TestCase):
         self.assertFalse(fs.is_valid())
 
 
-class ToRomanGoodInput(unittest.TestCase):
+class TestToRomanGoodInput(unittest.TestCase):
     def test_too_large(self):
         '''to_roman should pass with same input'''
 
@@ -197,7 +169,7 @@ class ToRomanGoodInput(unittest.TestCase):
         self.assertTrue(fs.is_valid())
 
 
-class QuestionFormSetGoodInput(unittest.TestCase):
+class TestQuestionFormSetGoodInput(unittest.TestCase):
     def test_good_input(self):
         '''Test if this form formset is valid '''
 

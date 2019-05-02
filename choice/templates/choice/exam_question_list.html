@@ -13,11 +13,17 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 -->
 {# -*- coding:utf-8 -*-#}
+{% extends "choice/base.html" %}
+
+{% block content %}
 <h1>Exam: {{ exam.title }}</h1>
 <h1>Exam author: {{ exam.author }}</h1>
 Exam created on: {{ exam.created_date }}
-    <ol>
-      {% for Question in object_list %}
-        <li>{{ Question.no }} :: {{ Question.sub_no }}</li>
-      {% endfor %}
-    </ol>
+<ol>
+  {% for Question in object_list %}
+    <li>{{ Question.no }} :: {{ Question.sub_no }}</li>
+  {% endfor %}
+</ol>
+<p><a href="{% url 'choice:exam-delete' exam.id %}"> delete </a></p>
+<p><a href="{% url 'choice:exam-update' exam.id %}"> update </a></p>
+{% endblock %}

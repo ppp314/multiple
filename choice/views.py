@@ -28,8 +28,10 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.forms import inlineformset_factory
+from extra_views import CreateWithInlinesView, InlineFormSet, \
+    InlineFormSetFactory
 from .models import Exam, Question
-from .models import Bookmark
+from .models import Bookmark, Car, Person
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
 
@@ -39,17 +41,10 @@ class ExamIndexView(generic.ListView):
     template_name = 'choice/exam_list.html'
 
     paginate_by = 10
-   
+
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('-created_date')
-
-
-class ExamTrialView(generic.ListView):
-    template_name = 'choice/exam_list.html'
-
-    def get_queryset(self):
-        return Exam.objects.question_set.all()
+        return Exam.objects.order_by('created_date')
 
 
 class QuestionIndexView(generic.ListView):
@@ -60,7 +55,7 @@ class QuestionIndexView(generic.ListView):
 
     def get_queryset(self):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
-        return Question.objects.filter(exam=self.exam)
+        return Question.objects.filter(exam=self.exam).order_by('no', 'sub_no')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,7 +65,7 @@ class QuestionIndexView(generic.ListView):
 
 class ExamCreate(CreateView):
     model = Exam
-    fields = ['title', 'author', 'number_of_question']
+    form_class = MyExamForm
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -108,7 +103,7 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        return self.object.question_set.all()
+        return self.object.question_set.order_by('no', 'sub_no')
 
 
 def vote(request, pk):
@@ -158,3 +153,34 @@ class HomeView(TemplateView):
 
 class AboutView(TemplateView):
     template_name = "choice/about.html"
+
+
+class SuccessView(TemplateView):
+    template_name = "choice/success.html"
+
+
+class ChildInLines(InlineFormSet):
+    model = Question
+    fields = ('no', 'sub_no', 'point', )
+
+
+class ParentCreateView(CreateWithInlinesView):
+    model = Exam
+    fields = ['title']
+    context_object_name = 'exam'
+    inlines = ['ChildInLines', ]
+    template_name = 'choice/parent.html'
+    success_url = "/"
+
+
+class CarInlineFormSet(InlineFormSetFactory):
+    model = Car
+    fields = ("color", )
+
+
+class PersonCarCreateFormsetView(CreateWithInlinesView):
+    model = Person
+    fields = ("name", "age")  # self.model の fields
+    inlines = [CarInlineFormSet, ]
+    template_name = "choice/person_formset.html"
+    success_url = reverse_lazy('choice:success')

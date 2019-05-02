@@ -20,35 +20,29 @@ This file is part of Multiple.
 from django.urls import path
 
 
-from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, ExamQuestionView, ExamTrialView, vote, testform
+from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
+    ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, \
+    ExamQuestionView, vote, testform, SuccessView, ParentCreateView, \
+    PersonCarCreateFormsetView
+
 from .views import add_question
 
 app_name = 'choice'
 
-"""
-    Page URL name
-    Home  /      'home'
-    About /about 'about'
-    Help  /help  'help'
-    Login /login 'login'
-    Index /mypage/  'exam-index'
-    DetailExam /detail/<int:pk> 'exam-detail'
-    UpdateExam /update/<int:pk> 'exam-update'
-    DeleteExam /delete/<int:pk> 'exam-delete'
-    CreateExam /create/<int:pk> 'exam-create'
-"""
-
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),
-    path('mypage/', ExamIndexView.as_view(), name='exam-index'),
-    path('<int:pk>/', ExamDetailView.as_view(), name='exam-detail'),
+    path('list/', ExamIndexView.as_view(), name='exam-list'),
+    path('detail/<int:pk>/',
+         ExamQuestionView.as_view(), name='exam-question-view'),
     path('update/<int:pk>/', ExamUpdateView.as_view(), name='exam-update'),
     path('delete/<int:pk>/', ExamDeleteView.as_view(), name='exam-delete'),
     path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
-    path('new/<int:pk>/', ExamQuestionView.as_view(), name='exam-question-view'),
+    path('new/<int:pk>/', ExamDetailView.as_view(), name='exam-detail'),
     path('vote/<int:pk>/', vote, name='exam-vote'),
     path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', testform, name='test-form'),
     path('addquestion/', add_question, name='add-question'),
+    path('success/', SuccessView.as_view(), name='success'),
+    path('examcreate/', PersonCarCreateFormsetView.as_view(), name='exam-ppp'),
 ]
