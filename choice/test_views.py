@@ -78,17 +78,23 @@ class TestExamQuestionInlineView(TestCase):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_url,expected_template", [
-        ("choice:about", "choice/about.html"),
-        ("choice:home", "choice/home.html"),
-        ("choice:exam-create", "choice/exam_form.html"),
-        ("choice:success", "choice/success.html"),
-        ("choice:exam-ppp", "choice/person_formset.html"),
+        ("choice:about",
+         ["choice/about.html", "choice/base.html"]),
+        ("choice:home",
+         ["choice/home.html", "choice/base.html"]),
+        ("choice:exam-create",
+         ["choice/exam_form.html", "choice/base.html"]),
+        ("choice:success",
+         ["choice/success.html", "choice/base.html"]),
+        ("choice:exam-ppp",
+         ["choice/person_formset.html", "choice/base.html"]),
     ],)
 def test_get_simple_view(client, test_url, expected_template):
     """ Test if the page about is available"""
     url = reverse(test_url)
     response = client.get(url)
-    assert expected_template in response.template_name
+    for e in expected_template:
+        assert e in [t.name for t in response.templates]
     assert response.status_code == 200
 
 
