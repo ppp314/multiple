@@ -135,7 +135,7 @@ def add_question(request):
         if formset.is_valid():
             exam.save()
             formset.save()
-            return redirect('choice:exam-index')
+            return redirect('choice:exam-list')
 
         else:
             formset = QuestionFormSet(request.POST, request.FILES, instance=exam)
@@ -184,3 +184,16 @@ class PersonCarCreateFormsetView(CreateWithInlinesView):
     inlines = [CarInlineFormSet, ]
     template_name = "choice/person_formset.html"
     success_url = reverse_lazy('choice:success')
+
+
+class QuestionInlineFormSet(InlineFormSetFactory):
+    model = Question
+    fields = ("no", "sub_no", "point", "answer", )
+
+
+class PersonQuestionCreateFromSetView(CreateWithInlinesView):
+    model = Person
+    fields = ("name", "age")
+    inlines = [QuestionInlineFormSet, ]
+    template_name = "choice/person_formset.html"
+    success_url = reverse_lazy('choice:exam-list')

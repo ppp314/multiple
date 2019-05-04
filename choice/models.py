@@ -58,7 +58,7 @@ class Exam(models.Model):
 
 class Question(models.Model):
 
-    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
+    exam = models.ForeignKey('Person', on_delete=models.CASCADE)
 
     no = models.IntegerField(
         verbose_name='大問',
@@ -75,11 +75,10 @@ class Question(models.Model):
         default=0
         )
 
-    choice1 = models.BooleanField(null=False, default=False)
-    choice2 = models.BooleanField(null=False, default=False)
-    choice3 = models.BooleanField(null=False, default=False)
-    choice4 = models.BooleanField(null=False, default=False)
-    choice5 = models.BooleanField(null=False, default=False)
+    answer = models.PositiveIntegerField(
+        verbose_name='正解',
+        default=1
+        )
 
     class Meta:
         verbose_name = '問題'

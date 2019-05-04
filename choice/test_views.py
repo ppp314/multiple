@@ -19,12 +19,13 @@ This file is part of Multiple.
 
 import pytest
 import pdb
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam, Question
-from .views import PersonCarCreateFormsetView
+from .views import PersonCarCreateFormsetView, \
+    PersonQuestionCreateFromSetView
 from .forms import MyExamForm
 
 """
@@ -43,36 +44,7 @@ from .forms import MyExamForm
 
 class TestFormSetCreateView(TestCase):
     """ Test if FormSet Create view contains the management form piece."""
-
-   
-class TestExamQuestionInlineView(TestCase):
-    """
-        Test inlineformset_factory.
-    """
-    def test_get_exam_quesion_inline(self):
-        """ Test method==GET"""
-        url = reverse('choice:add-question')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'question_set-TOTAL_FORMS')
-        self.assertContains(response, 'question_set-INITIAL_FORMS')
-        self.assertContains(response, 'question_set-MIN_NUM_FORMS')
-        self.assertContains(response, 'question_set-MAX_NUM_FORMS')
-
-    def test_post_exam_question_inline(self):
-        """ Test method==POST"""
-        author = User.objects.get_or_create(username='ss')[0]
-
-        data = {'author': author,
-                'Title': "TESTURL",
-                'question_set-TOTAL_FORMS': "5",
-                'question_set-INITIAL_FORMS': "0",
-                'question_set-MIN_NUM_FORMS': "0",
-                'question_set-MAX_NUM_FORMS': "5"
-                }
-        url = reverse('choice:add-question')
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
+    pass
 
 
 @pytest.mark.django_db
@@ -96,48 +68,6 @@ def test_get_simple_view(client, test_url, expected_template):
     for e in expected_template:
         assert e in [t.name for t in response.templates]
     assert response.status_code == 200
-
-
-class TestExamListViews(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
-
-    def test_no_exam_and_one_exam(self):
-        # If no exam exists, an approperiate messages is to be displayed
-        response = self.client.get(reverse('choice:exam-list'))
-        self.assertTemplateUsed(response, 'choice/exam_list.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 0)
-        self.assertContains(response, "No exam is available")
-
-        self.exam = Exam.objects.create(
-            author=self.user, title='Test',
-            number_of_question=1)
-        response = self.client.get(reverse('choice:exam-list'))
-        self.assertTemplateUsed(response, 'choice/exam_list.html')
-        self.assertTemplateUsed(response, 'choice/base.html')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['latest_exam_list']), 1)
-
-
-        def test_create_user_logged_in_user_with_no_exam(self):
-        #    User.objects.create_user(username='ss')
-        #    Login as 'ss' without password
-            response = self.client.get(reverse('choice:exam-list'))
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(response.context['latest_exam_list']), 0)
-
-        def test_create_user_logged_in_user_with_add_one_exam(self):
-            Uauthor = User.objects.get(username='ss')
-            create_exam(Uauthor, "Test exam")
-
-            response = self.client.get(reverse('choice:exam-list'))
-            self.assertEqual(len(response.context['latest_exam_list']), 1)
-            self.assertContains(response, "Test exam")
 
 
 @pytest.mark.django_db
@@ -164,3 +94,10 @@ def test_many_formset_view(client):
         factory_kwargs={'extra': 30}
         )
     print(form.inlines)
+
+
+def test_person_question_view():
+    factory = RequestFactory()
+    request = factory.get(reverse("choice:exam-create2"))
+    response = PersonQuestionCreateFromSetView.as_view()(request)
+    assert response.status_code == 200

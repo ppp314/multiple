@@ -17,53 +17,56 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-from django.test import TestCase
+import pytest
 from django.contrib.auth.models import User
-from .models import Exam, Question
+from .models import Exam, Question, Person
 
 
 # Create your tests here.
-class TestExamModel(TestCase):
-    """ Test Exam model. """
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
-        
-    def test_create_exam(self):
-        self.exam = Exam.objects.create(
-            author=self.user, title='Test',
-            number_of_question=1)
-
-    def test_no_exam(self):
-        with self.assertRaises(Exam.DoesNotExist):
-            self.exam = Exam.objects.get(author=self.user)
+@pytest.fixture
+def create_user_fixture():
+    User.objects.create(
+        username='yoshiko',
+        email='yoshiko@example.com',
+        password='top_secret'
+    )
 
 
-class TestQuestionModel(TestCase):
-    """ Test Question model. """
+@pytest.mark.django_db
+def test_no_exam(create_user_fixture):
+    """If no question exists, count should be 0."""
+    assert Exam.objects.filter(author__username='yoshiko').count() == 0
 
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
-        self.exam = Exam.objects.create(
-            author=self.user, title='Test',
-            number_of_question=1)
 
-    def test_create_question(self):
-        self.question = Question.objects.create(
-            exam=self.exam,
-            no=1, sub_no=1, point=5,
-            choice1=True,
-            choice2=True,
-            choice3=True,
-            choice4=True,
-            choice5=True)
+@pytest.mark.django_db
+def test_one_exam(create_user_fixture):
+    """if one question exists, count should be 1."""
+    user = User.objects.get(username='yoshiko')
+    Exam.objects.create(
+        author=user, title="test",
+        number_of_question=10,
+    )
+    assert Exam.objects.count() == 1
 
-    def test_no_question(self):
-        with self.assertRaises(Question.DoesNotExist):
-            self.question = Question.objects.get(exam=self.exam)
+
+@pytest.fixture
+def create_person_fixture():
+    Person.objects.create(name='ss', age=17)
+
+
+@pytest.mark.django_db
+def test_no_question(create_person_fixture):
+    """If no question exists, count should be 0."""
+    assert Question.objects.filter(exam__name='ss').count() == 0
+
+
+@pytest.mark.django_db
+def test_one_question(create_person_fixture):
+    """if one question exists, count should be 1."""
+    person = Person.objects.get(name='ss')
+    Question.objects.create(
+        exam=person, no=1, sub_no=1, point=1, answer=1
+    )
+    assert Question.objects.count() == 1
+
+
