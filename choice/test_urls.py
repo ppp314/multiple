@@ -20,16 +20,43 @@ This file is part of Multiple.
 import pytest
 
 
-from django.urls.base import resolve
-from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView
+from django.urls.base import resolve, Resolver404
+from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
+    ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
+    vote, ExamCreate, multiple_question_form, add_question, SuccessView, \
+    PersonCarCreateFormsetView, PersonQuestionCreateFromSetView
 
 
 @pytest.mark.parametrize("test_url, expected", [
-    ("/", HomeView),
-    ("/about/", AboutView),
-    ("/list/", ExamIndexView),
-    ("/detail/1/", ExamQuestionView),
+    ('/', HomeView),
+    ('/about/', AboutView),
+    ('/list/', ExamIndexView),
+    ('/detail/1/', ExamQuestionView),
+    ('/update/1/', ExamUpdateView),
+    ('/delete/1/', ExamDeleteView),
+    ('/p/1/', QuestionIndexView),
+    ('/new/1/', ExamDetailView),
+    ('/vote/1/', vote),
+    ('/create/', ExamCreate),
+    ('/testform/', multiple_question_form),
+    ('/addquestion/', add_question),
+    ('/success/', SuccessView),
+    ('/exampersoncar/', PersonCarCreateFormsetView),
+    ('/examcreate/', PersonQuestionCreateFromSetView),
 ])
 def test_urls_valid(test_url, expected):
+    """
+    Test if the given test_url can be resolved.
+    The preceding slashes and trailing slashes are significant.
+    """
     match = resolve(test_url)
     assert match.func.__name__ == expected.__name__
+
+
+def test_urls_invalid():
+    """
+    Test if the given fake test_url can not be resolved.
+    The preceding slashes and trailing slashes are significant.
+    """
+    with pytest.raises(Resolver404):
+        resolve('/error404/')

@@ -120,7 +120,7 @@ def vote(request, pk):
         return redirect('choice:exam-index')
 
 
-def testform(request):
+def multiple_question_form(request):
     form = MultipleQuestionChoiceForm()
 
     return render(request, 'choice/name.html', {'form': form})
