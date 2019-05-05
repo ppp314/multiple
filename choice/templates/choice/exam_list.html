@@ -41,6 +41,7 @@
 	    <th scope="col">Title</th>
 	    <th scope="col">Number of Question</th>
 	    <th scope="col">Created Date</th>
+	    <th scope="col">Edit</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -50,6 +51,7 @@
 	      <td><a class="btn btn-default" href="{% url 'choice:exam-question-view' exam.id %}">{{ exam.title }}</a></td>
 	      <td>{{ exam.number_of_question }}</td>
 	      <td>{{ exam.created_date }}</td>
+	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:edit-question' exam.id %}">編集</a>
 	    </tr>
 	  {% endfor %}
 	</tbody>

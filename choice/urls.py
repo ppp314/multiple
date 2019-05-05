@@ -22,11 +22,9 @@ from django.urls import path
 
 from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
     ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, \
-    ExamQuestionView, vote, multiple_question_form, SuccessView, \
-    ParentCreateView, PersonCarCreateFormsetView, \
+    ExamQuestionView, vote, multiple_question_form, EditQuestionView, \
+    SuccessView, ParentCreateView, PersonCarCreateFormsetView, \
     PersonQuestionCreateFromSetView
-
-from .views import add_question
 
 app_name = 'choice'
 
@@ -43,7 +41,8 @@ urlpatterns = [
     path('vote/<int:pk>/', vote, name='exam-vote'),
     path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', multiple_question_form, name='test-form'),
-    path('addquestion/', add_question, name='add-question'),
+    path('editquestion/<int:pk>', EditQuestionView.as_view(),
+         name='edit-question'),
     path('success/', SuccessView.as_view(), name='success'),
     path('exampersoncar/',
          PersonCarCreateFormsetView.as_view(), name='exam-ppp'),

@@ -23,7 +23,7 @@ import pytest
 from django.urls.base import resolve, Resolver404
 from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
     ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
-    vote, ExamCreate, multiple_question_form, add_question, SuccessView, \
+    vote, ExamCreate, multiple_question_form, EditQuestionView, SuccessView, \
     PersonCarCreateFormsetView, PersonQuestionCreateFromSetView
 
 
@@ -39,7 +39,7 @@ from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
     ('/vote/1/', vote),
     ('/create/', ExamCreate),
     ('/testform/', multiple_question_form),
-    ('/addquestion/', add_question),
+    ('/editquestion/1', EditQuestionView),
     ('/success/', SuccessView),
     ('/exampersoncar/', PersonCarCreateFormsetView),
     ('/examcreate/', PersonQuestionCreateFromSetView),

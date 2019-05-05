@@ -58,7 +58,7 @@ class Exam(models.Model):
 
 class Question(models.Model):
 
-    exam = models.ForeignKey('Person', on_delete=models.CASCADE)
+    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
     no = models.IntegerField(
         verbose_name='大問',
@@ -91,7 +91,7 @@ class Question(models.Model):
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=100)
-    url = models.CharField(max_length=100)
+    url = models.CharField(max_length=1000)
 
     def __str__(self):
         return str(self.title)

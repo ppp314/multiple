@@ -29,7 +29,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.forms import inlineformset_factory
 from extra_views import CreateWithInlinesView, InlineFormSet, \
-    InlineFormSetFactory
+    InlineFormSetFactory, InlineFormSetView
 from .models import Exam, Question
 from .models import Bookmark, Car, Person
 from .forms import MultipleQuestionChoiceForm
@@ -126,25 +126,10 @@ def multiple_question_form(request):
     return render(request, 'choice/name.html', {'form': form})
 
 
-def add_question(request):
-    form = MyExamForm(request.POST or None)
-    QuestionFormSet = inlineformset_factory(Exam, Question, fields='__all__', extra=5, max_num=5, can_delete=False)
-    if request.method == 'POST' and form.is_valid():
-        exam = form.save(commit=False)
-        formset = QuestionFormSet(request.POST, request.FILES, instance=exam)
-        if formset.is_valid():
-            exam.save()
-            formset.save()
-            return redirect('choice:exam-list')
-
-        else:
-            formset = QuestionFormSet(request.POST, request.FILES, instance=exam)
-    else:
-        formset = QuestionFormSet()
-
-    return render(request, 'choice/post_form.html',
-                  {'form': form,
-                   'formset': formset})
+class EditQuestionView(InlineFormSetView):
+    model = Exam
+    inline_model = Question
+    template_name = 'choice/post_form.html'
 
 
 class HomeView(TemplateView):

@@ -26,8 +26,8 @@ from .models import Exam, Question, Person
 @pytest.fixture
 def create_user_fixture():
     User.objects.create(
-        username='yoshiko',
-        email='yoshiko@example.com',
+        username='fixtureuser',
+        email='fixtureuser@example.com',
         password='top_secret'
     )
 
@@ -35,13 +35,13 @@ def create_user_fixture():
 @pytest.mark.django_db
 def test_no_exam(create_user_fixture):
     """If no question exists, count should be 0."""
-    assert Exam.objects.filter(author__username='yoshiko').count() == 0
+    assert Exam.objects.filter(author__username='fixtureuser').count() == 0
 
 
 @pytest.mark.django_db
 def test_one_exam(create_user_fixture):
     """if one question exists, count should be 1."""
-    user = User.objects.get(username='yoshiko')
+    user = User.objects.get(username='fixtureuser')
     Exam.objects.create(
         author=user, title="test",
         number_of_question=10,
@@ -49,23 +49,23 @@ def test_one_exam(create_user_fixture):
     assert Exam.objects.count() == 1
 
 
-@pytest.fixture
-def create_person_fixture():
-    Person.objects.create(name='ss', age=17)
-
-
 @pytest.mark.django_db
-def test_no_question(create_person_fixture):
+def test_no_question():
     """If no question exists, count should be 0."""
-    assert Question.objects.filter(exam__name='ss').count() == 0
+    assert Question.objects.count() == 0
 
 
 @pytest.mark.django_db
-def test_one_question(create_person_fixture):
+def test_one_question(create_user_fixture):
     """if one question exists, count should be 1."""
-    person = Person.objects.get(name='ss')
+    user = User.objects.get(username='fixtureuser')
+    exam = Exam.objects.create(
+        title='test',
+        author=user,
+        number_of_question=10,
+    )
     Question.objects.create(
-        exam=person, no=1, sub_no=1, point=1, answer=1
+        exam=exam, no=1, sub_no=1, point=1, answer=1
     )
     assert Question.objects.count() == 1
 
