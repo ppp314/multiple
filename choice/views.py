@@ -130,6 +130,7 @@ class EditQuestionView(InlineFormSetView):
     model = Exam
     inline_model = Question
     template_name = 'choice/post_form.html'
+    fields = ["no", "sub_no", "point", "answer"]
 
 
 class HomeView(TemplateView):
