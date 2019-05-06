@@ -70,6 +70,36 @@ def test_get_simple_view(client, test_url, expected_template):
     assert response.status_code == 200
 
 
+@pytest.fixture
+def create_user_exam_fixture():
+    user = User.objects.create(
+        username='fixtureuser',
+        email='fixtureuser@example.com',
+        password='top_secret'
+    )
+    Exam.objects.create(
+        title='test',
+        author=user,
+        number_of_question=10,
+    )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_url,expected_template", [
+        ("choice:edit-question",
+         ["choice/post_form.html", "choice/base.html"]),
+    ],)
+def test_get_onearg_view(
+        create_user_exam_fixture, client, test_url, expected_template):
+    """ Test if the page about is available"""
+    url = reverse(test_url, args=(1,))
+    response = client.get(url)
+    for e in expected_template:
+        assert e in [t.name for t in response.templates]
+    assert response.status_code == 200
+
+
 @pytest.mark.django_db
 def test_create_exam_by_post():
     assert Exam.objects.count() == 0
