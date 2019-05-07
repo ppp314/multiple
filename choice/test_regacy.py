@@ -22,13 +22,12 @@ from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Person
+from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
 import unittest
 
 
 # Create your tests here.
 
-from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
-from .views import ExamDetailView
 
 
 TEXTEXAMPLE = 'test one'

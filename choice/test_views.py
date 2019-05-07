@@ -18,8 +18,7 @@ This file is part of Multiple.
 """
 
 import pytest
-import pdb
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -27,6 +26,7 @@ from .models import Exam, Question
 from .views import PersonCarCreateFormsetView, \
     PersonQuestionCreateFromSetView
 from .forms import MyExamForm
+
 
 """
     Page URL name temmplate
@@ -68,20 +68,6 @@ def test_get_simple_view(client, test_url, expected_template):
     for e in expected_template:
         assert e in [t.name for t in response.templates]
     assert response.status_code == 200
-
-
-@pytest.fixture
-def create_user_exam_fixture():
-    user = User.objects.create(
-        username='fixtureuser',
-        email='fixtureuser@example.com',
-        password='top_secret'
-    )
-    Exam.objects.create(
-        title='test',
-        author=user,
-        number_of_question=10,
-    )
 
 
 @pytest.mark.django_db
