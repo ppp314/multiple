@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from choice.models import Exam, Question
 
 
-@pytest.fixture()
+@pytest.fixture
 def create_user_exam_fixture():
     user = User.objects.create(
         username='dokinchan',
