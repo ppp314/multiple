@@ -21,8 +21,7 @@ import pytest
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
-from .models import Person
-from .models import Exam, Question, BookmarkFormSet, QuestionFormSet
+from .models import Exam, Question
 import unittest
 
 
@@ -80,76 +79,3 @@ class TestExamListTemplate(TestCase):
         self.assertContains(response, reverse('admin:index'))
         self.assertContains(response, reverse('admin:logout'))
 
-
-class TestToRomanBadInput(unittest.TestCase):
-    def test_too_large(self):
-        '''to_roman should fail with large input'''
-
-        data = {'form-TOTAL_FORMS': '2',
-                'form-INITIAL_FORMS': '2',
-                'form-0-title': '',
-                'form-0-url': 'http://www.yahoo.co.jp',
-                'form-1-title': 'Yahoo! Japan',
-                'form-1-url': 'http://www.yahoo.co.jp',
-                }
-
-        fs = BookmarkFormSet(data)
-        self.assertFalse(fs.is_valid())
-
-
-class TestToRomanGoodInput(unittest.TestCase):
-    def test_too_large(self):
-        '''to_roman should pass with same input'''
-
-        data = {'form-TOTAL_FORMS': '2',
-                'form-INITIAL_FORMS': '2',
-                'form-0-title': 'Google',
-                'form-0-url': 'http://www.google.com',
-                'form-1-title': 'Yahoo! Japan',
-                'form-1-url': 'http://www.yahoo.co.jp',
-                }
-
-        fs = BookmarkFormSet(data)
-        self.assertTrue(fs.is_valid())
-
-
-class TestQuestionFormSetGoodInput(unittest.TestCase):
-    def test_good_input(self):
-        '''Test if this form formset is valid '''
-
-        data = {'form-TOTAL_FORMS': '2',
-                'form-INITIAL_FORMS': '2',
-                'form-MIN_NUM_FORMS': '2',
-                'form-MAX_NUM_FORMS': '100',
-                'form-0-choice1': 'Google',
-                'form-0-choice2': True,
-                'form-1-choice1': 'Yahoo! Japan',
-                'form-1-choice2': True,
-                }
-        fs = QuestionFormSet(data)
-        self.assertTrue(fs.is_valid())
-
-    def test_bad_input(self):
-        '''Test if this formset is not valid '''
-
-        data = {'form-TOTAL_FORMS': '2',
-                'form-INITIAL_FORMS': '2',
-                'form-MIN_NUM_FORMS': '2',
-                'form-MAX_NUM_FORMS': '100',
-                'form-0-choice1': 'Google',
-                'form-0-choice2': '',
-                'form-1-choice1': 'Yahoo! Japan',
-                'form-1-choice2': 'jjjj',
-                }
-        fs = QuestionFormSet(data)
-        # self.assertFalse(fs.is_valid(), "Null and True")
-
-        data['form-0-choice2'] = True
-        data['form-1-choice2'] = ''
-        fs = QuestionFormSet(data)
-        # self.assertFalse(fs.is_valid(), "True and Null")
-
-        data['form-0-choice2'] = ''
-        data['form-1-choice2'] = ''
-        fs = QuestionFormSet(data)
-        #self.assertFalse(fs.is_valid(), "Null and Null")

@@ -23,8 +23,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam, Question
-from .views import PersonCarCreateFormsetView, \
-    PersonQuestionCreateFromSetView
 from .forms import MyExamForm
 
 
@@ -58,8 +56,6 @@ class TestFormSetCreateView(TestCase):
          ["choice/exam_form.html", "choice/base.html"]),
         ("choice:success",
          ["choice/success.html", "choice/base.html"]),
-        ("choice:exam-ppp",
-         ["choice/person_formset.html", "choice/base.html"])
     ],)
 def test_get_simple_view(client, test_url, expected_template):
     """ Test if the page about is available"""
@@ -104,10 +100,3 @@ def test_create_exam_by_post():
     form = MyExamForm(data=form_data)
     print(form.errors)
     assert form.is_valid()
-
-
-def test_many_formset_view(client):
-    form = PersonCarCreateFormsetView(
-        factory_kwargs={'extra': 30}
-        )
-    print(form.inlines)

@@ -23,8 +23,7 @@ import pytest
 from django.urls.base import resolve, Resolver404
 from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
     ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
-    vote, ExamCreate, multiple_question_form, EditQuestionView, SuccessView, \
-    PersonCarCreateFormsetView, PersonQuestionCreateFromSetView
+    vote, ExamCreate, multiple_question_form, EditQuestionView, SuccessView
 
 
 @pytest.mark.parametrize("test_url, expected", [
@@ -41,8 +40,6 @@ from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
     ('/testform/', multiple_question_form),
     ('/editquestion/1', EditQuestionView),
     ('/success/', SuccessView),
-    ('/exampersoncar/', PersonCarCreateFormsetView),
-    ('/examcreate/', PersonQuestionCreateFromSetView),
 ])
 def test_urls_valid(test_url, expected):
     """

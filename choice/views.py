@@ -31,7 +31,6 @@ from django.forms import inlineformset_factory
 from extra_views import CreateWithInlinesView, InlineFormSet, \
     InlineFormSetFactory, InlineFormSetView
 from .models import Exam, Question
-from .models import Bookmark, Car, Person
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
 
@@ -159,27 +158,6 @@ class ParentCreateView(CreateWithInlinesView):
     success_url = "/"
 
 
-class CarInlineFormSet(InlineFormSetFactory):
-    model = Car
-    fields = ("color", )
-
-
-class PersonCarCreateFormsetView(CreateWithInlinesView):
-    model = Person
-    fields = ("name", "age")  # self.model の fields
-    inlines = [CarInlineFormSet, ]
-    template_name = "choice/person_formset.html"
-    success_url = reverse_lazy('choice:success')
-
-
 class QuestionInlineFormSet(InlineFormSetFactory):
     model = Question
     fields = ("no", "sub_no", "point", "answer", )
-
-
-class PersonQuestionCreateFromSetView(CreateWithInlinesView):
-    model = Person
-    fields = ("name", "age")
-    inlines = [QuestionInlineFormSet, ]
-    template_name = "choice/person_formset.html"
-    success_url = reverse_lazy('choice:exam-list')
