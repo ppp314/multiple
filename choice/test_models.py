@@ -17,53 +17,26 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-from django.test import TestCase
-from django.contrib.auth.models import User
+import pytest
 from .models import Exam, Question
 
 
 # Create your tests here.
-class TestExamModel(TestCase):
-    """ Test Exam model. """
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
-        
-    def test_create_exam(self):
-        self.exam = Exam.objects.create(
-            author=self.user, title='Test',
-            number_of_question=1)
-
-    def test_no_exam(self):
-        with self.assertRaises(Exam.DoesNotExist):
-            self.exam = Exam.objects.get(author=self.user)
+@pytest.mark.django_db
+def test_one_exam(create_user_exam_fixture):
+    """Test if no question exists. The count should be 0."""
+    assert Exam.objects.filter(author__username='dokinchan').count() == 1
 
 
-class TestQuestionModel(TestCase):
-    """ Test Question model. """
+@pytest.mark.django_db
+def test_no_question():
+    """Test if no question exists, count should be 0."""
+    assert Question.objects.count() == 0
 
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username='jacob',
-            email='jacob@example.com',
-            password='top_secret')
-        self.exam = Exam.objects.create(
-            author=self.user, title='Test',
-            number_of_question=1)
 
-    def test_create_question(self):
-        self.question = Question.objects.create(
-            exam=self.exam,
-            no=1, sub_no=1, point=5,
-            choice1=True,
-            choice2=True,
-            choice3=True,
-            choice4=True,
-            choice5=True)
+@pytest.mark.django_db
+def test_two_exam(create_user_exam_fixture):
+    """Test if there are two questions existing. The count should be 2."""
+    assert Exam.objects.count() == 2
 
-    def test_no_question(self):
-        with self.assertRaises(Question.DoesNotExist):
-            self.question = Question.objects.get(exam=self.exam)
+

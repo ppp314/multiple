@@ -75,11 +75,10 @@ class Question(models.Model):
         default=0
         )
 
-    choice1 = models.BooleanField(null=False, default=False)
-    choice2 = models.BooleanField(null=False, default=False)
-    choice3 = models.BooleanField(null=False, default=False)
-    choice4 = models.BooleanField(null=False, default=False)
-    choice5 = models.BooleanField(null=False, default=False)
+    answer = models.PositiveIntegerField(
+        verbose_name='正解',
+        default=1
+        )
 
     class Meta:
         verbose_name = '問題'
@@ -92,7 +91,7 @@ class Question(models.Model):
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=100)
-    url = models.CharField(max_length=100)
+    url = models.CharField(max_length=1000)
 
     def __str__(self):
         return str(self.title)

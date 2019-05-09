@@ -38,7 +38,6 @@ class MyExamAdmin(admin.ModelAdmin):
          {'fields': ['title']}),
 
         ]
-    inlines = [QuestionInline]
     list_display = ('pk', 'author', 'created_date', 'title')
 
 
