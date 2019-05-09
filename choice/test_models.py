@@ -19,24 +19,34 @@ This file is part of Multiple.
 
 import pytest
 from .models import Exam, Question
+from .models import Drill, Answer
+
+pytestmark = pytest.mark.django_db
 
 
 # Create your tests here.
-@pytest.mark.django_db
 def test_one_exam(create_user_exam_fixture):
     """Test if no question exists. The count should be 0."""
     assert Exam.objects.filter(author__username='dokinchan').count() == 1
 
 
-@pytest.mark.django_db
 def test_no_question():
     """Test if no question exists, count should be 0."""
     assert Question.objects.count() == 0
 
 
-@pytest.mark.django_db
 def test_two_exam(create_user_exam_fixture):
     """Test if there are two questions existing. The count should be 2."""
     assert Exam.objects.count() == 2
 
 
+def test_one_drill(create_user_exam_fixture):
+    """ 
+    Test if one drill and the same number of
+    answer can be made.
+    """
+    exam = Exam.objects.first()
+    question = Question.objects.first()
+    drill = Drill.objects.create(exam=exam)
+    Answer.objects.create(drill=drill, question=question)
+    assert Drill.objects.count() == 1

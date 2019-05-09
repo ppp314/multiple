@@ -75,7 +75,7 @@ class Question(models.Model):
         default=0
         )
 
-    answer = models.PositiveIntegerField(
+    correct_answer = models.PositiveIntegerField(
         verbose_name='正解',
         default=1
         )
@@ -87,3 +87,19 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
+
+
+class Drill(models.Model):
+    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
+    title = models.CharField(
+        verbose_name='テスト名',
+        max_length=200
+        )
+
+
+class Answer(models.Model):
+    drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    answer = models.PositiveIntegerField(
+        default=1
+        )
