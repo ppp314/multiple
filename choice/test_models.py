@@ -20,7 +20,7 @@ This file is part of Multiple.
 import pytest
 from .models import Exam, CorrectAns
 from .models import Drill
-from django.db.models import Sum
+from django.db.models import Sum, F
 
 
 pytestmark = pytest.mark.django_db
@@ -60,3 +60,13 @@ def test_point(create_user_exam_fixture):
     assert CorrectAns.objects.all().aggregate(
         Sum('point')
     )['point__sum'] == 200
+
+
+def test_point_one_user(create_user_exam_fixture):
+    """Test total point"""
+    ex = Exam.objects.filter(author__username='baikinman')[0]
+    d = Drill.objects.filter(exam=ex)[0]
+    an = d.answer_set.all().order_by('correctans__no', 'correctans__sub_no')
+    assert an.filter(
+        answer=F('correctans__correct_answer')
+    ).aggregate(Sum('correctans__point'))['correctans__point__sum'] == 95

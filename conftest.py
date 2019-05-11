@@ -29,8 +29,12 @@ def create_user_exam_fixture():
 
     anset = drill.answer_set.all()
 
-    for an in anset:
-        an.answer = 1
+    an = anset[0]
+    an.answer = 2
+    an.save()
+   
+    for an in anset[1:]:
+        an.answer = 3
     an.save()
 
     user = User.objects.create(
@@ -55,10 +59,11 @@ def create_user_exam_fixture():
     )
 
     anset = drill.answer_set.all()
-
+   
     an = anset[0]
     an.answer = 2
+    an.save()
 
     for an in anset[1:]:
         an.answer = 1
-    an.save()
+        an.save()

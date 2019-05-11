@@ -116,3 +116,6 @@ class Answer(models.Model):
         blank=True,
         default=1
     )
+
+    def __str__(self):
+        return ":is {}.".format(self.answer)
