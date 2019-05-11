@@ -22,7 +22,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
-from .models import Exam, Question
+from .models import Exam, CorrectAns
 from .forms import MyExamForm
 
 

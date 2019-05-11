@@ -18,13 +18,13 @@ This file is part of Multiple.
 """
 
 from django.contrib import admin
-from .models import Exam, Question
+from .models import Exam, CorrectAns
 
 # Register your models here.
 
 
 class QuestionInline(admin.TabularInline):
-    model = Question
+    model = CorrectAns
     extra = 0
     ordering = ['no', 'sub_no']
 
@@ -42,4 +42,4 @@ class MyExamAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Exam, MyExamAdmin)
-admin.site.register(Question)
+admin.site.register(CorrectAns)

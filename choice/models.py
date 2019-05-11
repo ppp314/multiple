@@ -56,7 +56,7 @@ class Exam(models.Model):
         return reverse('choice:question-index', kwargs={'pk': self.pk})
 
 
-class Question(models.Model):
+class CorrectAns(models.Model):
 
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
@@ -98,14 +98,14 @@ class Drill(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        questions = self.exam.question_set.all()
-        for q in questions:
-            Answer.objects.create(drill=self, question=q)
+        answers = self.exam.correctans_set.all()
+        for an in answers:
+            Answer.objects.create(drill=self, correctans=an)
 
 
 class Answer(models.Model):
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
-    question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
     answer = models.PositiveIntegerField(
         blank=True,
         default=1

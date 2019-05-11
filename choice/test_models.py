@@ -18,8 +18,8 @@ This file is part of Multiple.
 """
 
 import pytest
-from .models import Exam, Question
-from .models import Drill, Answer
+from .models import Exam, CorrectAns
+from .models import Drill
 
 pytestmark = pytest.mark.django_db
 
@@ -32,7 +32,7 @@ def test_one_exam(create_user_exam_fixture):
 
 def test_no_question():
     """Test if no question exists, count should be 0."""
-    assert Question.objects.count() == 0
+    assert CorrectAns.objects.count() == 0
 
 
 def test_two_exam(create_user_exam_fixture):
@@ -49,4 +49,4 @@ def test_one_drill(create_user_exam_fixture):
     d = Drill(title="Test")
     d.exam = e
     d.save()
-    assert d.answer_set.count() == e.question_set.count()
+    assert d.answer_set.count() == e.correctans_set.count()
