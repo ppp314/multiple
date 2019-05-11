@@ -66,7 +66,7 @@ def test_point(create_user_exam_fixture):
 def test_point_one_user(create_user_exam_fixture):
     """
     Test total point.
-    There is the one wrong answer and the nineteen correct answers,
+    There are the one wrong answer and the nineteen correct answers,
     which are 5 points each.
     """
     ex = Exam.objects.filter(author__username='baikinman')[0]
