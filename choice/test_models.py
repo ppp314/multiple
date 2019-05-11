@@ -46,6 +46,7 @@ def test_one_drill(create_user_exam_fixture):
     """
     Test if one drill and the same number of
     answer can be made.
+    Answer.save() is configured properly.
     """
     e = Exam.objects.first()
     d = Drill(title="Test")
@@ -63,10 +64,16 @@ def test_point(create_user_exam_fixture):
 
 
 def test_point_one_user(create_user_exam_fixture):
-    """Test total point"""
+    """
+    Test total point.
+    There is the one wrong answer and the nineteen correct answers,
+    which are 5 points each.
+    """
     ex = Exam.objects.filter(author__username='baikinman')[0]
     d = Drill.objects.filter(exam=ex)[0]
     an = d.answer_set.all().order_by('correctans__no', 'correctans__sub_no')
     assert an.filter(
         answer=F('correctans__correct_answer')
-    ).aggregate(Sum('correctans__point'))['correctans__point__sum'] == 95
+    ).aggregate(
+        Sum('correctans__point')
+    )['correctans__point__sum'] == 95
