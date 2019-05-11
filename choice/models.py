@@ -18,6 +18,7 @@ This file is part of multiple.
 '''
 
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 from django.utils import timezone
 from django.forms.formsets import formset_factory, BaseFormSet
@@ -101,6 +102,11 @@ class Drill(models.Model):
         answers = self.exam.correctans_set.all()
         for an in answers:
             Answer.objects.create(drill=self, correctans=an)
+
+    def point_earned(self):
+        p = self.exam.correctans_set.all()
+        p = p.aggregate(Sum('point'))
+        return p
 
 
 class Answer(models.Model):

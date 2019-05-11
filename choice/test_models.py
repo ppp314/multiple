@@ -50,3 +50,9 @@ def test_one_drill(create_user_exam_fixture):
     d.exam = e
     d.save()
     assert d.answer_set.count() == e.correctans_set.count()
+
+
+@pytest.mark.skip("Needs to be done")
+def test_point(create_user_exam_fixture):
+    ex = Exam.objects.filter(author__username='dokinchan')[0]
+    assert CorrectAns.objects.filter(exam=ex)[0].point_earned() == 100
