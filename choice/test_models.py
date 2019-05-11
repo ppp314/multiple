@@ -41,12 +41,12 @@ def test_two_exam(create_user_exam_fixture):
 
 
 def test_one_drill(create_user_exam_fixture):
-    """ 
+    """
     Test if one drill and the same number of
     answer can be made.
     """
-    exam = Exam.objects.first()
-    question = Question.objects.first()
-    drill = Drill.objects.create(exam=exam)
-    Answer.objects.create(drill=drill, question=question)
-    assert Drill.objects.count() == 1
+    e = Exam.objects.first()
+    d = Drill(title="Test")
+    d.exam = e
+    d.save()
+    assert d.answer_set.count() == e.question_set.count()

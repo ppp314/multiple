@@ -96,6 +96,12 @@ class Drill(models.Model):
         max_length=200
         )
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        questions = self.exam.question_set.all()
+        for q in questions:
+            Answer.objects.create(drill=self, question=q)
+
 
 class Answer(models.Model):
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
