@@ -107,5 +107,6 @@ class Answer(models.Model):
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     answer = models.PositiveIntegerField(
+        blank=True,
         default=1
-        )
+    )
