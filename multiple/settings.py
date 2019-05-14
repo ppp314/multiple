@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'extra_views',
     'debug_toolbar',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +106,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGGING = {
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+        },
+    },
+}
 
 
 # Internationalization
