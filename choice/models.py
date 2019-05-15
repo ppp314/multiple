@@ -88,12 +88,23 @@ class CorrectAns(models.Model):
         return str(self.no) + '-' + str(self.sub_no)
 
 
+class DrillQuerySet(models.QuerySet):
+    def score(self):
+        return self.annotate(
+            total_score=Sum('answer__correctans__point'
+            )
+        )
+
+
 class Drill(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
     title = models.CharField(
         verbose_name='テスト名',
         max_length=200
     )
+
+    objects = models.Manager()
+    my_objects = DrillQuerySet.as_manager()
 
     def __str__(self):
         return f"is {self.title}."

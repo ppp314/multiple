@@ -77,3 +77,11 @@ def test_point_one_user(create_user_exam_fixture):
     ).aggregate(
         Sum('correctans__point')
     )['correctans__point__sum'] == 95
+
+
+def test_drill_annotation(create_user_exam_fixture):
+    """
+    Test drill point
+    """
+    a = Drill.my_objects.order_by('exam').score()
+    assert a[0].total_score == 100
