@@ -18,7 +18,7 @@ This file is part of multiple.
 '''
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, F, Q
 from django.urls import reverse
 from django.utils import timezone
 
@@ -89,11 +89,17 @@ class CorrectAns(models.Model):
 
 
 class DrillQuerySet(models.QuerySet):
+    """
+    Used as a Drill class manager
+    """
     def score(self):
-        return self.annotate(
-            total_score=Sum('answer__correctans__point'
+        mark_c = Sum(
+            'answer__correctans__point',
+            filter=Q(
+                answer__correctans__correct_answer=F('answer__answer')
             )
         )
+        return self.annotate(total_score=mark_c)
 
 
 class Drill(models.Model):
