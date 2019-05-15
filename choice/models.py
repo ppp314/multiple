@@ -18,10 +18,9 @@ This file is part of multiple.
 '''
 
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 from django.utils import timezone
-from django.forms.formsets import formset_factory, BaseFormSet
-from django import forms
 
 
 class Exam(models.Model):
@@ -31,17 +30,17 @@ class Exam(models.Model):
     title = models.CharField(
         verbose_name='テスト名',
         max_length=200
-        )
+    )
 
     created_date = models.DateTimeField(
         verbose_name='作成日',
         default=timezone.now
-        )
+    )
 
     number_of_question = models.IntegerField(
         verbose_name='問題数',
         default=1
-        )
+    )
 
     class Meta:
 
@@ -56,29 +55,29 @@ class Exam(models.Model):
         return reverse('choice:question-index', kwargs={'pk': self.pk})
 
 
-class Question(models.Model):
-
+class CorrectAns(models.Model):
+    """ The class which contains correct answers."""
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
     no = models.IntegerField(
         verbose_name='大問',
         default=0
-        )
+    )
 
     sub_no = models.IntegerField(
         verbose_name='小問',
         default=0
-        )
+    )
 
     point = models.IntegerField(
         verbose_name='配点',
         default=0
-        )
+    )
 
-    answer = models.PositiveIntegerField(
+    correct_answer = models.PositiveIntegerField(
         verbose_name='正解',
         default=1
-        )
+    )
 
     class Meta:
         verbose_name = '問題'
@@ -87,3 +86,38 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
+
+
+class Drill(models.Model):
+    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
+    title = models.CharField(
+        verbose_name='テスト名',
+        max_length=200
+    )
+
+    def __str__(self):
+        return f"is {self.title}."
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        answers = self.exam.correctans_set.all()
+        for an in answers:
+            Answer.objects.create(drill=self, correctans=an)
+
+    def point_earned(self):
+        p = self.exam.correctans_set.all()
+        p = p.aggregate(Sum('point'))
+        return p
+
+
+class Answer(models.Model):
+    """The class contains submitted answers."""
+    drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
+    correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
+    answer = models.PositiveIntegerField(
+        blank=True,
+        default=1
+    )
+
+    def __str__(self):
+        return f"is {self.answer}."

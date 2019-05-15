@@ -18,25 +18,62 @@ This file is part of Multiple.
 """
 
 import pytest
-from .models import Exam, Question
+from .models import Exam, CorrectAns
+from .models import Drill
+from django.db.models import Sum, F
+
+
+pytestmark = pytest.mark.django_db
 
 
 # Create your tests here.
-@pytest.mark.django_db
 def test_one_exam(create_user_exam_fixture):
     """Test if no question exists. The count should be 0."""
     assert Exam.objects.filter(author__username='dokinchan').count() == 1
 
 
-@pytest.mark.django_db
 def test_no_question():
     """Test if no question exists, count should be 0."""
-    assert Question.objects.count() == 0
+    assert CorrectAns.objects.count() == 0
 
 
-@pytest.mark.django_db
 def test_two_exam(create_user_exam_fixture):
     """Test if there are two questions existing. The count should be 2."""
     assert Exam.objects.count() == 2
 
 
+def test_one_drill(create_user_exam_fixture):
+    """
+    Test if one drill and the same number of
+    answer can be made.
+    Answer.save() is configured properly.
+    """
+    e = Exam.objects.first()
+    d = Drill(title="Test")
+    d.exam = e
+    d.save()
+    assert d.answer_set.count() == e.correctans_set.count()
+
+
+def test_point(create_user_exam_fixture):
+    """Test if each point is properly set."""
+    assert CorrectAns.objects.count() == 40
+    assert CorrectAns.objects.all().aggregate(
+        Sum('point')
+    )['point__sum'] == 200
+
+
+def test_point_one_user(create_user_exam_fixture):
+    """
+    Test total point.
+    There are the one wrong answer and the nineteen correct answers,
+    which are 5 points each.
+    """
+    ex = Exam.objects.filter(author__username='baikinman')[0]
+    d = Drill.objects.filter(exam=ex)[0]
+    an = d.answer_set.all().order_by('correctans__no', 'correctans__sub_no')
+    assert an.filter(
+        answer=F('correctans__correct_answer')
+    ).aggregate(
+        Sum('correctans__point')
+    )['correctans__point__sum'] == 95

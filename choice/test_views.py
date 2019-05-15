@@ -22,7 +22,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
-from .models import Exam, Question
+from .models import Exam
 from .forms import MyExamForm
 
 
@@ -89,13 +89,16 @@ def test_create_exam_by_post():
     test_author = User.objects.create_user(
         username='jacob',
         email='jacob@example.com',
-        password='top_secret')
+        password='top_secret'
+    )
 
-    form_data = {'title': "Test One",
-                 'author': test_author.id,
-                 'created_date': timezone.now(),
-                 'number_of_question': 10,
-                 'q_tobemade': 15, }
+    form_data = {
+        'title': "Test One",
+        'author': test_author.id,
+        'created_date': timezone.now(),
+        'number_of_question': 10,
+        'q_tobemade': 15,
+    }
 
     form = MyExamForm(data=form_data)
     print(form.errors)
