@@ -71,7 +71,10 @@ def test_point_one_user(create_user_exam_fixture):
     """
     ex = Exam.objects.filter(author__username='baikinman')[0]
     d = Drill.objects.filter(exam=ex)[0]
-    an = d.mark_set.all().order_by('correctans__no', 'correctans__sub_no')
+    an = d.mark_set.all().order_by(
+        'correctans__no',
+        'correctans__sub_no',
+    )
     assert an.filter(
         answer=F('correctans__correct_answer')
     ).aggregate(
