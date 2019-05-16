@@ -84,5 +84,5 @@ def test_drill_annotation(create_user_exam_fixture):
     Test drill point
     """
     exam = Exam.objects.get(title="test1")
-    a = Drill.my_objects.filter(exam=exam).score()
+    a = Drill.objects.filter(exam=exam).score()
     assert a[0].total_score == 95

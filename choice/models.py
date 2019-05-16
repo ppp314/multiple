@@ -93,6 +93,7 @@ class DrillQuerySet(models.QuerySet):
     Used as a Drill class manager
     """
     def score(self):
+        """Should not apply .filter() """
         mark_c = Sum(
             'answer__correctans__point',
             filter=Q(
@@ -109,8 +110,7 @@ class Drill(models.Model):
         max_length=200
     )
 
-    objects = models.Manager()
-    my_objects = DrillQuerySet.as_manager()
+    objects = DrillQuerySet.as_manager()
 
     def __str__(self):
         return f"is {self.title}."
