@@ -95,9 +95,9 @@ class DrillQuerySet(models.QuerySet):
     def score(self):
         """Should not apply .filter() """
         mark_c = Sum(
-            'answer__correctans__point',
+            'mark__correctans__point',
             filter=Q(
-                answer__correctans__correct_answer=F('answer__answer')
+                mark__correctans__correct_answer=F('mark__answer')
             )
         )
         return self.annotate(total_score=mark_c)
@@ -119,7 +119,7 @@ class Drill(models.Model):
         super().save(*args, **kwargs)
         answers = self.exam.correctans_set.all()
         for an in answers:
-            Answer.objects.create(drill=self, correctans=an)
+            Mark.objects.create(drill=self, correctans=an)
 
     def point_earned(self):
         p = self.exam.correctans_set.all()
@@ -127,7 +127,7 @@ class Drill(models.Model):
         return p
 
 
-class Answer(models.Model):
+class Mark(models.Model):
     """The class contains submitted answers."""
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)

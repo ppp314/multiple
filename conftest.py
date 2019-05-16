@@ -30,18 +30,18 @@ def create_user_exam_fixture():
         title="Test Drill one"
     )
 
-    anset = drill.answer_set.all()
+    mkset = drill.mark_set.all()
 
     """
     Set answer 1 wrong answer and 19 correct answers to earn the score of 95.
     """
-    an = anset[0]
-    an.answer = 2  # Wrong!
-    an.save()
+    mk = mkset[0]
+    mk.answer = 2  # Wrong!
+    mk.save()
 
-    for an in anset[1:]:
-        an.answer = 1  # Correct
-        an.save()
+    for mk in mkset[1:]:
+        mk.answer = 1  # Correct
+        mk.save()
 
     """
     The second fixture
@@ -67,12 +67,12 @@ def create_user_exam_fixture():
         title="Test Drill one"
     )
 
-    anset = drill.answer_set.all()
+    mkset = drill.mark_set.all()
 
-    an = anset[0]
-    an.answer = 2
-    an.save()
+    mk = mkset[0]
+    mk.answer = 2
+    mk.save()
 
-    for an in anset[1:]:
-        an.answer = 1
-        an.save()
+    for mk in mkset[1:]:
+        mk.answer = 1
+        mk.save()

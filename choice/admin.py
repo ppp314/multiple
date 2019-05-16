@@ -18,7 +18,7 @@ This file is part of Multiple.
 """
 
 from django.contrib import admin
-from .models import Exam, CorrectAns, Drill, Answer
+from .models import Exam, CorrectAns, Drill, Mark
 
 # Register your models here.
 
@@ -36,7 +36,7 @@ class DrillInline(admin.TabularInline):
 
 
 class AnswerInline(admin.TabularInline):
-    model = Answer
+    model = Mark
     extra = 0
     ordering = ['correctans__no', 'correctans__sub_no']
 
