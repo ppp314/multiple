@@ -1,7 +1,9 @@
 import pytest
 
 from django.contrib.auth.models import User
-from choice.models import Exam, CorrectAns, Drill
+from choice.models import Exam, CorrectAns, Drill,\
+    CHOICE_MARK_ONE,\
+    CHOICE_MARK_TWO
 
 
 @pytest.fixture
@@ -22,7 +24,8 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1
+            exam=exam, no=i, sub_no=1, point=5,
+            answer=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(
@@ -30,18 +33,26 @@ def create_user_exam_fixture():
         title="Test Drill one"
     )
 
-    mkset = drill.mark_set.all()
+    mkset = (
+        drill
+        .mark_set.
+        order_by(
+            'correctans__no',
+            'correctans__sub_no'
+        )
+    )
 
     """
     Set answer 1 wrong answer and 19 correct answers to earn the score of 95.
     """
     mk = mkset[0]
-    mk.answer = 2  # Wrong!
+    mk.your_choice = CHOICE_MARK_TWO  # Wrong!
     mk.save()
-
     for mk in mkset[1:]:
-        mk.answer = 1  # Correct
+        mk.your_choice = CHOICE_MARK_ONE  # Correct
         mk.save()
+
+
 
     """
     The second fixture
@@ -59,7 +70,8 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1
+            exam=exam, no=i, sub_no=1, point=5,
+            answer=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(
@@ -67,12 +79,18 @@ def create_user_exam_fixture():
         title="Test Drill one"
     )
 
-    mkset = drill.mark_set.all()
+    mkset = (
+        drill
+        .mark_set.
+        order_by(
+            'correctans__no',
+            'correctans__sub_no'
+        )
+    )
 
     mk = mkset[0]
-    mk.answer = 2
+    mk.your_choice = CHOICE_MARK_TWO  # Wrong!
     mk.save()
-
     for mk in mkset[1:]:
-        mk.answer = 1
+        mk.your_choice = CHOICE_MARK_ONE  # Correct
         mk.save()
