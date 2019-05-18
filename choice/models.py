@@ -89,7 +89,7 @@ class CorrectAns(models.Model):
         default=0
     )
 
-    c_answer = models.CharField(
+    answer = models.CharField(
         max_length=30,
         choices=CHOICE_MARK_CHOICES,
         blank=True,
@@ -113,7 +113,7 @@ class DrillQuerySet(models.QuerySet):
         mark_c = Sum(
             'mark__correctans__point',
             filter=Q(
-                mark__correctans__c_answer=F('mark__your_choice')
+                mark__correctans__answer=F('mark__your_choice')
             )
         )
         return self.annotate(total_score=mark_c)
