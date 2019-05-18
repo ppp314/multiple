@@ -24,7 +24,7 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1,
+            exam=exam, no=i, sub_no=1, point=5,
             c_answer=CHOICE_MARK_ONE
         )
 
@@ -46,14 +46,10 @@ def create_user_exam_fixture():
     Set answer 1 wrong answer and 19 correct answers to earn the score of 95.
     """
     mk = mkset[0]
-    mk.answer = 2  # Wrong!
-    mk.your_choice = CHOICE_MARK_TWO
+    mk.your_choice = CHOICE_MARK_TWO  # Wrong!
     mk.save()
-    i = 0
     for mk in mkset[1:]:
-        i = i + 1
-        mk.answer = 1  # Correct
-        mk.your_choice = CHOICE_MARK_ONE
+        mk.your_choice = CHOICE_MARK_ONE  # Correct
         mk.save()
 
 
@@ -74,7 +70,7 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1,
+            exam=exam, no=i, sub_no=1, point=5,
             c_answer=CHOICE_MARK_ONE
         )
 
@@ -93,11 +89,8 @@ def create_user_exam_fixture():
     )
 
     mk = mkset[0]
-    mk.answer = 2
-    mk.your_choice = CHOICE_MARK_TWO
+    mk.your_choice = CHOICE_MARK_TWO  # Wrong!
     mk.save()
-
     for mk in mkset[1:]:
-        mk.answer = 1
-        mk.your_choice = CHOICE_MARK_ONE
+        mk.your_choice = CHOICE_MARK_ONE  # Correct
         mk.save()

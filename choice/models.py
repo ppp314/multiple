@@ -89,11 +89,6 @@ class CorrectAns(models.Model):
         default=0
     )
 
-    correct_answer = models.PositiveIntegerField(
-        verbose_name='正解',
-        default=1
-    )
-
     c_answer = models.CharField(
         max_length=30,
         choices=CHOICE_MARK_CHOICES,
@@ -153,10 +148,6 @@ class Mark(models.Model):
 
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
-    answer = models.PositiveIntegerField(
-        blank=True,
-        default=1
-    )
     your_choice = models.CharField(
         max_length=30,
         choices=CHOICE_MARK_CHOICES,
