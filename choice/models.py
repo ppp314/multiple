@@ -149,14 +149,13 @@ class Mark(models.Model):
     correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
     answer = models.PositiveIntegerField(
         blank=True,
-        default=100
+        default=1
     )
-
-    pretty = models.CharField(
+    your_choice = models.CharField(
         max_length=30,
+        choices=CHOICE_MARK_CHOICES,
         blank=True,
-        default=""
     )
 
     def __str__(self):
-        return f"is {self.answer}."
+        return f"is {self.your_choice}."

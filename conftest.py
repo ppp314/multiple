@@ -1,7 +1,9 @@
 import pytest
 
 from django.contrib.auth.models import User
-from choice.models import Exam, CorrectAns, Drill
+from choice.models import Exam, CorrectAns, Drill,\
+    CHOICE_MARK_ONE,\
+    CHOICE_MARK_TWO
 
 
 @pytest.fixture
@@ -44,11 +46,13 @@ def create_user_exam_fixture():
     """
     mk = mkset[0]
     mk.answer = 2  # Wrong!
+    mk.your_choice = CHOICE_MARK_TWO
     mk.save()
     i = 0
     for mk in mkset[1:]:
         i = i + 1
         mk.answer = 1  # Correct
+        mk.your_choice = CHOICE_MARK_ONE
         mk.save()
 
 
@@ -88,8 +92,10 @@ def create_user_exam_fixture():
 
     mk = mkset[0]
     mk.answer = 2
+    mk.your_choice = CHOICE_MARK_TWO
     mk.save()
 
     for mk in mkset[1:]:
         mk.answer = 1
+        mk.your_choice = CHOICE_MARK_ONE
         mk.save()
