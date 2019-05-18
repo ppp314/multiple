@@ -52,7 +52,7 @@ def test_one_drill(create_user_exam_fixture):
     d = Drill(title="Test")
     d.exam = e
     d.save()
-    assert d.answer_set.count() == e.correctans_set.count()
+    assert d.mark_set.count() == e.correctans_set.count()
 
 
 def test_point(create_user_exam_fixture):
@@ -71,9 +71,21 @@ def test_point_one_user(create_user_exam_fixture):
     """
     ex = Exam.objects.filter(author__username='baikinman')[0]
     d = Drill.objects.filter(exam=ex)[0]
-    an = d.answer_set.all().order_by('correctans__no', 'correctans__sub_no')
+    an = d.mark_set.all().order_by(
+        'correctans__no',
+        'correctans__sub_no',
+    )
     assert an.filter(
-        answer=F('correctans__correct_answer')
+        your_choice=F('correctans__answer')
     ).aggregate(
         Sum('correctans__point')
     )['correctans__point__sum'] == 95
+
+
+def test_drill_annotation(create_user_exam_fixture):
+    """
+    Test drill point
+    """
+    exam = Exam.objects.get(title="test1")
+    a = Drill.objects.filter(exam=exam).score()
+    assert a[0].total_score == 95

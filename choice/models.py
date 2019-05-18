@@ -18,7 +18,7 @@ This file is part of multiple.
 '''
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, F, Q
 from django.urls import reverse
 from django.utils import timezone
 
@@ -55,6 +55,21 @@ class Exam(models.Model):
         return reverse('choice:question-index', kwargs={'pk': self.pk})
 
 
+CHOICE_MARK_ONE = 'MARK1'
+CHOICE_MARK_TWO = 'MARK2'
+CHOICE_MARK_THREE = 'MARK3'
+CHOICE_MARK_FOUR = 'MARK4'
+CHOICE_MARK_FIVE = 'MARK5'
+
+CHOICE_MARK_CHOICES = (
+    (CHOICE_MARK_ONE, 'Mark 1'),
+    (CHOICE_MARK_TWO, 'Mark 2'),
+    (CHOICE_MARK_THREE, 'Mark 3'),
+    (CHOICE_MARK_FOUR, 'Mark 4'),
+    (CHOICE_MARK_FIVE, 'Mark 5'),
+)
+
+
 class CorrectAns(models.Model):
     """ The class which contains correct answers."""
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
@@ -74,9 +89,10 @@ class CorrectAns(models.Model):
         default=0
     )
 
-    correct_answer = models.PositiveIntegerField(
-        verbose_name='正解',
-        default=1
+    answer = models.CharField(
+        max_length=30,
+        choices=CHOICE_MARK_CHOICES,
+        blank=True,
     )
 
     class Meta:
@@ -88,12 +104,29 @@ class CorrectAns(models.Model):
         return str(self.no) + '-' + str(self.sub_no)
 
 
+class DrillQuerySet(models.QuerySet):
+    """
+    Used as a Drill class manager
+    """
+    def score(self):
+        """Should not apply .filter() """
+        mark_c = Sum(
+            'mark__correctans__point',
+            filter=Q(
+                mark__correctans__answer=F('mark__your_choice')
+            )
+        )
+        return self.annotate(total_score=mark_c)
+
+
 class Drill(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
     title = models.CharField(
         verbose_name='テスト名',
         max_length=200
     )
+
+    objects = DrillQuerySet.as_manager()
 
     def __str__(self):
         return f"is {self.title}."
@@ -102,7 +135,7 @@ class Drill(models.Model):
         super().save(*args, **kwargs)
         answers = self.exam.correctans_set.all()
         for an in answers:
-            Answer.objects.create(drill=self, correctans=an)
+            Mark.objects.create(drill=self, correctans=an)
 
     def point_earned(self):
         p = self.exam.correctans_set.all()
@@ -110,14 +143,16 @@ class Drill(models.Model):
         return p
 
 
-class Answer(models.Model):
+class Mark(models.Model):
     """The class contains submitted answers."""
+
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
-    answer = models.PositiveIntegerField(
+    your_choice = models.CharField(
+        max_length=30,
+        choices=CHOICE_MARK_CHOICES,
         blank=True,
-        default=1
     )
 
     def __str__(self):
-        return f"is {self.answer}."
+        return f"is {self.your_choice}."
