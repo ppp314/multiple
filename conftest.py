@@ -24,7 +24,8 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1
+            exam=exam, no=i, sub_no=1, point=5, correct_answer=1,
+            c_answer=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(
@@ -73,7 +74,8 @@ def create_user_exam_fixture():
 
     for i in range(1, 21):
         CorrectAns.objects.create(
-            exam=exam, no=i, sub_no=1, point=5, correct_answer=1
+            exam=exam, no=i, sub_no=1, point=5, correct_answer=1,
+            c_answer=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(

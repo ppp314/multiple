@@ -94,6 +94,12 @@ class CorrectAns(models.Model):
         default=1
     )
 
+    c_answer = models.CharField(
+        max_length=30,
+        choices=CHOICE_MARK_CHOICES,
+        blank=True,
+    )
+
     class Meta:
         verbose_name = '問題'
         verbose_name_plural = '問題'
@@ -112,7 +118,7 @@ class DrillQuerySet(models.QuerySet):
         mark_c = Sum(
             'mark__correctans__point',
             filter=Q(
-                mark__correctans__correct_answer=F('mark__answer')
+                mark__correctans__c_answer=F('mark__your_choice')
             )
         )
         return self.annotate(total_score=mark_c)

@@ -76,7 +76,7 @@ def test_point_one_user(create_user_exam_fixture):
         'correctans__sub_no',
     )
     assert an.filter(
-        answer=F('correctans__correct_answer')
+        your_choice=F('correctans__c_answer')
     ).aggregate(
         Sum('correctans__point')
     )['correctans__point__sum'] == 95
