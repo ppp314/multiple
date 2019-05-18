@@ -55,6 +55,21 @@ class Exam(models.Model):
         return reverse('choice:question-index', kwargs={'pk': self.pk})
 
 
+CHOICE_MARK_ONE = 'MARK1'
+CHOICE_MARK_TWO = 'MARK2'
+CHOICE_MARK_THREE = 'MARK3'
+CHOICE_MARK_FOUR = 'MARK4'
+CHOICE_MARK_FIVE = 'MARK5'
+
+CHOICE_MARK_CHOICES = (
+    (CHOICE_MARK_ONE, 'Mark 1'),
+    (CHOICE_MARK_TWO, 'Mark 2'),
+    (CHOICE_MARK_THREE, 'Mark 3'),
+    (CHOICE_MARK_FOUR, 'Mark 4'),
+    (CHOICE_MARK_FIVE, 'Mark 5'),
+)
+
+
 class CorrectAns(models.Model):
     """ The class which contains correct answers."""
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
@@ -129,11 +144,18 @@ class Drill(models.Model):
 
 class Mark(models.Model):
     """The class contains submitted answers."""
+
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
     answer = models.PositiveIntegerField(
         blank=True,
-        default=1
+        default=100
+    )
+
+    pretty = models.CharField(
+        max_length=30,
+        blank=True,
+        default=""
     )
 
     def __str__(self):
