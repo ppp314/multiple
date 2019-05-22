@@ -21,6 +21,7 @@ import pytest
 from .models import Exam, CorrectAns
 from .models import Drill
 from django.db.models import Sum, F
+from django.db import transaction
 
 
 pytestmark = pytest.mark.django_db
@@ -89,3 +90,14 @@ def test_drill_annotation(create_user_exam_fixture):
     exam = Exam.objects.get(title="test1")
     a = Drill.objects.filter(exam=exam).score()
     assert a[0].total_score == 95
+
+
+def test_should_pass_select_for_update(create_user_exam_fixture):
+    """
+    test for select_for_update
+    """
+    ex = Exam.objects.filter(author__username='baikinman')[0]
+    d = Drill.objects.filter(exam=ex, id=1)
+    with transaction.atomic():
+        d.select_for_update()
+    assert True
