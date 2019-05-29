@@ -15,7 +15,7 @@ Postgres https://devcenter.heroku.com/articles/heroku-postgresql#local-setup
 
 
 Installation
-
+------------
 1. Set up local envronment using python3::
 
   mkdir mysite
@@ -106,13 +106,13 @@ Make Procfile in the top directory and add following::
   
 
 heroku setup
-============
+------------
   $ heroku local web
 
 Your app should now be running on http://localhost:5000/).
 
 Deploying to Heroku
-===================
+-------------------
 
 heroku setup::
   $ heroku create
@@ -123,7 +123,7 @@ heroku setup::
 
 
 Documentation
-=============
+-------------
 For more information about using Python on Heroku, see these Dev Center articles:
 https://devcenter.heroku.com/categories/python
 
