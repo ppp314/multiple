@@ -1,6 +1,3 @@
-#  Demo
-
-This application is inspired by the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
 
 ## Running Locally  
 
