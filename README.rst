@@ -17,6 +17,7 @@ Postgres https://devcenter.heroku.com/articles/heroku-postgresql#local-setup
 Installation
 ------------
 1. Set up local envronment using python3::
+
   $ mkdir mysite
 
   $ cd mysite
