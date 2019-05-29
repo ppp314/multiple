@@ -36,14 +36,14 @@ Installation
 
 
 
-If you create your source tree from scratch, you need to django project first.::
+#. If you create your source tree from scratch, you need to django project first.::
   (venv) $ django-admin.py startproject mysite .
 
 
   (venv) $ pip freeze > requirements.txt
 
 
-Add following in ``settings.py``::
+#. Add following in ``settings.py``::
   import django_heroku
 
   INSTALLED_APPS = (
@@ -58,26 +58,26 @@ Add following in ``settings.py``::
   LANGUAGE_CODE = 'ja-JP'
 
   STATIC_ROOT = '/static/'
-  # Configure Django App for Heroku.
+  """ Configure Django App for Heroku."""
     django_heroku.settings(locals())
 
 
-Remove secret key from settings.py
+#. Remove secret key from settings.py
 
-Set global environment variable::
+#. Set global environment variable::
   (venv) $ set -x SECRET_KEY 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
 
 
-Setup the database.::
+#. Setup the database.::
   (venv) $ createdb mysite
   (venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite'
 
-Run server locally::
+#. Run server locally::
   (venv) $ python manage.py runserver
 
 
-Use ipython::
-  (venv) $ python manage.py shell -i ipython
+#. Use ipython::
+  (venv) $ python manage.py shell_plus -i 
 
 Push to github
 ==============
