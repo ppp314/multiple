@@ -12,8 +12,13 @@ Also, install the Heroku CLI https://devcenter.heroku.com/articles/heroku-cli an
 Postgres https://devcenter.heroku.com/articles/heroku-postgresql#local-setup
 
 
-Setup::
-  $ mkdir mysite
+
+
+Installation
+
+1. Set up local envronment using python3::
+
+  mkdir mysite
 
   $ cd mysite
 
@@ -28,6 +33,8 @@ Setup::
   (venv) $ pip install django-extensions
 
   (venv) $ pip install django django-heroku gunicorn django-multiselectfield
+
+
 
 If you create your source tree from scratch, you need to django project first.::
   (venv) $ django-admin.py startproject mysite .
