@@ -72,45 +72,49 @@ Installation
 
 Push to github
 ==============
-Make .gitignore  
 
+1. Make .gitignore::
 
-*.pyc
-*~
-__pycache__
-myvenv
-db.sqlite3
-/static
-.DS_Store
+     *.pyc
+     *~
+     __pycache__
+     myvenv
+     db.sqlite3
+     /static
+     .DS_Store
 
+2. Setup git::
 
-Setup git::
-  $ git init
-  $ git add -A
-  $ git commit -m "Initialize repository"
+     $ git init
+     $ git add -A
+     $ git commit -m "Initialize repository"
   
-  $ git remote add origin https://github.com/<username>/mysite.git
-  $git push -u origin --all
+     $ git remote add origin https://github.com/<username>/mysite.git
+     $ git push -u origin --all
 
-Make Procfile in the top directory and add following::
-  web: gunicorn mysite.wsgi --reload --log-file -
+#. Make Procfile in the top directory and add following::
+
+     web: gunicorn mysite.wsgi --reload --log-file -
   
 
 heroku setup
 ------------
-  $ heroku local web
+1. Setup heroku locally::
 
-Your app should now be running on http://localhost:5000/).
+     $ heroku local web
+
+Your app should now be running on http://localhost:5000/.
 
 Deploying to Heroku
 -------------------
 
-heroku setup::
-  $ heroku create
-  $ git push heroku master
+2. heroku setup::
 
-  $ heroku run python manage.py migrate
-  $ heroku open
+     $ heroku create
+     $ git push heroku master
+
+     $ heroku run python manage.py migrate
+     $ heroku open
 
 
 Documentation
