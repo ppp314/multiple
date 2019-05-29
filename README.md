@@ -1,128 +1,127 @@
-#  Demo
-
-This application is inspired by the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.  
-
-## Running Locally  
-
-Make sure you have Python [installed properly](http://install.python-guide.org). Also, install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).  
-
-```sh
-$ mkdir mysite
-$ cd mysite
-$ python3 -m venv venv
-$ source venv/bin/activate.fish
-(venv) $ pip install --upgrade pip
-(venv) $ pip install ipython
-(venv) $ pip install django-extensions
-(venv) $ pip install django django-heroku gunicorn django-multiselectfield
-```
-If you create your source tree from scratch, you need to django project first.
-```sh
-(venv) $ django-admin.py startproject mysite .
-```
-
-```sh
-(venv) $ pip freeze > requirements.txt
-```
-
-Add following in settings.py  
-
-```sh
-
-INSTALLED_APPS = (
-...
-...
-
-  'django_extensions', #<--- Insert this line
-...
-)
-
-TIME_ZONE = 'Asia/Tokyo'
-
-LANGUAGE_CODE = 'ja-JP'
-
-STATIC_ROOT = '/static/'
-# Configure Django App for Heroku.
-import django_heroku
-    django_heroku.settings(locals())
-```
-Remove secret key
-
-Create file "local_settings.py" with secret key
-```sh
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
-```
+===============
+Mysite
+===============
 
 
-```sh
-(venv) $ createdb mysite
-(venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite'
-(venv) $ python manage.py runserver
-```
+Running Locally
+===============
+Make sure you have Python installed properly http://install.python-guide.org.
 
-Use ipython
+Also, install the Heroku CLI https://devcenter.heroku.com/articles/heroku-cli and
 
-```sh
-(venv) $ python manage.py shell -i ipython
-```
+Install Postgres::
+
+  brew install postgresql.
 
 
-#Push to github
+Installation
+------------
+1. Setup local environment using python3::
 
-Make .gitignore  
+     $ mkdir mysite
+     $ cd mysite
+     $ python3 -m venv venv
+     $ source venv/bin/activate.fish
+     (venv) $ pip install --upgrade pip
+     (venv) $ pip install ipython
+     (venv) $ pip install django-extensions
+     (venv) $ pip install django django-heroku gunicorn 
 
-```sh
-*.pyc
-*~
-__pycache__
-myvenv
-db.sqlite3
-/static
-.DS_Store
-local_settings.py
-```
+#. If you create your source tree from scratch, you need to django project first.::
 
-```sh
-$ git init
-$ git add -A
-$ git commit -m "Initialize repository"
+     (venv) $ django-admin.py startproject mysite .
+     (venv) $ pip freeze > requirements.txt
 
-git remote add origin https://github.com/<username>/mysite.git
-git push -u origin --all
-````
+#. Add following in ``settings.py``::
+
+     import django_heroku
+
+     INSTALLED_APPS = (
+     ...
+     ...
+     'django_extensions', #<--- Insert this line
+     ...
+     )
+
+     TIME_ZONE = 'Asia/Tokyo'
+
+     LANGUAGE_CODE = 'ja-JP'
+
+     STATIC_ROOT = '/static/'
+     """ Configure Django App for Heroku."""
+     django_heroku.settings(locals())
+
+#. Remove secret key from settings.py
+
+#. Set global environment variable::
+
+     (venv) $ set -x SECRET_KEY 'f!%)$s04lc1rr*ea#@tkp#em^24mh295+_=zl)4)bdm!!3q@o^'
+
+#. Setup the database.::
+
+     (venv) $ createdb mysite
+     (venv) $ set -x DATABASE_URL 'postgres://$user@localhost/mysite'
+
+#. Run server locally::
+
+     (venv) $ python manage.py runserver
+
+#. Use ipython::
+
+     (venv) $ python manage.py shell_plus -i 
+
+Push to github
+==============
+
+1. Make .gitignore::
+
+     *.pyc
+     *~
+     __pycache__
+     myvenv
+     db.sqlite3
+     /static
+     .DS_Store
+
+2. Setup git::
+
+     $ git init
+     $ git add -A
+     $ git commit -m "Initialize repository"
+  
+     $ git remote add origin https://github.com/<username>/mysite.git
+     $ git push -u origin --all
+
+#. Make Procfile in the top directory and add following::
+
+     web: gunicorn mysite.wsgi --reload --log-file -
+  
+
+heroku setup
+------------
+1. Setup heroku locally::
+
+     $ heroku local web
+
+Your app should now be running on http://localhost:5000/.
+
+Deploying to Heroku
+-------------------
+
+2. heroku setup::
+
+     $ heroku create
+     $ git push heroku master
+
+     $ heroku run python manage.py migrate
+     $ heroku open
 
 
-Add Procfile following.  
-
-```sh
-web: gunicorn mysite.wsgi --reload --log-file -
-```
-
-
-
-```sh
-$ heroku local web
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku master
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-
-## Documentation
-
+Documentation
+-------------
 For more information about using Python on Heroku, see these Dev Center articles:
+https://devcenter.heroku.com/categories/python
 
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
-
-## LICENSE
+LICENSE
+=======
 GPL-3
-
