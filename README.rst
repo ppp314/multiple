@@ -9,9 +9,9 @@ Make sure you have Python installed properly http://install.python-guide.org.
 
 Also, install the Heroku CLI https://devcenter.heroku.com/articles/heroku-cli and
 
-Postgres https://devcenter.heroku.com/articles/heroku-postgresql#local-setup
+Install Postgres::
 
-
+  brew install postgresql.
 
 
 Installation
