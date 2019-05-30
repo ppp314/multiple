@@ -21,13 +21,24 @@ from django.urls import include, path
 
 
 from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
-    ExamDeleteView, ExamUpdateView, ExamCreate, QuestionIndexView, \
+    ExamDeleteView, ExamUpdateView, \
+    ExamCreateView, \
+    QuestionIndexView, \
     ExamQuestionView, vote, multiple_question_form, EditQuestionView, \
-    SuccessView
+    SuccessView, \
+    AnswerModelFormSetView, \
+    AnswerDeleteView, \
+    MarkUpdateWithInlinesView, \
+    MarkDeleteView
+
 
 app_name = 'choice'
 
+<<<<<<< HEAD
 extra_patterns = [
+=======
+exam_extra_patterns = [
+>>>>>>> development-1
     path(
         '',
         ExamIndexView.as_view(),
@@ -48,6 +59,47 @@ extra_patterns = [
         ExamDeleteView.as_view(),
         name='exam-delete'
     ),
+    path(
+        'create/',
+        ExamCreateView.as_view(),
+        name='exam-create'
+    ),
+]
+
+answer_extra_patterns = [
+    path(
+        '<int:pk>/',
+        AnswerModelFormSetView.as_view(),
+        name='answer-list',
+    ),
+    path(
+        '<int:pk>/update',
+        AnswerModelFormSetView.as_view(),
+        name='answer-update'
+    ),
+    path(
+        '<int:pk>/delete',
+        AnswerDeleteView.as_view(),
+        name='answer-delete'
+    ),
+]
+
+mark_extra_patterns = [
+    path(
+        '<int:pk>/',
+        MarkUpdateWithInlinesView.as_view(),
+        name='mark-list',
+    ),
+    path(
+        '<int:pk>/update',
+        MarkUpdateWithInlinesView.as_view(),
+        name='mark-update'
+    ),
+    path(
+        '<int:pk>/delete',
+        MarkDeleteView.as_view(),
+        name='mark-delete'
+    ),
 ]
 
 
@@ -55,9 +107,11 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),
     path('exam/', include(extra_patterns)),
+    path('exam/', include(exam_extra_patterns)),
+    path('answer/', include(answer_extra_patterns)),
+    path('mark/', include(mark_extra_patterns)),
     path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
     path('vote/<int:pk>/', vote, name='exam-vote'),
-    path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', multiple_question_form, name='test-form'),
     path('editquestion/<int:pk>', EditQuestionView.as_view(),
          name='edit-question'),

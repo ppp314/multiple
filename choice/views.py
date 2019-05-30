@@ -29,7 +29,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.forms import inlineformset_factory
 from extra_views import CreateWithInlinesView, InlineFormSet, \
-    InlineFormSetFactory, InlineFormSetView
+    InlineFormSetFactory, InlineFormSetView, \
+    ModelFormSetView, \
+    UpdateWithInlinesView
 from .models import Exam, Answer
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
@@ -62,12 +64,13 @@ class QuestionIndexView(generic.ListView):
         return context
 
 
-class ExamCreate(CreateView):
+class ExamCreateView(ModelFormSetView):
     model = Exam
-    form_class = MyExamForm
-
-    def form_valid(self, form):
-        return super().form_valid(form)
+    fields = [
+        'author',
+        'title',
+    ]
+    template_name = 'choice/exam_formset.html'
 
 
 class ExamDetailView(DetailView):
@@ -80,7 +83,7 @@ class ExamDetailView(DetailView):
 class ExamDeleteView(DeleteView):
 
     model = Exam
-    success_url = reverse_lazy('choice:exam-index')
+    success_url = reverse_lazy('choice:exam-list')
 
 
 class ExamUpdateView(UpdateView):
@@ -103,6 +106,25 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
 
     def get_queryset(self):
         return self.object.answer_set.order_by('no', 'sub_no')
+<<<<<<< HEAD
+=======
+
+
+class AnswerModelFormSetView(ModelFormSetView):
+    pass
+
+
+class AnswerDeleteView(generic.DeleteView):
+    pass
+
+
+class MarkUpdateWithInlinesView(UpdateWithInlinesView):
+    pass
+
+
+class MarkDeleteView(generic.DeleteView):
+    pass
+>>>>>>> development-1
 
 
 def vote(request, pk):

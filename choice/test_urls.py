@@ -18,24 +18,36 @@ This file is part of Multiple.
 """
 
 import pytest
-
-
 from django.urls.base import resolve, Resolver404
-from .views import HomeView, AboutView, ExamIndexView, ExamQuestionView, \
+from .views import HomeView, AboutView, ExamIndexView, \
+    ExamCreateView, \
     ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
-    vote, ExamCreate, multiple_question_form, EditQuestionView, SuccessView
+    AnswerModelFormSetView, \
+    AnswerDeleteView, \
+    MarkUpdateWithInlinesView, \
+    MarkDeleteView, \
+    vote, \
+    multiple_question_form, \
+    EditQuestionView, \
+    SuccessView
 
 
 @pytest.mark.parametrize("test_url, expected", [
     ('/', HomeView),
     ('/about/', AboutView),
     ('/exam/', ExamIndexView),
+    ('/exam/create/', ExamCreateView),
     ('/exam/1/', ExamDetailView),
     ('/exam/1/update', ExamUpdateView),
     ('/exam/1/delete', ExamDeleteView),
+    ('/answer/1/', AnswerModelFormSetView),
+    ('/answer/1/update', AnswerModelFormSetView),
+    ('/answer/1/delete', AnswerDeleteView),
+    ('/mark/1/', MarkUpdateWithInlinesView),
+    ('/mark/1/update', MarkUpdateWithInlinesView),
+    ('/mark/1/delete', MarkDeleteView),
     ('/p/1/', QuestionIndexView),
     ('/vote/1/', vote),
-    ('/create/', ExamCreate),
     ('/testform/', multiple_question_form),
     ('/editquestion/1', EditQuestionView),
     ('/success/', SuccessView),

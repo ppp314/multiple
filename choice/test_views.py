@@ -32,11 +32,6 @@ from .forms import MyExamForm
     About /about 'about'   choice/about.html
     Help  /help  'help'    choice/help.html
     Login /login 'login'
-    Index /list/  'exam-list'  choice/exam-list.html
-    DetailExam /detail/<int:pk> 'exam-detail'
-    UpdateExam /update/<int:pk> 'exam-update'
-    DeleteExam /delete/<int:pk> 'exam-delete'
-    CreateExam /create/<int:pk> 'exam-create'
 """
 
 
@@ -52,10 +47,10 @@ class TestFormSetCreateView(TestCase):
          ["choice/about.html", "choice/base.html"]),
         ("choice:home",
          ["choice/home.html", "choice/base.html"]),
-        ("choice:exam-create",
-         ["choice/exam_form.html", "choice/base.html"]),
         ("choice:success",
          ["choice/success.html", "choice/base.html"]),
+        ('choice:exam-create',
+         ["choice/exam_formset.html", "choice/base.html"]),
     ],)
 def test_get_simple_view(client, test_url, expected_template):
     """ Test if the page about is available"""
