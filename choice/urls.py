@@ -34,11 +34,7 @@ from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
 
 app_name = 'choice'
 
-<<<<<<< HEAD
-extra_patterns = [
-=======
 exam_extra_patterns = [
->>>>>>> development-1
     path(
         '',
         ExamIndexView.as_view(),
@@ -106,7 +102,6 @@ mark_extra_patterns = [
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),
-    path('exam/', include(extra_patterns)),
     path('exam/', include(exam_extra_patterns)),
     path('answer/', include(answer_extra_patterns)),
     path('mark/', include(mark_extra_patterns)),

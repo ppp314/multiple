@@ -106,8 +106,6 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
 
     def get_queryset(self):
         return self.object.answer_set.order_by('no', 'sub_no')
-<<<<<<< HEAD
-=======
 
 
 class AnswerModelFormSetView(ModelFormSetView):
@@ -124,7 +122,6 @@ class MarkUpdateWithInlinesView(UpdateWithInlinesView):
 
 class MarkDeleteView(generic.DeleteView):
     pass
->>>>>>> development-1
 
 
 def vote(request, pk):
