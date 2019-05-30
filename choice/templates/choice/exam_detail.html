@@ -16,12 +16,29 @@ This file is part of Multiple.
 {% extends "choice/base.html" %}
 
 {% block content %}
-  <h1>{{ exam_detail.author }}</h1>
-  <p>{{ exam_detail.author }}</p>
-  <p>{{ exam_detail.title }}</p>
-  <p>Created on: {{ exam_detail.created_date|date }}</p>
-  <p><a href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a></p>
-  <p><a href="{% url 'choice:exam-update' exam_detail.id %}"> update </a></p>
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+	<p>作成者</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam_detail.author }}</p>
+      </div>
+      <div class="col-3">
+	<p>作成日</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam_detail.created_date|date }}</p>
+      </div>
+    </div>
+    <p>{{ exam_detail.title }}</p>
+
+    <p>
+      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a>
+      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam_detail.id %}"> update </a>
+      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}"> index </a>
+    </p>
+  </div>
 {% endblock %}
 
 

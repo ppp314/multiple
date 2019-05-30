@@ -64,14 +64,14 @@ def test_get_simple_view(client, test_url, expected_template):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_url,expected_template", [
-        ("choice:edit-question",
-         ["choice/post_form.html", "choice/base.html"]),
+        ('choice:exam-detail',
+         ["choice/exam_detail.html", "choice/base.html"]),
     ],)
-@pytest.mark.skip(reason="Can't guess url properly, maybe.")
 def test_get_onearg_view(
         create_user_exam_fixture, client, test_url, expected_template):
-    """ Test if the page about is available"""
-    url = reverse(test_url, args=(1,))
+    """Test if the view which requires id argument is available."""
+    id = Exam.objects.first().id
+    url = reverse(test_url, args=(id,))
     response = client.get(url)
     assert response.status_code == 200
     for e in expected_template:

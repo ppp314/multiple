@@ -58,18 +58,6 @@ class TestExamDetailViews(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_exam_detail_view(self):
-        exam = Exam.objects.create(author=self.author, title="exam_title")
-        url = reverse('choice:exam-detail', args=(exam.id,))
-        response = self.client.get(url)
-        self.assertNotEqual(response.context['exam_detail'], [])
-
-        # Test if the view contains the links to the delete page, the index page and the update page
-        self.assertContains(response, reverse('choice:exam-delete', args=(exam.id,)))
-        self.assertContains(response, reverse('choice:exam-update', args=(exam.id,)))
-        self.assertContains(response, reverse('choice:exam-list'))
-        self.assertTemplateUsed(response, 'choice/detail.html')
-
 
 class TestExamListTemplate(TestCase):
 
