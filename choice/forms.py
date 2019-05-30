@@ -19,7 +19,7 @@ This file is part of Multiple.
 
 from django import forms
 from django.forms import ModelForm
-from .models import Exam, CorrectAns
+from .models import Exam, Answer
 
 
 class MultipleQuestionChoiceForm(forms.Form):
@@ -38,7 +38,7 @@ class ExamForm(forms.Form):
 
 class QuestionForm(forms.Form):
     class Meta:
-        model = CorrectAns
+        model = Answer
         fields = ['no', 'sub_no', 'point']
 
 

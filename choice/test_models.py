@@ -18,8 +18,9 @@ This file is part of Multiple.
 """
 
 import pytest
-from .models import Exam, CorrectAns
-from .models import Drill
+from .models import Exam, Answer
+from .models import Drill, Grade
+from django.utils import timezone
 from django.db.models import Sum, F
 from django.db import transaction
 
@@ -35,7 +36,7 @@ def test_one_exam(create_user_exam_fixture):
 
 def test_no_question():
     """Test if no question exists, count should be 0."""
-    assert CorrectAns.objects.count() == 0
+    assert Answer.objects.count() == 0
 
 
 def test_two_exam(create_user_exam_fixture):
@@ -50,16 +51,19 @@ def test_one_drill(create_user_exam_fixture):
     Answer.save() is configured properly.
     """
     e = Exam.objects.first()
-    d = Drill(title="Test")
+    d = Drill(
+        description="Test",
+        created=timezone.now()
+    )
     d.exam = e
     d.save()
-    assert d.mark_set.count() == e.correctans_set.count()
+    assert d.mark_set.count() == e.answer_set.count()
 
 
 def test_point(create_user_exam_fixture):
     """Test if each point is properly set."""
-    assert CorrectAns.objects.count() == 40
-    assert CorrectAns.objects.all().aggregate(
+    assert Answer.objects.count() == 40
+    assert Answer.objects.all().aggregate(
         Sum('point')
     )['point__sum'] == 200
 
@@ -73,14 +77,14 @@ def test_point_one_user(create_user_exam_fixture):
     ex = Exam.objects.filter(author__username='baikinman')[0]
     d = Drill.objects.filter(exam=ex)[0]
     an = d.mark_set.all().order_by(
-        'correctans__no',
-        'correctans__sub_no',
+        'answer__no',
+        'answer__sub_no',
     )
     assert an.filter(
-        your_choice=F('correctans__answer')
+        your_choice=F('answer__correct')
     ).aggregate(
-        Sum('correctans__point')
-    )['correctans__point__sum'] == 95
+        Sum('answer__point')
+    )['answer__point__sum'] == 95
 
 
 def test_drill_annotation(create_user_exam_fixture):
@@ -88,16 +92,34 @@ def test_drill_annotation(create_user_exam_fixture):
     Test drill point
     """
     exam = Exam.objects.get(title="test1")
-    a = Drill.objects.filter(exam=exam).score()
-    assert a[0].total_score == 95
+    thisdrill = Drill.objects.get(exam=exam)
+
+    assert thisdrill.point_full_mark()['total'] == 100
+    assert thisdrill.point_earned()['total'] == 95
 
 
-def test_should_pass_select_for_update(create_user_exam_fixture):
+def test_should_create_grade_object(create_user_exam_fixture):
     """
-    test for select_for_update
+    Test if can create grade object.
     """
-    ex = Exam.objects.filter(author__username='baikinman')[0]
-    d = Drill.objects.filter(exam=ex, id=1)
-    with transaction.atomic():
-        d.select_for_update()
-    assert True
+    exam = Exam.objects.get(title="test1")
+    point = Drill.objects.filter(exam=exam).score()[0].total_score
+
+    asof = timezone.now()
+
+    before = Grade.objects.count()
+    Grade.objects.create(
+        exam=exam,
+        point=point,
+        created=asof,
+    )
+    after = Grade.objects.count()
+
+    assert before + 1 == after
+
+    before = after
+    thisdrill = Drill.objects.get(exam=exam)
+    thisdrill.register_grade()
+    after = Grade.objects.count()
+
+    assert before + 1 == after

@@ -1,7 +1,8 @@
 import pytest
 
+from django.utils import timezone
 from django.contrib.auth.models import User
-from choice.models import Exam, CorrectAns, Drill,\
+from choice.models import Exam, Answer, Drill,\
     CHOICE_MARK_ONE,\
     CHOICE_MARK_TWO
 
@@ -23,22 +24,23 @@ def create_user_exam_fixture():
     )
 
     for i in range(1, 21):
-        CorrectAns.objects.create(
+        Answer.objects.create(
             exam=exam, no=i, sub_no=1, point=5,
-            answer=CHOICE_MARK_ONE
+            correct=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(
         exam=exam,
-        title="Test Drill one"
+        description="Test Drill one",
+        created=timezone.now(),
     )
 
     mkset = (
         drill
         .mark_set.
         order_by(
-            'correctans__no',
-            'correctans__sub_no'
+            'answer__no',
+            'answer__sub_no'
         )
     )
 
@@ -69,22 +71,23 @@ def create_user_exam_fixture():
     )
 
     for i in range(1, 21):
-        CorrectAns.objects.create(
+        Answer.objects.create(
             exam=exam, no=i, sub_no=1, point=5,
-            answer=CHOICE_MARK_ONE
+            correct=CHOICE_MARK_ONE
         )
 
     drill = Drill.objects.create(
         exam=exam,
-        title="Test Drill one"
+        description="Test Drill one",
+        created=timezone.now(),
     )
 
     mkset = (
         drill
         .mark_set.
         order_by(
-            'correctans__no',
-            'correctans__sub_no'
+            'answer__no',
+            'answer__sub_no'
         )
     )
 

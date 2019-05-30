@@ -17,7 +17,7 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from django.urls import path
+from django.urls import include, path
 
 
 from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
@@ -27,16 +27,35 @@ from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
 
 app_name = 'choice'
 
+extra_patterns = [
+    path(
+        '',
+        ExamIndexView.as_view(),
+        name='exam-list',
+    ),
+    path(
+        '<int:pk>/',
+        ExamDetailView.as_view(),
+        name='exam-detail',
+    ),
+    path(
+        '<int:pk>/update',
+        ExamUpdateView.as_view(),
+        name='exam-update'
+    ),
+    path(
+        '<int:pk>/delete',
+        ExamDeleteView.as_view(),
+        name='exam-delete'
+    ),
+]
+
+
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('about/', AboutView.as_view(), name='about'),
-    path('list/', ExamIndexView.as_view(), name='exam-list'),
-    path('detail/<int:pk>/',
-         ExamQuestionView.as_view(), name='exam-question-view'),
-    path('update/<int:pk>/', ExamUpdateView.as_view(), name='exam-update'),
-    path('delete/<int:pk>/', ExamDeleteView.as_view(), name='exam-delete'),
+    path('exam/', include(extra_patterns)),
     path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
-    path('new/<int:pk>/', ExamDetailView.as_view(), name='exam-detail'),
     path('vote/<int:pk>/', vote, name='exam-vote'),
     path('create/', ExamCreate.as_view(), name='exam-create'),
     path('testform/', multiple_question_form, name='test-form'),

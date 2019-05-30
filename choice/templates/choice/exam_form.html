@@ -1,4 +1,4 @@
- <!-- 
+<!-- 
 Copyright 2019 Acacia Shop
 This file is part of Multiple.
     Multiple is free software: you can redistribute it and/or modify
@@ -13,15 +13,14 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 -->
 {% extends "choice/base.html" %}
-{% load bootstrap4 %}
-<!-- -  -->
+{% load crispy_forms_tags %}
 {% block content %}
   <div class="container">
     <div class="row">
       <div class="col-12">
 	<form method="post">
 	  {% csrf_token %}
-	  {{ form.as_p }}
+	  {{ form|crispy }}
 	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
 	</form>
       </div>

@@ -30,7 +30,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from extra_views import CreateWithInlinesView, InlineFormSet, \
     InlineFormSetFactory, InlineFormSetView
-from .models import Exam, CorrectAns
+from .models import Exam, Answer
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
 
@@ -47,14 +47,14 @@ class ExamIndexView(generic.ListView):
 
 
 class QuestionIndexView(generic.ListView):
-    model = CorrectAns
+    model = Answer
     context_object_name = 'question_list'
 
     paginate_by = 10
 
     def get_queryset(self):
         self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
-        return CorrectAns.objects.filter(exam=self.exam).order_by('no', 'sub_no')
+        return Answer.objects.filter(exam=self.exam).order_by('no', 'sub_no')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -102,14 +102,14 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        return self.object.question_set.order_by('no', 'sub_no')
+        return self.object.answer_set.order_by('no', 'sub_no')
 
 
 def vote(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     try:
-        selected_question = exam.question_set.get(pk=request.POST['question'])
-    except (KeyError, CorrectAns.DoesNotExist):
+        selected_question = exam.answer_set.get(pk=request.POST['question'])
+    except (KeyError, Answer.DoesNotExist):
         return render(request, 'choice/detail.html', {
             'exam_detail': exam,
             'error_message': "You didn't select a choice.",
@@ -127,7 +127,7 @@ def multiple_question_form(request):
 
 class EditQuestionView(InlineFormSetView):
     model = Exam
-    inline_model = CorrectAns
+    inline_model = Answer
     template_name = 'choice/post_form.html'
     fields = ["no", "sub_no", "point", "answer"]
 
@@ -145,7 +145,7 @@ class SuccessView(TemplateView):
 
 
 class ChildInLines(InlineFormSet):
-    model = CorrectAns
+    model = Answer
     fields = ('no', 'sub_no', 'point', )
 
 
@@ -159,5 +159,5 @@ class ParentCreateView(CreateWithInlinesView):
 
 
 class QuestionInlineFormSet(InlineFormSetFactory):
-    model = CorrectAns
+    model = Answer
     fields = ("no", "sub_no", "point", "answer", )

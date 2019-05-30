@@ -52,7 +52,7 @@ class Exam(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('choice:question-index', kwargs={'pk': self.pk})
+        return reverse('choice:exam-detail', args=(self.pk,))
 
 
 CHOICE_MARK_ONE = 'MARK1'
@@ -70,34 +70,41 @@ CHOICE_MARK_CHOICES = (
 )
 
 
-class CorrectAns(models.Model):
+class Answer(models.Model):
     """ The class which contains correct answers."""
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
+
+    created = models.DateTimeField(
+        verbose_name='作成日',
+        blank=True,
+        default=None,
+        null=True
+    )
 
     no = models.IntegerField(
         verbose_name='大問',
         default=0
     )
 
-    sub_no = models.IntegerField(
+    sub_no = models.PositiveIntegerField(
         verbose_name='小問',
         default=0
     )
 
-    point = models.IntegerField(
+    point = models.PositiveIntegerField(
         verbose_name='配点',
         default=0
     )
 
-    answer = models.CharField(
+    correct = models.CharField(
         max_length=30,
         choices=CHOICE_MARK_CHOICES,
         blank=True,
     )
 
     class Meta:
-        verbose_name = '問題'
-        verbose_name_plural = '問題'
+        verbose_name = '解答'
+        verbose_name_plural = '解答'
         ordering = ['pk']
 
     def __str__(self):
@@ -111,43 +118,78 @@ class DrillQuerySet(models.QuerySet):
     def score(self):
         """Should not apply .filter() """
         mark_c = Sum(
-            'mark__correctans__point',
+            'mark__answer__point',
             filter=Q(
-                mark__correctans__answer=F('mark__your_choice')
+                mark__answer__correct=F('mark__your_choice')
             )
         )
         return self.annotate(total_score=mark_c)
 
 
 class Drill(models.Model):
+    """Hold Drill object for the Exam instance."""
+
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
-    title = models.CharField(
-        verbose_name='テスト名',
+
+    description = models.CharField(
+        verbose_name='ドリルの説明',
         max_length=200
+    )
+
+    created = models.DateTimeField(
+        verbose_name='作成日',
+        blank=True,
+        default=None,
     )
 
     objects = DrillQuerySet.as_manager()
 
     def __str__(self):
-        return f"is {self.title}."
+        return f"is {self.description}."
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        answers = self.exam.correctans_set.all()
+        answers = self.exam.answer_set.all()
         for an in answers:
-            Mark.objects.create(drill=self, correctans=an)
+            Mark.objects.create(drill=self, answer=an)
+
+    def point_full_mark(self):
+        """ Return the sum of the allocated point."""
+        p = self.exam.answer_set.all()
+        dict = p.aggregate(
+            total=Sum('point')
+        )
+        return dict  # {'total': 100}
 
     def point_earned(self):
-        p = self.exam.correctans_set.all()
-        p = p.aggregate(Sum('point'))
-        return p
+        """ Return the sum of point earned."""
+        qs = Mark.objects.filter(drill=self)
+
+        dict = qs.aggregate(
+            total=Sum(
+                'answer__point',
+                filter=Q(
+                    answer__correct=F('your_choice')
+                )
+            )
+        )
+        return dict  # {'total': 100}
+
+    def register_grade(self):
+        """Register the result of this drill."""
+        dict = self.point_earned()
+        Grade.objects.create(
+            exam=self.exam,
+            point=dict['total'],
+            created=timezone.now(),
+        )
 
 
 class Mark(models.Model):
     """The class contains submitted answers."""
 
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
-    correctans = models.ForeignKey('CorrectAns', on_delete=models.CASCADE)
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
     your_choice = models.CharField(
         max_length=30,
         choices=CHOICE_MARK_CHOICES,
@@ -156,3 +198,20 @@ class Mark(models.Model):
 
     def __str__(self):
         return f"is {self.your_choice}."
+
+
+class Grade(models.Model):
+    """Hold the results of drills.
+
+    """
+    exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
+    point = models.PositiveIntegerField(
+        blank=True
+    )
+    created = models.DateTimeField(
+        blank=True,
+        default=None,
+    )
+
+    def __str__(self):
+        return f"is {self.point}"

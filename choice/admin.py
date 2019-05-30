@@ -18,13 +18,13 @@ This file is part of Multiple.
 """
 
 from django.contrib import admin
-from .models import Exam, CorrectAns, Drill, Mark
+from .models import Exam, Answer, Drill, Mark
 
 # Register your models here.
 
 
-class CorrectAnsInline(admin.TabularInline):
-    model = CorrectAns
+class AnswerInline(admin.TabularInline):
+    model = Answer
     extra = 0
     ordering = ['no', 'sub_no']
 
@@ -32,13 +32,13 @@ class CorrectAnsInline(admin.TabularInline):
 class DrillInline(admin.TabularInline):
     model = Drill
     extra = 0
-    ordering = ['title']
+    ordering = ['id']
 
-
-class AnswerInline(admin.TabularInline):
+  
+class MarkInline(admin.TabularInline):
     model = Mark
     extra = 0
-    ordering = ['correctans__no', 'correctans__sub_no']
+    ordering = ['answer__no', 'answer__sub_no']
 
 
 class MyExamAdmin(admin.ModelAdmin):
@@ -52,7 +52,7 @@ class MyExamAdmin(admin.ModelAdmin):
         ]
 
     list_display = ('pk', 'author', 'created_date', 'title')
-    inlines = [CorrectAnsInline, DrillInline]
+    inlines = [AnswerInline, DrillInline]
 
 
 admin.site.register(Exam, MyExamAdmin)
