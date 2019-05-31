@@ -65,29 +65,48 @@ class QuestionIndexView(generic.ListView):
 
 
 class ExamCreateView(ModelFormSetView):
+    """
+    Passing initial data into ModelFormSet and InlineFormSet works slightly
+    differently to a regular FormSet. The data passed in from :code:`initial`
+    will
+    be inserted into the :code:`extra` forms of the formset. Only the data from
+    :code:`get_queryset()` will be inserted into the initial rows:
+
+    from module import symbol
+    extra_views import ModelFormSetView
+    from my_app.models import Item
+
+
+    class ItemFormSetView(ModelFormSetView):
+        template_name = 'item_formset.html'
+        model = Item
+        factory_kwargs = {'extra': 10}
+        initial = [{'name': 'example1'}, {'name': 'example2'}]
+    """
     model = Exam
     fields = [
         'author',
         'title',
     ]
+    factory_kwargs = {'extra': 10}
     template_name = 'choice/exam_formset.html'
 
 
 class ExamDetailView(DetailView):
-
+    """ generic.DetailView"""
     model = Exam
     context_object_name = 'exam_detail'
-    template_name = 'choice/detail.html'
+    template_name = 'choice/exam_detail.html'
 
 
 class ExamDeleteView(DeleteView):
-
+    """ generic.DeleteView"""
     model = Exam
     success_url = reverse_lazy('choice:exam-list')
 
 
 class ExamUpdateView(UpdateView):
-
+    """ generic.UpdateView"""
     model = Exam
     fields = ['title', 'author']
 
@@ -106,8 +125,6 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
 
     def get_queryset(self):
         return self.object.answer_set.order_by('no', 'sub_no')
-<<<<<<< HEAD
-=======
 
 
 class AnswerModelFormSetView(ModelFormSetView):
@@ -124,7 +141,6 @@ class MarkUpdateWithInlinesView(UpdateWithInlinesView):
 
 class MarkDeleteView(generic.DeleteView):
     pass
->>>>>>> development-1
 
 
 def vote(request, pk):

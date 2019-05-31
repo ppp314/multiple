@@ -125,3 +125,41 @@ https://devcenter.heroku.com/categories/python
 LICENSE
 =======
 GPL-3
+
+
+URL organization
+================
+
+
++------------+---------------+-----------------------+----------------+
+| Model      | View          | Which Form?           | URL name       |
++============+===============+=======================+================+
+|Exam        | create        |ModelFormSetView       |exam-create     |
+|            +---------------+-----------------------+----------------+
+|            | list          |ModelFormSetView       |exam-list       |
+|            +---------------+-----------------------+----------------+
+|            | update        |ModelFormSetView       |exam-update     |
+|            +---------------+-----------------------+----------------+
+|            | delete        |generic.DeleteView     |exam-delete     |
++------------+---------------+-----------------------+----------------+
+| Answer     | create        | CreateWithInlinesView | answer-create  |
+|            +---------------+-----------------------+----------------+
+|            | list          | ModelFormSetView      | answer-list    |
+|            +---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | answer-update  |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | answer-delete  |
++------------+---------------+-----------------------+----------------+
+| Mark       | create        | (NA)                  | mark-create    |
+|            +---------------+-----------------------+----------------+
+|            | list          | (NA)                  | mark-list      |
++------------+---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | mark-update    |
+|            +---------------+-----------------------+----------------+
+|            | delete        | (NA)                  | mark-delete    |
++------------+---------------+-----------------------+----------------+
+| Grade      | list          | generic.ListView      | grade-list     |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | grade-delete   |
++------------+---------------+-----------------------+----------------+
+
