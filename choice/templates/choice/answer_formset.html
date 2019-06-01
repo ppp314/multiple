@@ -23,26 +23,13 @@ This file is part of Multiple.
 	  {{ form|crispy }}
 	</div>	  
 	{% for formset in inlines %}
-	  {{ formset.management_form }}
-	  {% for form in formset %}
-	    <div class="form-group col-md-3 mb-0">
-	      {{ form.no|as_crispy_field }}
-	    </div>
-	    <div class="form-group col-md-3 mb-0">
-	      {{ form.sub_no|as_crispy_field }}
-	    </div>
-	    <div class="form-group col-md-3 mb-0">
-	      {{ form.point|as_crispy_field }}
-	    </div>
-	    <div class="form-group col-md-3 mb-0">
-	      {{ form.correct|as_crispy_field }}
-	    </div>
-	  {% endfor %}
+	  {% crispy formset %}
 	{% endfor %}
-	<input type="submit" class="btn btn-outline-secondary" value="Submit">
-	<a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">戻る</a>
+	<div class="col-12">
+	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
+	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
+	</div>
       </div>
     </div>
   </form>
-
 {% endblock %}
