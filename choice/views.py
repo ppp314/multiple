@@ -159,6 +159,16 @@ class AnswerModelFormSetView(UpdateWithInlinesView):
     fields = ('title', 'number_of_question')
     template_name = 'choice/answer_formset.html'
 
+    def get_context_data(self, **kwargs):
+        data = super(AnswerModelFormSetView, self).get_context_data(**kwargs)
+        print("AnswerModelFormSetView:Passing get_context_data()")
+        return data
+
+    def forms_valid(self, form, inlines):
+        instance = super(AnswerModelFormSetView, self).forms_valid(form, inlines)
+        print("AnswerModelFormSetView:Passing forms_valid()")
+        return instance
+
 
 class AnswerDeleteView(generic.DeleteView):
     pass
