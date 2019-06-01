@@ -159,9 +159,6 @@ class AnswerModelFormSetView(UpdateWithInlinesView):
     fields = ('title', 'number_of_question')
     template_name = 'choice/answer_formset.html'
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
 
 class AnswerDeleteView(generic.DeleteView):
     pass
