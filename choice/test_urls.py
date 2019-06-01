@@ -26,6 +26,8 @@ from .views import HomeView, AboutView, ExamIndexView, \
     AnswerDeleteView, \
     MarkUpdateWithInlinesView, \
     MarkDeleteView, \
+    DrillUpdateWithInlinesView, \
+    DrillDeleteView, \
     vote, \
     multiple_question_form, \
     EditQuestionView, \
@@ -43,6 +45,11 @@ from .views import HomeView, AboutView, ExamIndexView, \
     ('/answer/3539427c-9f18-44a7-844f-7ca13c7d922f/', AnswerModelFormSetView),
     ('/answer/3539427c-9f18-44a7-844f-7ca13c7d922f/update', AnswerModelFormSetView),
     ('/answer/3539427c-9f18-44a7-844f-7ca13c7d922f/delete', AnswerDeleteView),
+    ('/drill/3539427c-9f18-44a7-844f-7ca13c7d922f/create', DrillUpdateWithInlinesView),
+    ('/drill/3539427c-9f18-44a7-844f-7ca13c7d922f/', DrillUpdateWithInlinesView),
+    ('/drill/3539427c-9f18-44a7-844f-7ca13c7d922f/update', DrillUpdateWithInlinesView),
+    ('/drill/3539427c-9f18-44a7-844f-7ca13c7d922f/delete', DrillDeleteView),
+
     ('/mark/3539427c-9f18-44a7-844f-7ca13c7d922f/', MarkUpdateWithInlinesView),
     ('/mark/3539427c-9f18-44a7-844f-7ca13c7d922f/update', MarkUpdateWithInlinesView),
     ('/mark/3539427c-9f18-44a7-844f-7ca13c7d922f/delete', MarkDeleteView),

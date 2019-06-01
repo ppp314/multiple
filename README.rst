@@ -150,6 +150,14 @@ URL organization
 |            +---------------+-----------------------+----------------+
 |            | delete        | generic.DeleteView    | answer-delete  |
 +------------+---------------+-----------------------+----------------+
+| Drill      | create        | UpdateWithInlinesView | drill-create   |
+|            +---------------+-----------------------+----------------+
+|            | list          | generic.ListView      | drill-list     |
++            +---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | drill-update   |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | drill-delete   |
++------------+---------------+-----------------------+----------------+
 | Mark       | create        | (NA)                  | mark-create    |
 |            +---------------+-----------------------+----------------+
 |            | list          | (NA)                  | mark-list      |

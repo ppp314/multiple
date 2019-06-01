@@ -31,6 +31,10 @@ from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
     MarkUpdateWithInlinesView, \
     MarkDeleteView
 
+from .views import \
+    DrillUpdateWithInlinesView, \
+    DrillDeleteView
+
 
 app_name = 'choice'
 
@@ -80,6 +84,29 @@ answer_extra_patterns = [
     ),
 ]
 
+drill_extra_patterns = [
+    path(
+        '<uuid:pk>/create',  # pk is answer.id
+        DrillUpdateWithInlinesView.as_view(),
+        name='drill-list',
+    ),
+    path(
+        '<uuid:pk>/',
+        DrillUpdateWithInlinesView.as_view(),
+        name='drill-list',
+    ),
+    path(
+        '<uuid:pk>/update',
+        DrillUpdateWithInlinesView.as_view(),
+        name='drill-update'
+    ),
+    path(
+        '<uuid:pk>/delete',
+        DrillDeleteView.as_view(),
+        name='drill-delete'
+    ),
+]
+
 mark_extra_patterns = [
     path(
         '<uuid:pk>/',
@@ -104,6 +131,7 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('exam/', include(exam_extra_patterns)),
     path('answer/', include(answer_extra_patterns)),
+    path('drill/', include(drill_extra_patterns)),
     path('mark/', include(mark_extra_patterns)),
     path('p/<uuid:pk>/', QuestionIndexView.as_view(), name='question-index'),
     path('vote/<uuid:pk>/', vote, name='exam-vote'),
