@@ -1,0 +1,46 @@
+<!-- 
+Copyright 2019 Acacia Shop
+This file is part of Multiple.
+    Multiple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Multiple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
+-->
+{% extends "choice/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="container">
+      <div class="form-row">
+	{{ form }}
+	{% for formset in inlines %}
+	  {{ formset.management_form }}
+	  {% for form in formset %}
+	    <div class="form-group col-md-3 mb-0">
+	      {{ form.no|as_crispy_field }}
+	    </div>
+	    <div class="form-group col-md-3 mb-0">
+	      {{ form.sub_no|as_crispy_field }}
+	    </div>
+	    <div class="form-group col-md-3 mb-0">
+	      {{ form.point|as_crispy_field }}
+	    </div>
+	    <div class="form-group col-md-3 mb-0">
+	      {{ form.correct|as_crispy_field }}
+	    </div>
+	  {% endfor %}
+	{% endfor %}
+	<input type="submit" class="btn btn-outline-secondary" value="Submit">
+	<a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">戻る</a>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

@@ -144,7 +144,7 @@ URL organization
 +------------+---------------+-----------------------+----------------+
 | Answer     | create        | CreateWithInlinesView | answer-create  |
 |            +---------------+-----------------------+----------------+
-|            | list          | ModelFormSetView      | answer-list    |
+|            | list          | CreateWithInlinesView | answer-list    |
 |            +---------------+-----------------------+----------------+
 |            | update        | UpdateWithInlinesView | answer-update  |
 |            +---------------+-----------------------+----------------+
