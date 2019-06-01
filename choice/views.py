@@ -127,8 +127,21 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
         return self.object.answer_set.order_by('no', 'sub_no')
 
 
-class AnswerModelFormSetView(ModelFormSetView):
-    pass
+class AnswerInline(InlineFormSetFactory):
+    model = Answer
+    fields = ('no', 'sub_no', 'point', 'correct')
+
+
+class AnswerModelFormSetView(UpdateWithInlinesView):
+    """
+    """
+    model = Exam
+    inlines = [AnswerInline]
+    fields = ('title', 'number_of_question')
+    template_name = 'choice/answer_formset.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 class AnswerDeleteView(generic.DeleteView):

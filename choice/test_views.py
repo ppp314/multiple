@@ -79,6 +79,23 @@ def test_get_onearg_view(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_url,expected_template", [
+        ('choice:answer-list',
+         ["choice/answer_formset.html", "choice/base.html"]),
+    ],)
+def test_get_answer_with_onearg_view(
+        create_user_exam_fixture, client, test_url, expected_template):
+    """Test if the view which requires id argument is available."""
+    id = Exam.objects.first().id
+    url = reverse(test_url, args=(id,))
+    response = client.get(url)
+    assert response.status_code == 200
+    for e in expected_template:
+        assert e in [t.name for t in response.templates]
+        
+
+@pytest.mark.django_db
 def test_create_exam_by_post():
     assert Exam.objects.count() == 0
     test_author = User.objects.create_user(
