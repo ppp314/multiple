@@ -128,12 +128,31 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
 
 
 class AnswerInline(InlineFormSetFactory):
+    """
+    class ItemInline(InlineFormSetFactory):
+        model = Item
+        form_class = ItemForm
+        formset_class = BaseItemFormSet
+        initial = [{'name': 'example1'}, {'name', 'example2'}]
+        prefix = 'item-form'
+        factory_kwargs = {'extra': 2, 'max_num': None,
+                          'can_order': False, 'can_delete': False}
+        formset_kwargs = {'auto_id': 'my_id_%s'}
+    """
     model = Answer
     fields = ('no', 'sub_no', 'point', 'correct')
+    factory_kwargs = {
+        'extra': 1,
+        'max_num': None,
+        'can_order': True,
+        'can_delete': False,
+    }
 
 
 class AnswerModelFormSetView(UpdateWithInlinesView):
     """
+    Parent: Exam
+    Child: Answer
     """
     model = Exam
     inlines = [AnswerInline]
