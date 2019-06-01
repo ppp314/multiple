@@ -174,6 +174,14 @@ class AnswerDeleteView(generic.DeleteView):
     pass
 
 
+class DrillUpdateWithInlinesView(UpdateWithInlinesView):
+    pass
+
+
+class DrillDeleteView(generic.DeleteView):
+    pass
+
+
 class MarkUpdateWithInlinesView(UpdateWithInlinesView):
     pass
 

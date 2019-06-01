@@ -26,6 +26,8 @@ from .views import HomeView, AboutView, ExamIndexView, \
     AnswerDeleteView, \
     MarkUpdateWithInlinesView, \
     MarkDeleteView, \
+    DrillUpdateWithInlinesView, \
+    DrillDeleteView, \
     vote, \
     multiple_question_form, \
     EditQuestionView, \
