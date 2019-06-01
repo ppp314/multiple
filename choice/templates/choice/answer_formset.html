@@ -19,7 +19,9 @@ This file is part of Multiple.
     {% csrf_token %}
     <div class="container">
       <div class="form-row">
-	{{ form }}
+	<div class="col-12">
+	  {{ form|crispy }}
+	</div>	  
 	{% for formset in inlines %}
 	  {{ formset.management_form }}
 	  {% for form in formset %}
