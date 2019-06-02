@@ -17,6 +17,7 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from django.utils import timezone
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -45,7 +46,7 @@ class ExamIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('created_date')
+        return Exam.objects.order_by('created')
 
 
 class QuestionIndexView(generic.ListView):

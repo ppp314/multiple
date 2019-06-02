@@ -112,7 +112,7 @@ def test_create_exam_form_valid():
     form_data = {
         'title': "Test One",
         'author': test_author.id,
-        'created_date': timezone.now(),
+        'created': timezone.now(),
         'number_of_question': 10,
         'q_tobemade': 15,
     }
