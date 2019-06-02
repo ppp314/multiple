@@ -41,7 +41,7 @@ class Exam(models.Model):
         max_length=200
     )
 
-    created_date = models.DateTimeField(
+    created = models.DateTimeField(
         verbose_name='作成日',
         default=timezone.now
     )
@@ -162,6 +162,7 @@ class Drill(models.Model):
         verbose_name='作成日',
         blank=True,
         default=None,
+        null=True
     )
 
     objects = DrillQuerySet.as_manager()
