@@ -32,6 +32,7 @@ from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
     MarkDeleteView
 
 from .views import \
+    DrillCreateView, \
     DrillUpdateWithInlinesView, \
     DrillDeleteView
 
@@ -86,9 +87,9 @@ answer_extra_patterns = [
 
 drill_extra_patterns = [
     path(
-        '<uuid:pk>/create',  # pk is answer.id
-        DrillUpdateWithInlinesView.as_view(),
-        name='drill-list',
+        '<uuid:pk>/create',
+        DrillCreateView.as_view(),
+        name='drill-create',
     ),
     path(
         '<uuid:pk>/',
