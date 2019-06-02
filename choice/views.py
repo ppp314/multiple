@@ -32,7 +32,7 @@ from extra_views import CreateWithInlinesView, InlineFormSet, \
     InlineFormSetFactory, InlineFormSetView, \
     ModelFormSetView, \
     UpdateWithInlinesView
-from .models import Exam, Answer
+from .models import Exam, Answer, Drill
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
 
@@ -172,6 +172,28 @@ class AnswerModelFormSetView(UpdateWithInlinesView):
 
 class AnswerDeleteView(generic.DeleteView):
     pass
+
+
+class DrillInline(InlineFormSetFactory):
+    model = Drill
+    fields = ('description',)
+    factory_kwargs = {
+        'extra': 1,
+        'max_num': 1,
+        'can_order': False,
+        'can_delete': False,
+    }
+
+
+class DrillCreateView(UpdateWithInlinesView):
+    """
+    Parent: Exam
+    Child: Answer
+    """
+    model = Exam
+    inlines = [DrillInline]
+    fields = ('title', 'number_of_question')
+    template_name = 'choice/drill_create.html'
 
 
 class DrillUpdateWithInlinesView(UpdateWithInlinesView):
