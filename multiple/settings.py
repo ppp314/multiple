@@ -145,11 +145,3 @@ DEBUG = get_env_var("DEBUG")
 django_heroku.settings(locals())
 
 SHELL_PLUS = "ipython"
-
-
-LOGGING['loggers'] = {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-}
