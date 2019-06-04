@@ -18,7 +18,8 @@ This file is part of Multiple.
 """
 
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, BaseInlineFormSet
+from django.utils import timezone
 from .models import Exam, Answer
 
 
@@ -51,3 +52,15 @@ class MyExamForm(ModelForm):
         max_value=60,
         min_value=1,
     )
+
+
+class DrillInlineFormSet(BaseInlineFormSet):
+    def clean(self):
+        print("DrillInlineFormSet: passing clean() method.")
+        super().clean()
+        # example custom validation across forms in the formset
+        asof = timezone.now()
+        for form in self.forms:
+            form.cleaned_data['created'] = asof
+            # update the instance value, too.
+            form.instance.name = asof

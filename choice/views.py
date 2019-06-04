@@ -36,6 +36,7 @@ from extra_views import CreateWithInlinesView, InlineFormSet, \
 from .models import Exam, Answer, Drill
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
+from .forms import DrillInlineFormSet
 
 
 class ExamIndexView(generic.ListView):
@@ -177,6 +178,7 @@ class AnswerDeleteView(generic.DeleteView):
 
 class DrillInline(InlineFormSetFactory):
     model = Drill
+    formset_class = DrillInlineFormSet
     fields = ('description',)
     factory_kwargs = {
         'extra': 1,
@@ -184,6 +186,32 @@ class DrillInline(InlineFormSetFactory):
         'can_order': False,
         'can_delete': False,
     }
+
+
+"""
+from my_app.forms import AddressForm, BaseAddressFormSet
+
+
+class AddressFormSetView(FormSetView):
+    template_name = 'address_formset.html'
+    form_class = AddressForm
+    formset_class = BaseAddressFormSet
+    initial = [{'type': 'home'}, {'type', 'work'}]
+    prefix = 'address-form'
+    success_url = 'success/'
+    factory_kwargs = {'extra': 2, 'max_num': None,
+                      'can_order': False, 'can_delete': False}
+    formset_kwargs = {'auto_id': 'my_id_%s'}
+
+from extra_views import InlineFormSetView
+from my_app.models import Item
+from my_app.forms import ItemForm
+
+class ItemInlineView(InlineFormSetView):
+    model = Item
+    form_class = ItemForm
+    formset_class = ItemInlineFormSet     # enables our custom inline
+"""
 
 
 class DrillCreateView(UpdateWithInlinesView):
