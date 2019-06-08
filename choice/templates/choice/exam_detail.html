@@ -34,9 +34,10 @@ This file is part of Multiple.
     <p>{{ exam_detail.title }}</p>
 
     <p>
+      <a class="btn btn-outline-secondary" href="{% url 'choice:answer-list' exam_detail.id %}">List Answer</a>
       <a class="btn btn-outline-secondary" href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a>
       <a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam_detail.id %}"> update </a>
-      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}"> index </a>
+      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}"> Cancel </a>
     </p>
   </div>
 {% endblock %}

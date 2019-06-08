@@ -144,11 +144,19 @@ URL organization
 +------------+---------------+-----------------------+----------------+
 | Answer     | create        | CreateWithInlinesView | answer-create  |
 |            +---------------+-----------------------+----------------+
-|            | list          | ModelFormSetView      | answer-list    |
+|            | list          | CreateWithInlinesView | answer-list    |
 |            +---------------+-----------------------+----------------+
 |            | update        | UpdateWithInlinesView | answer-update  |
 |            +---------------+-----------------------+----------------+
 |            | delete        | generic.DeleteView    | answer-delete  |
++------------+---------------+-----------------------+----------------+
+| Drill      | create        | UpdateWithInlinesView | drill-create   |
+|            +---------------+-----------------------+----------------+
+|            | list          | generic.ListView      | drill-list     |
++            +---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | drill-update   |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | drill-delete   |
 +------------+---------------+-----------------------+----------------+
 | Mark       | create        | (NA)                  | mark-create    |
 |            +---------------+-----------------------+----------------+

@@ -17,6 +17,7 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from django.utils import timezone
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -32,9 +33,10 @@ from extra_views import CreateWithInlinesView, InlineFormSet, \
     InlineFormSetFactory, InlineFormSetView, \
     ModelFormSetView, \
     UpdateWithInlinesView
-from .models import Exam, Answer
+from .models import Exam, Answer, Drill
 from .forms import MultipleQuestionChoiceForm
 from .forms import MyExamForm
+from .forms import DrillInlineFormSet
 
 
 class ExamIndexView(generic.ListView):
@@ -45,7 +47,7 @@ class ExamIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Exam.objects.order_by('created_date')
+        return Exam.objects.order_by('created')
 
 
 class QuestionIndexView(generic.ListView):
@@ -127,11 +129,107 @@ class ExamQuestionView(SingleObjectMixin, generic.ListView):
         return self.object.answer_set.order_by('no', 'sub_no')
 
 
-class AnswerModelFormSetView(ModelFormSetView):
-    pass
+class AnswerInline(InlineFormSetFactory):
+    """
+    class ItemInline(InlineFormSetFactory):
+        model = Item
+        form_class = ItemForm
+        formset_class = BaseItemFormSet
+        initial = [{'name': 'example1'}, {'name', 'example2'}]
+        prefix = 'item-form'
+        factory_kwargs = {'extra': 2, 'max_num': None,
+                          'can_order': False, 'can_delete': False}
+        formset_kwargs = {'auto_id': 'my_id_%s'}
+    """
+    model = Answer
+    fields = ('no', 'sub_no', 'point', 'correct')
+    factory_kwargs = {
+        'extra': 1,
+        'max_num': None,
+        'can_order': True,
+        'can_delete': False,
+    }
+
+
+class AnswerModelFormSetView(UpdateWithInlinesView):
+    """
+    Parent: Exam
+    Child: Answer
+    """
+    model = Exam
+    inlines = [AnswerInline]
+    fields = ('title', 'number_of_question')
+    template_name = 'choice/answer_formset.html'
+
+    def get_context_data(self, **kwargs):
+        data = super(AnswerModelFormSetView, self).get_context_data(**kwargs)
+        print("AnswerModelFormSetView:Passing get_context_data()")
+        return data
+
+    def forms_valid(self, form, inlines):
+        instance = super(AnswerModelFormSetView, self).forms_valid(form, inlines)
+        print("AnswerModelFormSetView:Passing forms_valid()")
+        return instance
 
 
 class AnswerDeleteView(generic.DeleteView):
+    pass
+
+
+class DrillInline(InlineFormSetFactory):
+    model = Drill
+    formset_class = DrillInlineFormSet
+    fields = ('description',)
+    factory_kwargs = {
+        'extra': 1,
+        'max_num': 1,
+        'can_order': False,
+        'can_delete': False,
+    }
+
+
+"""
+from my_app.forms import AddressForm, BaseAddressFormSet
+
+
+class AddressFormSetView(FormSetView):
+    template_name = 'address_formset.html'
+    form_class = AddressForm
+    formset_class = BaseAddressFormSet
+    initial = [{'type': 'home'}, {'type', 'work'}]
+    prefix = 'address-form'
+    success_url = 'success/'
+    factory_kwargs = {'extra': 2, 'max_num': None,
+                      'can_order': False, 'can_delete': False}
+    formset_kwargs = {'auto_id': 'my_id_%s'}
+
+from extra_views import InlineFormSetView
+from my_app.models import Item
+from my_app.forms import ItemForm
+
+class ItemInlineView(InlineFormSetView):
+    model = Item
+    form_class = ItemForm
+    formset_class = ItemInlineFormSet     # enables our custom inline
+"""
+
+
+class DrillCreateView(UpdateWithInlinesView):
+    """
+    Parent: Exam
+    Child: Answer
+    """
+    model = Exam
+    inlines = [DrillInline]
+    fields = ('title', 'number_of_question')
+    template_name = 'choice/drill_create.html'
+
+
+class DrillUpdateWithInlinesView(UpdateWithInlinesView):
+    pass
+
+
+class DrillDeleteView(generic.DeleteView):
     pass
 
 

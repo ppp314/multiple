@@ -32,7 +32,7 @@ class Exam(models.Model):
         max_length=200
     )
 
-    created_date = models.DateTimeField(
+    created = models.DateTimeField(
         verbose_name='作成日',
         default=timezone.now
     )
@@ -105,7 +105,7 @@ class Answer(models.Model):
     class Meta:
         verbose_name = '解答'
         verbose_name_plural = '解答'
-        ordering = ['pk']
+        ordering = ['no', 'sub_no']
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
@@ -140,6 +140,7 @@ class Drill(models.Model):
         verbose_name='作成日',
         blank=True,
         default=None,
+        null=True
     )
 
     objects = DrillQuerySet.as_manager()
