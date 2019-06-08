@@ -41,17 +41,17 @@ exam_extra_patterns = [
         name='exam-list',
     ),
     path(
-        '<uuid:pk>/',
+        '<int:pk>/',
         ExamDetailView.as_view(),
         name='exam-detail',
     ),
     path(
-        '<uuid:pk>/update',
+        '<int:pk>/update',
         ExamUpdateView.as_view(),
         name='exam-update'
     ),
     path(
-        '<uuid:pk>/delete',
+        '<int:pk>/delete',
         ExamDeleteView.as_view(),
         name='exam-delete'
     ),
@@ -64,17 +64,17 @@ exam_extra_patterns = [
 
 answer_extra_patterns = [
     path(
-        '<uuid:pk>/',
+        '<int:pk>/',
         AnswerModelFormSetView.as_view(),
         name='answer-list',
     ),
     path(
-        '<uuid:pk>/update',
+        '<int:pk>/update',
         AnswerModelFormSetView.as_view(),
         name='answer-update'
     ),
     path(
-        '<uuid:pk>/delete',
+        '<int:pk>/delete',
         AnswerDeleteView.as_view(),
         name='answer-delete'
     ),
@@ -82,17 +82,17 @@ answer_extra_patterns = [
 
 mark_extra_patterns = [
     path(
-        '<uuid:pk>/',
+        '<int:pk>/',
         MarkUpdateWithInlinesView.as_view(),
         name='mark-list',
     ),
     path(
-        '<uuid:pk>/update',
+        '<int:pk>/update',
         MarkUpdateWithInlinesView.as_view(),
         name='mark-update'
     ),
     path(
-        '<uuid:pk>/delete',
+        '<int:pk>/delete',
         MarkDeleteView.as_view(),
         name='mark-delete'
     ),
@@ -105,10 +105,10 @@ urlpatterns = [
     path('exam/', include(exam_extra_patterns)),
     path('answer/', include(answer_extra_patterns)),
     path('mark/', include(mark_extra_patterns)),
-    path('p/<uuid:pk>/', QuestionIndexView.as_view(), name='question-index'),
-    path('vote/<uuid:pk>/', vote, name='exam-vote'),
+    path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
+    path('vote/<int:pk>/', vote, name='exam-vote'),
     path('testform/', multiple_question_form, name='test-form'),
-    path('editquestion/<uuid:pk>/', EditQuestionView.as_view(),
+    path('editquestion/<int:pk>', EditQuestionView.as_view(),
          name='edit-question'),
     path('success/', SuccessView.as_view(), name='success'),
 ]

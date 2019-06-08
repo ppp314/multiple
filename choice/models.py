@@ -17,22 +17,13 @@ This file is part of multiple.
     Along with multiple.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
-import uuid
 from django.db import models
 from django.db.models import Sum, F, Q
 from django.urls import reverse
 from django.utils import timezone
 
 
-
-
 class Exam(models.Model):
-
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
 
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
@@ -81,13 +72,6 @@ CHOICE_MARK_CHOICES = (
 
 class Answer(models.Model):
     """ The class which contains correct answers."""
-
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
-
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
     created = models.DateTimeField(
@@ -144,12 +128,6 @@ class DrillQuerySet(models.QuerySet):
 
 class Drill(models.Model):
     """Hold Drill object for the Exam instance."""
-
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
 
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
@@ -210,11 +188,6 @@ class Drill(models.Model):
 class Mark(models.Model):
     """The class contains submitted answers."""
 
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
     drill = models.ForeignKey('Drill', on_delete=models.CASCADE)
     answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
     your_choice = models.CharField(
@@ -231,11 +204,6 @@ class Grade(models.Model):
     """Hold the results of drills.
 
     """
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
     point = models.PositiveIntegerField(
         blank=True

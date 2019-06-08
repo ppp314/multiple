@@ -54,10 +54,7 @@ class TestExamDetailViews(TestCase):
         self.client.force_login(self.author)
 
     def test_exam_detail_view_not_found(self):
-        url = reverse(
-            'choice:exam-detail',
-            args=('3539427c-9f18-44a7-844f-7ca13c7d922f',)
-        )
+        url = reverse('choice:exam-detail', args=(2,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
