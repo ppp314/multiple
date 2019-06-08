@@ -87,22 +87,40 @@ answer_extra_patterns = [
 
 drill_extra_patterns = [
     path(
-        '<uuid:pk>/create',
+        '<int:pk>/create',
         DrillCreateView.as_view(),
         name='drill-create',
     ),
     path(
-        '<uuid:pk>/',
+        '<int:pk>/',
         DrillUpdateWithInlinesView.as_view(),
         name='drill-list',
     ),
     path(
-        '<uuid:pk>/update',
+        '<int:pk>/update',
         DrillUpdateWithInlinesView.as_view(),
         name='drill-update'
     ),
     path(
-        '<uuid:pk>/delete',
+        '<int:pk>/delete',
+        DrillDeleteView.as_view(),
+        name='drill-delete'
+    ),
+]
+
+mark_extra_patterns = [
+    path(
+        '<int:pk>/',
+        DrillUpdateWithInlinesView.as_view(),
+        name='drill-list',
+    ),
+    path(
+        '<int:pk>/update',
+        DrillUpdateWithInlinesView.as_view(),
+        name='drill-update'
+    ),
+    path(
+        '<int:pk>/delete',
         DrillDeleteView.as_view(),
         name='drill-delete'
     ),
