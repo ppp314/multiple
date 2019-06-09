@@ -24,7 +24,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam
 from .forms import MyExamForm
-from .views import ExamCreateView, DrillCreateView
+from .views import ExamCreateView
 
 
 """
@@ -173,42 +173,3 @@ def test_create_exam_by_post(rf):
     after = Exam.objects.count()
 
     assert before + 1 == after
-
-
-@pytest.mark.django_db
-def test_create_drill_by_post(
-        rf,
-        create_user_exam_fixture):
-    """
-    """
-    exam = Exam.objects.get(title="test1")
-    url = reverse('choice:drill-create', kwargs={'pk': exam.id})
-    request = rf.get(url)
-    response = DrillCreateView.as_view()(request)
-    assert response.status_code == 200
-
-    """
-    The value of response.rendered_content is following.
-    <input type="hidden" name="form-TOTAL_FORMS" value="10"
-        id="id_form-TOTAL_FORMS">
-    <input type="hidden" name="form-INITIAL_FORMS" value="0"
-        id="id_form-INITIAL_FORMS">
-    <input type="hidden" name="form-MIN_NUM_FORMS" value="0"
-        id="id_form-MIN_NUM_FORMS">
-    <input type="hidden" name="form-MAX_NUM_FORMS" value="1000"
-        id="id_form-MAX_NUM_FORMS">
-    """
-
-    test_data = {
-        'form-TOTAL_FORMS': "10",
-        'form-INITIAL_FORMS': "0",
-        'form-MIN_NUM_FORMS': "0",
-        'form-MAX_NUM_FORMS': "1000",
-        'form-0-author': test_author.id,
-        'form-0-title': "Success test",
-    }
-    url = reverse('choice:exam-create')
-    request = rf.post(url, data=test_data)
-    response = ExamCreateView.as_view()(request)
-    assert response.status_code == 302
-
