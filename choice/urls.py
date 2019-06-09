@@ -25,6 +25,7 @@ from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
     ExamCreateView, \
     QuestionIndexView, \
     ExamQuestionView, vote, multiple_question_form, EditQuestionView, \
+    ExamDrillListView, \
     SuccessView, \
     AnswerModelFormSetView, \
     AnswerDeleteView, \
@@ -65,6 +66,12 @@ exam_extra_patterns = [
         ExamCreateView.as_view(),
         name='exam-create'
     ),
+    path(
+        '<int:pk>/drill',
+        ExamDrillListView.as_view(),
+        name='exam-drill-list'
+    ),
+
 ]
 
 answer_extra_patterns = [

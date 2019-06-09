@@ -67,6 +67,8 @@ def test_get_simple_view(client, test_url, expected_template):
     "test_url,expected_template", [
         ('choice:exam-detail',
          ["choice/exam_detail.html", "choice/base.html"]),
+        ('choice:exam-drill-list',
+         ["choice/exam_drill_list.html", "choice/base.html"]),
     ],)
 def test_get_onearg_view(
         create_user_exam_fixture, client, test_url, expected_template):

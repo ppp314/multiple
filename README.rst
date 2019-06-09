@@ -136,7 +136,9 @@ URL organization
 +============+===============+=======================+================+
 |Exam        | create        |ModelFormSetView       |exam-create     |
 |            +---------------+-----------------------+----------------+
-|            | list          |ModelFormSetView       |exam-list       |
+|            | list answer   |generic.ListView       |(Not yet)       |
+|            +---------------+-----------------------+----------------+
+|            | list drill    |generic.ListView       |exam-drill-list |
 |            +---------------+-----------------------+----------------+
 |            | update        |ModelFormSetView       |exam-update     |
 |            +---------------+-----------------------+----------------+

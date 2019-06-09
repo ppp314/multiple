@@ -1,0 +1,61 @@
+ <!-- 
+Copyright 2019 Acacia Shop
+This file is part of Multiple.
+    Multiple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Multiple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
+-->
+{# -*- coding:utf-8 -*-#}
+{% extends "choice/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+	<p>作成者</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam_drill.author }}</p>
+      </div>
+      <div class="col-3">
+	<p>作成日</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam_drill.created_date|date }}</p>
+      </div>
+    </div>
+    <p>{{ exam_drill.title }}</p>
+
+    {% if drill_list %}
+      <table class="table table-sm">
+	<thead>
+	  <tr>
+	    <th scope="col">Description</th>
+	    <th scope="col">Created</th>
+	    <th scope="col">Edit</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for drill in drill_list %}
+	    <tr>
+	      <td><a class="btn btn-default" href="#">{{ drill.description}}</a></td>
+	      <td>{{ drill.created }}</td>
+	      <td><a class="btn btn-outline-secondary" href="#">編集</a>
+	      <td><a class="btn btn-outline-secondary" href="#">ドリル追加</a>
+	    </tr>
+	  {% endfor %}
+	</tbody>
+      </table>
+    {% else %}
+      <p>No drill is available.</p>
+    {% endif %}
+  </div>
+{% endblock %}
+

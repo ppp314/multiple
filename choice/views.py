@@ -101,6 +101,16 @@ class ExamDetailView(DetailView):
     template_name = 'choice/exam_detail.html'
 
 
+class ExamDrillListView(ExamDetailView):
+    context_object_name = 'exam_drill'
+    template_name = 'choice/exam_drill_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['drill_list'] = Drill.objects.filter(exam=self.object)
+        return context
+
+
 class ExamDeleteView(DeleteView):
     """ generic.DeleteView"""
     model = Exam
