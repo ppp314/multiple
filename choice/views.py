@@ -23,7 +23,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -101,7 +101,7 @@ class ExamDetailView(DetailView):
     template_name = 'choice/exam_detail.html'
 
 
-class ExamDrillListView(ExamDetailView):
+class ExamDrillListView3(ExamDetailView):
     context_object_name = 'exam_drill'
     template_name = 'choice/exam_drill_list.html'
 
@@ -110,6 +110,50 @@ class ExamDrillListView(ExamDetailView):
         context['drill_list'] = Drill.objects.filter(exam=self.object)
         return context
 
+
+class ExamDrillListView(DetailView):
+    model = Exam
+    context_object_name = 'exam_drill'
+    template_name = 'choice/exam_drill_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['drill_list'] = ExamDetailFormSet()
+        # should change to 'formset' in future.
+        return context
+
+
+class ExamDrillListView4(SingleObjectMixin, ListView):
+    template_name = 'choice/exam_drill_list4.html'
+
+    def get(self, request, *arg, **kwargs):
+        self.object = self.get_object(queryset=Exam.objects.all())
+        return super().get(request, *arg, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['exam_drill'] = self.object
+        return context
+
+    def get_queryset(self):
+        return self.object.drill_set.all()
+   
+
+class DrillForm(forms.ModelForm):
+    class Meta:
+        model = Drill
+        fields = ('description',)
+
+
+ExamDetailFormSet = inlineformset_factory(
+    parent_model=Exam,
+    model=Drill,
+    form=DrillForm,
+    extra=1,
+    min_num=1,
+    validate_min=True,
+)
+    
 
 class ExamDeleteView(DeleteView):
     """ generic.DeleteView"""

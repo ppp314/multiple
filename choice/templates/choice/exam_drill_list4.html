@@ -33,7 +33,7 @@ This file is part of Multiple.
     </div>
     <p>{{ exam_drill.title }}</p>
 
-    {% if drill_list %}
+    {% if object_list %}
       <table class="table table-sm">
 	<thead>
 	  <tr>
@@ -43,7 +43,7 @@ This file is part of Multiple.
 	  </tr>
 	</thead>
 	<tbody>
-	  {% for drill in drill_list %}
+	  {% for drill in object_list %}
 	    <tr>
 	      <td><a class="btn btn-default" href="#">{{ drill.description}}</a></td>
 	      <td>{{ drill.created }}</td>
