@@ -54,7 +54,7 @@ class TestFormSetCreateView(TestCase):
          ["choice/exam_formset.html", "choice/base.html"]),
     ],)
 def test_get_simple_view(client, test_url, expected_template):
-    """ Test if the page about is available"""
+    """ Test if the page about is pavailable"""
     url = reverse(test_url)
     response = client.get(url)
     for e in expected_template:
@@ -67,6 +67,10 @@ def test_get_simple_view(client, test_url, expected_template):
     "test_url,expected_template", [
         ('choice:exam-detail',
          ["choice/exam_detail.html", "choice/base.html"]),
+        ('choice:exam-drill-list',
+         ["choice/exam_drill_list.html", "choice/base.html"]),
+        ('choice:exam-drill-list4',
+         ["choice/exam_drill_list4.html", "choice/base.html"]),
     ],)
 def test_get_onearg_view(
         create_user_exam_fixture, client, test_url, expected_template):

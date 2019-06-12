@@ -22,6 +22,8 @@ from django.urls.base import resolve, Resolver404
 from .views import HomeView, AboutView, ExamIndexView, \
     ExamCreateView, \
     ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
+    ExamDrillListView, \
+    ExamDrillListView4, \
     AnswerModelFormSetView, \
     AnswerDeleteView, \
     MarkUpdateWithInlinesView, \
@@ -43,6 +45,8 @@ from .views import HomeView, AboutView, ExamIndexView, \
     ('/exam/1/', ExamDetailView),
     ('/exam/1/update', ExamUpdateView),
     ('/exam/1/delete', ExamDeleteView),
+    ('/exam/1/drill', ExamDrillListView),
+    ('/exam/1/drill4', ExamDrillListView4),
     ('/answer/1/', AnswerModelFormSetView),
     ('/answer/1/update', AnswerModelFormSetView),
     ('/answer/1/delete', AnswerDeleteView),
