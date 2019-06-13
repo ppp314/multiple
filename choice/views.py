@@ -20,8 +20,9 @@ This file is part of Multiple.
 
 from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import DetailView
+from django.urls import reverse
 from django.forms import ModelForm, inlineformset_factory
-from extra_views import CreateWithInlinesView
+from extra_views import CreateWithInlinesView, InlineFormSetFactory
 from .models import Exam, Answer, Drill
 
 
@@ -48,32 +49,25 @@ class ExamListView(ListView):
         return Exam.objects.order_by('created')
 
 
+class AnswerInline(InlineFormSetFactory):
+    model = Answer
+    fields = ['no', 'sub_no', 'point', 'correct']
+
+
 class ExamCreateView(CreateWithInlinesView):
-    """
-    Passing initial data into ModelFormSet and InlineFormSet works slightly
-    differently to a regular FormSet. The data passed in from :code:`initial`
-    will
-    be inserted into the :code:`extra` forms of the formset. Only the data from
-    :code:`get_queryset()` will be inserted into the initial rows:
-
-    from module import symbol
-    extra_views import ModelFormSetView
-    from my_app.models import Item
-
-
-    class ItemFormSetView(ModelFormSetView):
-        template_name = 'item_formset.html'
-        model = Item
-        factory_kwargs = {'extra': 10}
-        initial = [{'name': 'example1'}, {'name': 'example2'}]
-    """
+    model = Exam
+    inlines = [AnswerInline]
+    fields = ['title']
     template_name = 'choice/exam_update.html'
-    pass
+
+    def get_success_url(self):
+        return reverse('choice:exam-list')
 
 
 class ExamUpdateView(DetailView):
-    context_object_name = 'exam_drill'
-    template_name = 'choice/drill_update.html'
+    context_object_name = 'exam'
+    template_name = 'choice/exam_update.html'
+    queryset = Exam.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
