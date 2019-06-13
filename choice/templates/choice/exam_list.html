@@ -48,11 +48,11 @@
 	  {% for exam in latest_exam_list %}
 	    <tr>
 	      <th scope="row">{{ exam.id }}</th>
-	      <td><a class="btn btn-default" href="{% url 'choice:exam-detail' exam.id %}">{{ exam.title }}</a></td>
+	      <td><a class="btn btn-default" href="{% url 'choice:exam-update' exam.id %}">{{ exam.title }}</a></td>
 	      <td>{{ exam.number_of_question }}</td>
 	      <td>{{ exam.created_date }}</td>
 	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam.id %}">編集</a>
-	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:drill-create' exam.id %}">ドリル追加</a>
+	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:drill-update' exam.id %}">ドリル追加</a>
 	    </tr>
 	  {% endfor %}
 	</tbody>
