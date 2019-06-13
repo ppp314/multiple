@@ -20,7 +20,8 @@ This file is part of Multiple.
 from django.urls import include, path
 
 
-from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
+from .views import HomeView, AboutView, \
+    ExamListView, \
     ExamDeleteView, ExamUpdateView, \
     ExamCreateView, \
     QuestionIndexView, \
@@ -44,7 +45,7 @@ app_name = 'choice'
 exam_extra_patterns = [
     path(
         '',
-        ExamIndexView.as_view(),
+        ExamListView.as_view(),
         name='exam-list',
     ),
     path(

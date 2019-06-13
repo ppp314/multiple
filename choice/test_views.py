@@ -22,36 +22,24 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
-from .models import Exam
+from .models import Exam, Drill
 from .forms import MyExamForm
 from .views import ExamCreateView
-
-
-"""
-    Page URL name temmplate
-    Home  /      'home'    choice/home.html
-    About /about 'about'   choice/about.html
-    Help  /help  'help'    choice/help.html
-    Login /login 'login'
-"""
-
-
-class TestFormSetCreateView(TestCase):
-    """ Test if FormSet Create view contains the management form piece."""
-    pass
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_url,expected_template", [
-        ("choice:about",
-         ["choice/about.html", "choice/base.html"]),
         ("choice:home",
          ["choice/home.html", "choice/base.html"]),
+        ("choice:about",
+         ["choice/about.html", "choice/base.html"]),
         ("choice:success",
          ["choice/success.html", "choice/base.html"]),
+        ('choice:exam-list',
+         ["choice/exam_list.html", "choice/base.html"]),
         ('choice:exam-create',
-         ["choice/exam_formset.html", "choice/base.html"]),
+         ["choice/exam_update.html", "choice/base.html"]),
     ],)
 def test_get_simple_view(client, test_url, expected_template):
     """ Test if the page about is pavailable"""
@@ -65,14 +53,14 @@ def test_get_simple_view(client, test_url, expected_template):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_url,expected_template", [
-        ('choice:exam-detail',
-         ["choice/exam_detail.html", "choice/base.html"]),
-        ('choice:exam-drill-list',
-         ["choice/exam_drill_list.html", "choice/base.html"]),
-        ('choice:exam-drill-list4',
-         ["choice/exam_drill_list4.html", "choice/base.html"]),
+        ('choice:exam-update',
+         ["choice/exam_update.html", "choice/base.html"]),
+        ('choice:drill-update',
+         ["choice/drill_update.html", "choice/base.html"]),
+        ('choice:drill-list',
+         ["choice/drill_list.html", "choice/base.html"]),
     ],)
-def test_get_onearg_view(
+def test_get_exam_onearg_view(
         create_user_exam_fixture, client, test_url, expected_template):
     """Test if the view which requires id argument is available."""
     id = Exam.objects.first().id
@@ -86,24 +74,21 @@ def test_get_onearg_view(
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_url,expected_template", [
-        ('choice:answer-list',
-         ["choice/answer_formset.html", "choice/base.html"]),
-        ('choice:answer-update',
-         ["choice/answer_formset.html", "choice/base.html"]),
-        ('choice:drill-create',
-         ["choice/drill_create.html", "choice/base.html"]),
+        ('choice:mark-update',
+         ["choice/mark_update.html", "choice/base.html"]),
     ],)
-def test_get_answer_with_onearg_view(
+def test_get_drill_onearg_view(
         create_user_exam_fixture, client, test_url, expected_template):
     """Test if the view which requires id argument is available."""
-    id = Exam.objects.first().id
+    id = Drill.objects.first().id
     url = reverse(test_url, args=(id,))
     response = client.get(url)
     assert response.status_code == 200
     for e in expected_template:
         assert e in [t.name for t in response.templates]
-        
 
+
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_create_exam_form_valid():
     assert Exam.objects.count() == 0
@@ -126,6 +111,7 @@ def test_create_exam_form_valid():
     assert form.is_valid()
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_create_exam_by_post(rf):
     assert Exam.objects.count() == 0
