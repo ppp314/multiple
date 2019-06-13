@@ -23,7 +23,7 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse
 from django.forms import ModelForm, inlineformset_factory
 from extra_views import CreateWithInlinesView, InlineFormSetFactory
-from .models import Exam, Answer, Drill
+from .models import Exam, Answer, Drill, Mark
 
 
 class HomeView(TemplateView):
@@ -79,39 +79,50 @@ class ExamUpdateView(DetailView):
 
 
 class DrillUpdateView(DetailView):
-    context_object_name = 'exam_drill'
+    model = Exam
+    context_object_name = 'exam'
     template_name = 'choice/drill_update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Must change to form.
-        context['formset'] = Drill.objects.filter(exam=self.object)
+        DrillFormSet = inlineformset_factory(
+            Exam,
+            Drill,
+            fields=('description',)
+        )
+        formset = DrillFormSet(instance=self.object)
+        context['formset'] = formset
 
         return context
 
 
 class DrillListView(DetailView):
-    context_object_name = 'exam_drill'
+    model = Exam
+    context_object_name = 'exam'
     template_name = 'choice/drill_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['drill_list'] = Drill.objects.filter(exam=self.object)
-
+        context['object_list'] = Drill.objects.filter(exam=self.object)
         return context
 
 
 class MarkUpdateView(DetailView):
-    context_object_name = 'exam_drill'
-    template_name = 'choice/drill_update.html'
+    model = Drill
+    context_object_name = 'drill'
+    template_name = 'choice/mark_update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Must change to form.
-        context['formset'] = Drill.objects.filter(exam=self.object)
+        MarkFormSet = inlineformset_factory(
+            Drill,
+            Mark,
+            fields=('your_choice',)
+        )
+        formset = MarkFormSet(instance=self.object)
+        context['formset'] = formset
 
         return context
 

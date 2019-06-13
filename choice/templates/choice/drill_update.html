@@ -1,0 +1,47 @@
+<!-- 
+Copyright 2019 Acacia Shop
+This file is part of Multiple.
+    Multiple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Multiple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
+-->
+{% extends "choice/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="container">
+          <div class="row">
+      <div class="col-3">
+	<p>作成者</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.author }}</p>
+      </div>
+      <div class="col-3">
+	<p>作成日</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.created_date|date }}</p>
+      </div>
+    </div>
+    <p>{{ exam.title }}</p>
+      <div class="form-row">
+	<div class="col-12">
+	  {% crispy formset %}
+	</div>
+	<div class="col-12">
+	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
+	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
+	</div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
