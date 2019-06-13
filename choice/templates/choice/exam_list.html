@@ -34,12 +34,11 @@
       </div>
     </div>    
     {% if latest_exam_list %}
-      <table class="table table-sm">
+      <table class="table table-striped">
 	<thead>
 	  <tr>
 	    <th scope="col">pk</th>
 	    <th scope="col">Title</th>
-	    <th scope="col">Number of Question</th>
 	    <th scope="col">Created Date</th>
 	    <th scope="col">Edit</th>
 	  </tr>
@@ -48,11 +47,12 @@
 	  {% for exam in latest_exam_list %}
 	    <tr>
 	      <th scope="row">{{ exam.id }}</th>
-	      <td><a class="btn btn-default" href="{% url 'choice:exam-update' exam.id %}">{{ exam.title }}</a></td>
-	      <td>{{ exam.number_of_question }}</td>
+	      <td>{{ exam.title }}</td>
 	      <td>{{ exam.created_date }}</td>
-	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam.id %}">編集</a>
-	      <td><a class="btn btn-outline-secondary" href="{% url 'choice:drill-update' exam.id %}">ドリル追加</a>
+	      <td>
+		<a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam.id %}">Update</a>
+		<a class="btn btn-outline-secondary" href="{% url 'choice:drill-update' exam.id %}">ドリル追加</a>
+	      </td>
 	    </tr>
 	  {% endfor %}
 	</tbody>
