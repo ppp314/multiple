@@ -22,12 +22,13 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.forms import ModelForm, inlineformset_factory
+from django import forms
+from django.forms import ModelForm, inlineformset_factory, Form
 from extra_views import CreateWithInlinesView, \
-    InlineFormSetFactory, \
-    InlineFormSetView
-
+    UpdateWithInlinesView, \
+    InlineFormSetFactory
 from .models import Exam, Answer, Drill, Mark
+from .models import CHOICE_MARK_CHOICES
 
 
 class HomeView(TemplateView):
@@ -68,10 +69,10 @@ class ExamCreateView(CreateWithInlinesView):
         return reverse('choice:exam-list')
 
 
-class ExamUpdateView(InlineFormSetView):
+class ExamUpdateView(UpdateWithInlinesView):
     model = Exam
-    inline_model = Answer
-    fields = ['no', 'sub_no', 'point', 'correct']
+    inlines = [AnswerInline]
+    fields = ['title']
     template_name = 'choice/exam_update.html'
 
     def get_success_url(self):

@@ -20,11 +20,11 @@ This file is part of Multiple.
     <div class="container">
       <div class="form-row">
 	<div class="col-12">
-	  {{ exam.title }}
+	  {{ form|crispy }}
 	</div>
-	{{ formset|crispy }}
-
-	
+	{% for formset in inlines %}
+	  {{ formset|crispy }}
+	{% endfor %}
 	<div class="col-12">
 	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
 	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
