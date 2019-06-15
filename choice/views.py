@@ -23,7 +23,10 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm, inlineformset_factory
-from extra_views import CreateWithInlinesView, InlineFormSetFactory
+from extra_views import CreateWithInlinesView, \
+    InlineFormSetFactory, \
+    InlineFormSetView
+
 from .models import Exam, Answer, Drill, Mark
 
 
@@ -65,35 +68,11 @@ class ExamCreateView(CreateWithInlinesView):
         return reverse('choice:exam-list')
 
 
-class ExamUpdateView(DetailView):
-    context_object_name = 'exam'
+class ExamUpdateView(InlineFormSetView):
+    model = Exam
+    inline_model = Answer
+    fields = ['no', 'sub_no', 'point', 'correct']
     template_name = 'choice/exam_update.html'
-    queryset = Exam.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        AnswerFormSet = inlineformset_factory(
-            Exam,
-            Answer,
-            fields=('no', 'sub_no', 'point', 'correct',)
-        )
-        formset = AnswerFormSet(instance=self.object)
-        context['formset'] = formset
-
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        AnswerFormSet = inlineformset_factory(
-            Exam,
-            Answer,
-            fields=('no', 'sub_no', 'point', 'correct',)
-        )
-        formset = AnswerFormSet(request.POST, instance=self.object)
-        if formset.is_valid():
-            formset.save()
-            return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('choice:exam-list')

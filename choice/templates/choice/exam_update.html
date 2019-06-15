@@ -22,27 +22,9 @@ This file is part of Multiple.
 	<div class="col-12">
 	  {{ exam.title }}
 	</div>
-	{{ formset.management_form }}
-	<table calss="table table-striped">
-	  <thead>
-	    <tr>
-	    <th scope="col"></th>
-	    <th scope="col"></th>
-	    <th scope="col"></th>
-	    <th scope="col"></th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    {% for form in formset %}
-	      <tr>
-		<th scope="row">{{ form.no|as_crispy_field }}</th>
-		<td>{{ form.sub_no|as_crispy_field }}</td>
-		<td>{{ form.point|as_crispy_field }}</td>
-		<td>{{ form.correct|as_crispy_field }}</td>
-	      </tr>
-	    {% endfor %}
-	  </tbody>
-	</table>
+	{{ formset|crispy }}
+
+	
 	<div class="col-12">
 	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
 	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
