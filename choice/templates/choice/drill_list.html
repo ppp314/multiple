@@ -30,10 +30,13 @@ This file is part of Multiple.
       <div class="col-9">
 	<p>{{ exam.created_date|date }}</p>
       </div>
-    </div>
-    <p>{{ exam.title }}</p>
-
-    {% if object_list %}
+      <div class="col-3">
+	<p>テスト名</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.title }}</p>
+      </div>
+      {% if object_list %}
       <table class="table table-sm">
 	<thead>
 	  <tr>

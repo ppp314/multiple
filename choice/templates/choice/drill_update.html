@@ -15,10 +15,8 @@ This file is part of Multiple.
 {% extends "choice/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <div class="container">
-          <div class="row">
+  <div class="container">
+    <div class="row">
       <div class="col-3">
 	<p>作成者</p>
       </div>
@@ -31,8 +29,15 @@ This file is part of Multiple.
       <div class="col-9">
 	<p>{{ exam.created_date|date }}</p>
       </div>
+      <div class="col-3">
+	<p>テスト名</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.title }}</p>
+      </div>
     </div>
-    <p>{{ exam.title }}</p>
+    <form method="post">
+      {% csrf_token %}
       <div class="form-row">
 	<div class="col-12">
 	  {% crispy formset %}
@@ -42,6 +47,6 @@ This file is part of Multiple.
 	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
 	</div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}

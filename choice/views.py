@@ -18,8 +18,8 @@ This file is part of Multiple.
 """
 
 
-from django.views.generic import TemplateView, ListView
-from django.views.generic.detail import DetailView
+from django.views.generic import TemplateView, ListView, View
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django import forms
@@ -79,7 +79,7 @@ class ExamUpdateView(UpdateWithInlinesView):
         return reverse('choice:exam-list')
 
 
-class DrillUpdateView(DetailView):
+class DrillUpdateGetView(DetailView):
     model = Exam
     context_object_name = 'exam'
     template_name = 'choice/drill_update.html'
@@ -98,6 +98,38 @@ class DrillUpdateView(DetailView):
         return context
 
 
+class DrillUpdatePostView(SingleObjectMixin, View):
+    model = Exam
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        DrillFormSet = inlineformset_factory(
+            Exam,
+            Drill,
+            fields=('description',)
+        )
+        formset = DrillFormSet(request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(
+                reverse(
+                    'choice:drill-list',
+                    kwargs={'pk': self.object.pk}
+                )
+            )
+
+
+class DrillUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = DrillUpdateGetView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = DrillUpdatePostView.as_view()
+        return view(request, *args, **kwargs)
+
+
 class DrillListView(DetailView):
     model = Exam
     context_object_name = 'exam'
@@ -109,14 +141,13 @@ class DrillListView(DetailView):
         return context
 
 
-class MarkUpdateView(DetailView):
+class MarkUpdateGetView(DetailView):
     model = Drill
     context_object_name = 'drill'
     template_name = 'choice/mark_update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         MarkFormSet = inlineformset_factory(
             Drill,
             Mark,
@@ -126,6 +157,38 @@ class MarkUpdateView(DetailView):
         context['formset'] = formset
 
         return context
+
+
+class MarkUpdatePostView(SingleObjectMixin, View):
+    model = Drill
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        MarkFormSet = inlineformset_factory(
+            Drill,
+            Mark,
+            fields=('your_choice',)
+        )
+        formset = MarkFormSet(request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(
+                reverse(
+                    'choice:drill-list',
+                    kwargs={'pk': self.object.pk}
+                )
+            )
+
+
+class MarkUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = MarkUpdateGetView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = MarkUpdatePostView.as_view()
+        return view(request, *args, **kwargs)
 
 
 class DrillForm(ModelForm):
