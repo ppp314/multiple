@@ -151,7 +151,7 @@ class MarkUpdateGetView(DetailView):
         MarkFormSet = inlineformset_factory(
             Drill,
             Mark,
-            fields=('your_choice',)
+            fields=('your_choice', 'answer')
         )
         formset = MarkFormSet(instance=self.object)
         context['formset'] = formset
@@ -167,7 +167,7 @@ class MarkUpdatePostView(SingleObjectMixin, View):
         MarkFormSet = inlineformset_factory(
             Drill,
             Mark,
-            fields=('your_choice',)
+            fields=('your_choice', 'answer')
         )
         formset = MarkFormSet(request.POST, instance=self.object)
         if formset.is_valid():
