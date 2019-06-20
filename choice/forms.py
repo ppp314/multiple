@@ -20,7 +20,9 @@ This file is part of Multiple.
 from django import forms
 from django.forms import ModelForm, BaseInlineFormSet
 from django.utils import timezone
-from .models import Exam, Answer
+from .models import Exam, Answer, Drill
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 
 class MultipleQuestionChoiceForm(forms.Form):
@@ -64,3 +66,12 @@ class DrillInlineFormSet(BaseInlineFormSet):
             form.cleaned_data['created'] = asof
             # update the instance value, too.
             form.instance.name = asof
+
+
+class ExampleFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(ExampleFormSetHelper, self).__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_class = 'form-inline'
+        self.render_required_fields = True
+        self.add_input(Submit("submit", "Save"))

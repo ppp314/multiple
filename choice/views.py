@@ -29,6 +29,7 @@ from extra_views import CreateWithInlinesView, \
     InlineFormSetFactory
 from .models import Exam, Answer, Drill, Mark
 from .models import CHOICE_MARK_CHOICES
+from .forms import ExampleFormSetHelper
 
 
 class HomeView(TemplateView):
@@ -94,6 +95,8 @@ class DrillUpdateGetView(DetailView):
         )
         formset = DrillFormSet(instance=self.object)
         context['formset'] = formset
+        helper = ExampleFormSetHelper()
+        context['helper'] = helper
 
         return context
 

@@ -36,17 +36,10 @@ This file is part of Multiple.
 	<p>{{ exam.title }}</p>
       </div>
     </div>
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-row">
-	<div class="col-12">
-	  {% crispy formset %}
-	</div>
-	<div class="col-12">
-	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
-	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
-	</div>
+    <div class="form-row">
+      <div class="col-12">
+	{% crispy formset helper%}
       </div>
-    </form>
+    </div>
   </div>
 {% endblock %}
