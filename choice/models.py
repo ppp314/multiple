@@ -112,11 +112,18 @@ class Answer(models.Model):
 
 
 class DrillQuerySet(models.QuerySet):
-    """
-    Used as a Drill class manager
-    """
+    """Manager used as Drill class manager."""
     def score(self):
-        """Should not apply .filter() """
+        """Each drill queryset with a score of correct answer attribute.
+
+        Each drill with score of the correct answer as
+        a `total_score` attribute.
+
+        Returns:
+            QuerySet: the drill queryset with `total_score` attribute
+
+        Should not apply .filter() in this function.
+        """
         mark_c = Sum(
             'mark__answer__point',
             filter=Q(
@@ -155,7 +162,11 @@ class Drill(models.Model):
             Mark.objects.create(drill=self, answer=an)
 
     def point_full_mark(self):
-        """ Return the sum of the allocated point."""
+        """ Return the dictionary of the sum of the allocated point.
+
+        Returns:
+            the dictionary of total: {'total': 100}
+        """
         p = self.exam.answer_set.all()
         dict = p.aggregate(
             total=Sum('point')

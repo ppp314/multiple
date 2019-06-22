@@ -81,11 +81,26 @@ class ExamUpdateView(UpdateWithInlinesView):
 
 
 class DrillUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Exam.
+    """
     model = Exam
     context_object_name = 'exam'
     template_name = 'choice/drill_update.html'
 
     def get_context_data(self, **kwargs):
+        """ Return context_data as usual as well as DrillFormset and FormHelper.
+
+        Returns:
+            context: dictionary of formset and helper
+            ::
+                {
+                    'formset': DrillFormSet,
+                    'helper: crispy_forms helper,
+                }
+
+        """
         context = super().get_context_data(**kwargs)
 
         DrillFormSet = inlineformset_factory(
@@ -102,6 +117,7 @@ class DrillUpdateGetView(DetailView):
 
 
 class DrillUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing the post function."""
     model = Exam
 
     def post(self, request, *args, **kwargs):
@@ -123,7 +139,7 @@ class DrillUpdatePostView(SingleObjectMixin, View):
 
 
 class DrillUpdateView(View):
-
+    """ Dispatch get and post fuction as requested."""
     def get(self, request, *args, **kwargs):
         view = DrillUpdateGetView.as_view()
         return view(request, *args, **kwargs)
@@ -145,11 +161,25 @@ class DrillListView(DetailView):
 
 
 class MarkUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Drill
+    """
     model = Drill
     context_object_name = 'drill'
     template_name = 'choice/mark_update.html'
 
     def get_context_data(self, **kwargs):
+        """ Return context_data as usual as well as MarkFormset.
+
+        Returns:
+            context: the dictionary of formset.
+            ::
+                {
+                    'formset': MarkFormSet,
+                }
+
+        """
         context = super().get_context_data(**kwargs)
         MarkFormSet = inlineformset_factory(
             Drill,
@@ -163,6 +193,7 @@ class MarkUpdateGetView(DetailView):
 
 
 class MarkUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing post fuction."""
     model = Drill
 
     def post(self, request, *args, **kwargs):
@@ -184,7 +215,7 @@ class MarkUpdatePostView(SingleObjectMixin, View):
 
 
 class MarkUpdateView(View):
-
+    """ Dispatch get and post fuction as requested."""
     def get(self, request, *args, **kwargs):
         view = MarkUpdateGetView.as_view()
         return view(request, *args, **kwargs)

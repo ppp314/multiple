@@ -69,6 +69,7 @@ class DrillInlineFormSet(BaseInlineFormSet):
 
 
 class ExampleFormSetHelper(FormHelper):
+    """Return FormHelper from crispy_forms."""
     def __init__(self, *args, **kwargs):
         super(ExampleFormSetHelper, self).__init__(*args, **kwargs)
         self.form_method = 'post'
