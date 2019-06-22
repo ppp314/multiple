@@ -67,6 +67,7 @@ class ExamCreateView(CreateWithInlinesView):
     template_name = 'choice/exam_update.html'
 
     def get_success_url(self):
+        """ Return the url when ExamCreateView succeeds."""
         return reverse('choice:exam-list')
 
 
@@ -77,6 +78,7 @@ class ExamUpdateView(UpdateWithInlinesView):
     template_name = 'choice/exam_update.html'
 
     def get_success_url(self):
+        """ Return the url when ExamUpdateView succeeds."""
         return reverse('choice:exam-list')
 
 
@@ -90,7 +92,7 @@ class DrillUpdateGetView(DetailView):
     template_name = 'choice/drill_update.html'
 
     def get_context_data(self, **kwargs):
-        """ Return context_data as usual as well as DrillFormset and FormHelper.
+        """ Return context for the DetailView as well as DrillFormset and FormHelper.
 
         Returns:
             context: dictionary of formset and helper

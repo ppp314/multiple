@@ -156,6 +156,13 @@ class Drill(models.Model):
         return f"is {self.description}."
 
     def save(self, *args, **kwargs):
+        """Save the drill instance as well as create the Mark objects.
+
+        Create the Mark objects as many as the answer objects.
+        Todo:
+            Work around when there is no answer object.
+        """
+
         super().save(*args, **kwargs)
         answers = self.exam.answer_set.all()
         for an in answers:
