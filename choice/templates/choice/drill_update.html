@@ -12,18 +12,34 @@ This file is part of Multiple.
     You should have received a copy of the GNU General Public License
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 -->
-{# -*- coding:utf-8 -*-#}
 {% extends "choice/base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-<h1>Exam: {{ exam.title }}</h1>
-<h1>Exam author: {{ exam.author }}</h1>
-Exam created on: {{ exam.created_date }}
-<ol>
-  {% for Question in object_list %}
-    <li>{{ Question.no }} :: {{ Question.sub_no }}</li>
-  {% endfor %}
-</ol>
-<p><a href="{% url 'choice:exam-delete' exam.id %}"> delete </a></p>
-<p><a href="{% url 'choice:exam-update' exam.id %}"> update </a></p>
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+	<p>作成者</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.author }}</p>
+      </div>
+      <div class="col-3">
+	<p>作成日</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.created_date|date }}</p>
+      </div>
+      <div class="col-3">
+	<p>テスト名</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.title }}</p>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-12">
+	{% crispy formset helper%}
+      </div>
+    </div>
+  </div>
 {% endblock %}

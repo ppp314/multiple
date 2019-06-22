@@ -22,18 +22,21 @@ This file is part of Multiple.
 	<p>作成者</p>
       </div>
       <div class="col-9">
-	<p>{{ exam_drill.author }}</p>
+	<p>{{ exam.author }}</p>
       </div>
       <div class="col-3">
 	<p>作成日</p>
       </div>
       <div class="col-9">
-	<p>{{ exam_drill.created_date|date }}</p>
+	<p>{{ exam.created_date|date }}</p>
       </div>
-    </div>
-    <p>{{ exam_drill.title }}</p>
-
-    {% if object_list %}
+      <div class="col-3">
+	<p>テスト名</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.title }}</p>
+      </div>
+      {% if object_list %}
       <table class="table table-sm">
 	<thead>
 	  <tr>
