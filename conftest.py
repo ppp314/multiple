@@ -19,7 +19,6 @@ def create_user_exam_fixture():
     )
     exam = Exam.objects.create(
         title='test1',
-        author=user,
         number_of_question=10,
     )
 
@@ -66,7 +65,6 @@ def create_user_exam_fixture():
     )
     exam = Exam.objects.create(
         title='test2',
-        author=user,
         number_of_question=10,
     )
 

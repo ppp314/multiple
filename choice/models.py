@@ -25,8 +25,6 @@ from django.utils import timezone
 
 class Exam(models.Model):
 
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
     title = models.CharField(
         verbose_name='テスト名',
         max_length=200
@@ -234,3 +232,24 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"is {self.point}"
+
+
+class Publication(models.Model):
+    title = models.CharField(max_length=30)
+
+    class Meta:
+        ordering = ('title',)
+
+    def __str__(self):
+        return self.title
+
+
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    publications = models.ManyToManyField(Publication)
+
+    class Meta:
+        ordering = ('headline',)
+
+    def __str__(self):
+        return self.headline    
