@@ -20,7 +20,7 @@ This file is part of Multiple.
 from django import forms
 from django.forms import ModelForm, BaseInlineFormSet
 from django.utils import timezone
-from .models import Exam, Answer, Drill
+from .models import Exam, Answer, Drill, Publication, Article
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
@@ -69,9 +69,21 @@ class DrillInlineFormSet(BaseInlineFormSet):
 
 
 class ExampleFormSetHelper(FormHelper):
+    """Return FormHelper from crispy_forms."""
     def __init__(self, *args, **kwargs):
         super(ExampleFormSetHelper, self).__init__(*args, **kwargs)
         self.form_method = 'post'
         self.form_class = 'form-inline'
         self.render_required_fields = True
         self.add_input(Submit("submit", "Save"))
+
+
+class ArticleForm(ModelForm):
+    """ArticleForm class for ManyToManyField sample.
+
+    From Django documentation.
+    """
+
+    class Meta:
+        model = Article
+        fields = ('headline', 'publications')

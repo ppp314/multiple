@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from choice.models import Exam, Answer, Drill,\
     CHOICE_MARK_ONE,\
     CHOICE_MARK_TWO
+from choice.models import Publication, Article
 
 
 @pytest.fixture
@@ -19,7 +20,6 @@ def create_user_exam_fixture():
     )
     exam = Exam.objects.create(
         title='test1',
-        author=user,
         number_of_question=10,
     )
 
@@ -66,7 +66,6 @@ def create_user_exam_fixture():
     )
     exam = Exam.objects.create(
         title='test2',
-        author=user,
         number_of_question=10,
     )
 
@@ -97,3 +96,13 @@ def create_user_exam_fixture():
     for mk in mkset[1:]:
         mk.your_choice = CHOICE_MARK_ONE  # Correct
         mk.save()
+
+
+@pytest.fixture
+def create_publication():
+    """
+    The first fixture
+    """
+    Publication.objects.create(
+        title="Journal Standard"
+    )

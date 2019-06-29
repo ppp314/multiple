@@ -22,6 +22,7 @@ from django.views.generic import TemplateView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django import forms
 from django.forms import ModelForm, inlineformset_factory, Form
 from extra_views import CreateWithInlinesView, \
@@ -30,6 +31,7 @@ from extra_views import CreateWithInlinesView, \
 from .models import Exam, Answer, Drill, Mark
 from .models import CHOICE_MARK_CHOICES
 from .forms import ExampleFormSetHelper
+from .forms import ArticleForm
 
 
 class HomeView(TemplateView):
@@ -67,6 +69,7 @@ class ExamCreateView(CreateWithInlinesView):
     template_name = 'choice/exam_update.html'
 
     def get_success_url(self):
+        """ Return the url when ExamCreateView succeeds."""
         return reverse('choice:exam-list')
 
 
@@ -77,15 +80,31 @@ class ExamUpdateView(UpdateWithInlinesView):
     template_name = 'choice/exam_update.html'
 
     def get_success_url(self):
+        """ Return the url when ExamUpdateView succeeds."""
         return reverse('choice:exam-list')
 
 
 class DrillUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Exam.
+    """
     model = Exam
     context_object_name = 'exam'
     template_name = 'choice/drill_update.html'
 
     def get_context_data(self, **kwargs):
+        """ Return context for the DetailView as well as DrillFormset and FormHelper.
+
+        Returns:
+            context: dictionary of formset and helper
+            ::
+                {
+                    'formset': DrillFormSet,
+                    'helper: crispy_forms helper,
+                }
+
+        """
         context = super().get_context_data(**kwargs)
 
         DrillFormSet = inlineformset_factory(
@@ -102,6 +121,7 @@ class DrillUpdateGetView(DetailView):
 
 
 class DrillUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing the post function."""
     model = Exam
 
     def post(self, request, *args, **kwargs):
@@ -123,7 +143,7 @@ class DrillUpdatePostView(SingleObjectMixin, View):
 
 
 class DrillUpdateView(View):
-
+    """ Dispatch get and post fuction as requested."""
     def get(self, request, *args, **kwargs):
         view = DrillUpdateGetView.as_view()
         return view(request, *args, **kwargs)
@@ -145,11 +165,25 @@ class DrillListView(DetailView):
 
 
 class MarkUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Drill
+    """
     model = Drill
     context_object_name = 'drill'
     template_name = 'choice/mark_update.html'
 
     def get_context_data(self, **kwargs):
+        """ Return context_data as usual as well as MarkFormset.
+
+        Returns:
+            context: the dictionary of formset.
+            ::
+                {
+                    'formset': MarkFormSet,
+                }
+
+        """
         context = super().get_context_data(**kwargs)
         MarkFormSet = inlineformset_factory(
             Drill,
@@ -163,6 +197,7 @@ class MarkUpdateGetView(DetailView):
 
 
 class MarkUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing post fuction."""
     model = Drill
 
     def post(self, request, *args, **kwargs):
@@ -184,7 +219,7 @@ class MarkUpdatePostView(SingleObjectMixin, View):
 
 
 class MarkUpdateView(View):
-
+    """ Dispatch get and post fuction as requested."""
     def get(self, request, *args, **kwargs):
         view = MarkUpdateGetView.as_view()
         return view(request, *args, **kwargs)
@@ -208,3 +243,28 @@ ExamDetailFormSet = inlineformset_factory(
     min_num=1,
     validate_min=True,
 )
+
+
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ArticleForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+
+            newarticle = form.save(commit=False)
+            newarticle.headline = 'post'
+            newarticle.save()
+
+            form.save()
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('success/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ArticleForm()
+
+    return render(request, 'choice/name.html', {'form': form})
