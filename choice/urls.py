@@ -28,6 +28,8 @@ from .views import HomeView, \
     DrillListView, \
     MarkUpdateView
 
+from .views import get_name
+
 app_name = 'choice'
 
 exam_extra_patterns = [
@@ -68,6 +70,7 @@ drill_extra_patterns = [
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('test/', get_name, name='test'),
     path('about/', AboutView.as_view(), name='about'),
     path('success/', SuccessView.as_view(), name='success'),
     path('exam/', include(exam_extra_patterns)),

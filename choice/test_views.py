@@ -24,8 +24,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Exam, Drill
 from .forms import MyExamForm
-from .views import ExamCreateView
-
+from .views import ExamCreateView, get_name
+from .models import Publication, Article
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -163,3 +163,24 @@ def test_create_exam_by_post(rf):
     after = Exam.objects.count()
 
     assert before + 1 == after
+
+
+@pytest.mark.django_db
+def test_article_get(rf, create_publication):
+    url = reverse('choice:test')
+    request = rf.get(url)
+    response = get_name(request)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_article_post(rf, create_publication):
+    publication = Publication.objects.first()
+    test_data = {
+        'headline': "Succeed",
+        'publications': publication.id
+    }
+    url = reverse('choice:test')
+    request = rf.post(url, data=test_data)
+    response = get_name(request)
+    assert response.status_code == 302
