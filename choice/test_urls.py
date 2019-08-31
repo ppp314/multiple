@@ -19,38 +19,25 @@ This file is part of Multiple.
 
 import pytest
 from django.urls.base import resolve, Resolver404
-from .views import HomeView, AboutView, ExamIndexView, \
+from .views import HomeView, AboutView, SuccessView, \
+    ExamListView, \
     ExamCreateView, \
-    ExamUpdateView, ExamDeleteView, QuestionIndexView,  ExamDetailView, \
-    AnswerModelFormSetView, \
-    AnswerDeleteView, \
-    MarkUpdateWithInlinesView, \
-    MarkDeleteView, \
-    vote, \
-    multiple_question_form, \
-    EditQuestionView, \
-    SuccessView
+    ExamUpdateView, \
+    DrillUpdateView, \
+    DrillListView, \
+    MarkUpdateView
 
 
 @pytest.mark.parametrize("test_url, expected", [
     ('/', HomeView),
     ('/about/', AboutView),
-    ('/exam/', ExamIndexView),
-    ('/exam/create/', ExamCreateView),
-    ('/exam/1/', ExamDetailView),
-    ('/exam/1/update', ExamUpdateView),
-    ('/exam/1/delete', ExamDeleteView),
-    ('/answer/1/', AnswerModelFormSetView),
-    ('/answer/1/update', AnswerModelFormSetView),
-    ('/answer/1/delete', AnswerDeleteView),
-    ('/mark/1/', MarkUpdateWithInlinesView),
-    ('/mark/1/update', MarkUpdateWithInlinesView),
-    ('/mark/1/delete', MarkDeleteView),
-    ('/p/1/', QuestionIndexView),
-    ('/vote/1/', vote),
-    ('/testform/', multiple_question_form),
-    ('/editquestion/1', EditQuestionView),
     ('/success/', SuccessView),
+    ('/exam/', ExamListView),
+    ('/exam/create/', ExamCreateView),
+    ('/exam/1/update', ExamUpdateView),
+    ('/exam/1/drillupdate', DrillUpdateView),
+    ('/exam/1/drill', DrillListView),
+    ('/drill/1/', MarkUpdateView),
 ])
 def test_urls_valid(test_url, expected):
     """

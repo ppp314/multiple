@@ -25,14 +25,12 @@ from django.utils import timezone
 
 class Exam(models.Model):
 
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
     title = models.CharField(
         verbose_name='テスト名',
         max_length=200
     )
 
-    created_date = models.DateTimeField(
+    created = models.DateTimeField(
         verbose_name='作成日',
         default=timezone.now
     )
@@ -105,18 +103,25 @@ class Answer(models.Model):
     class Meta:
         verbose_name = '解答'
         verbose_name_plural = '解答'
-        ordering = ['pk']
+        ordering = ['no', 'sub_no']
 
     def __str__(self):
         return str(self.no) + '-' + str(self.sub_no)
 
 
 class DrillQuerySet(models.QuerySet):
-    """
-    Used as a Drill class manager
-    """
+    """Manager used as Drill class manager."""
     def score(self):
-        """Should not apply .filter() """
+        """Each drill queryset with a score of correct answer attribute.
+
+        Each drill with score of the correct answer as
+        a `total_score` attribute.
+
+        Returns:
+            QuerySet: the drill queryset with `total_score` attribute
+
+        Should not apply .filter() in this function.
+        """
         mark_c = Sum(
             'mark__answer__point',
             filter=Q(
@@ -140,6 +145,7 @@ class Drill(models.Model):
         verbose_name='作成日',
         blank=True,
         default=None,
+        null=True
     )
 
     objects = DrillQuerySet.as_manager()
@@ -148,13 +154,24 @@ class Drill(models.Model):
         return f"is {self.description}."
 
     def save(self, *args, **kwargs):
+        """Save the drill instance as well as create the Mark objects.
+
+        Create the Mark objects as many as the answer objects.
+        Todo:
+            Work around when there is no answer object.
+        """
+
         super().save(*args, **kwargs)
         answers = self.exam.answer_set.all()
         for an in answers:
             Mark.objects.create(drill=self, answer=an)
 
     def point_full_mark(self):
-        """ Return the sum of the allocated point."""
+        """ Return the dictionary of the sum of the allocated point.
+
+        Returns:
+            the dictionary of total: {'total': 100}
+        """
         p = self.exam.answer_set.all()
         dict = p.aggregate(
             total=Sum('point')
@@ -215,3 +232,24 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"is {self.point}"
+
+
+class Publication(models.Model):
+    title = models.CharField(max_length=30)
+
+    class Meta:
+        ordering = ('title',)
+
+    def __str__(self):
+        return self.title
+
+
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    publications = models.ManyToManyField(Publication)
+
+    class Meta:
+        ordering = ('headline',)
+
+    def __str__(self):
+        return self.headline    

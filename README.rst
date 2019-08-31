@@ -125,3 +125,51 @@ https://devcenter.heroku.com/categories/python
 LICENSE
 =======
 GPL-3
+
+
+URL organization
+================
+
+
++------------+---------------+-----------------------+----------------+
+| Model      | View          | Which Form?           | URL name       |
++============+===============+=======================+================+
+|Exam        | create        |ModelFormSetView       |exam-create     |
+|            +---------------+-----------------------+----------------+
+|            | list answer   |generic.ListView       |(Not yet)       |
+|            +---------------+-----------------------+----------------+
+|            | list drill    |generic.ListView       |exam-drill-list |
+|            +---------------+-----------------------+----------------+
+|            | update        |ModelFormSetView       |exam-update     |
+|            +---------------+-----------------------+----------------+
+|            | delete        |generic.DeleteView     |exam-delete     |
++------------+---------------+-----------------------+----------------+
+| Answer     | create        | CreateWithInlinesView | answer-create  |
+|            +---------------+-----------------------+----------------+
+|            | list          | CreateWithInlinesView | answer-list    |
+|            +---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | answer-update  |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | answer-delete  |
++------------+---------------+-----------------------+----------------+
+| Drill      | create        | UpdateWithInlinesView | drill-create   |
+|            +---------------+-----------------------+----------------+
+|            | list          | generic.ListView      | drill-list     |
++            +---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | drill-update   |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | drill-delete   |
++------------+---------------+-----------------------+----------------+
+| Mark       | create        | (NA)                  | mark-create    |
+|            +---------------+-----------------------+----------------+
+|            | list          | (NA)                  | mark-list      |
++------------+---------------+-----------------------+----------------+
+|            | update        | UpdateWithInlinesView | mark-update    |
+|            +---------------+-----------------------+----------------+
+|            | delete        | (NA)                  | mark-delete    |
++------------+---------------+-----------------------+----------------+
+| Grade      | list          | generic.ListView      | grade-list     |
+|            +---------------+-----------------------+----------------+
+|            | delete        | generic.DeleteView    | grade-delete   |
++------------+---------------+-----------------------+----------------+
+

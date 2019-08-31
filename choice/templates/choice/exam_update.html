@@ -15,15 +15,21 @@ This file is part of Multiple.
 {% extends "choice/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-	<form method="post">
-	  {% csrf_token %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="container">
+      <div class="form-row">
+	<div class="col-12">
+	  {{ form|crispy }}
+	</div>
+	{% for formset in inlines %}
 	  {{ formset|crispy }}
+	{% endfor %}
+	<div class="col-12">
 	  <input type="submit" class="btn btn-outline-secondary" value="Submit">
-	</form>
+	  <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}">Cancel</a>
+	</div>
       </div>
     </div>
-  </div>
+  </form>
 {% endblock %}

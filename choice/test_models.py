@@ -31,7 +31,7 @@ pytestmark = pytest.mark.django_db
 # Create your tests here.
 def test_one_exam(create_user_exam_fixture):
     """Test if no question exists. The count should be 0."""
-    assert Exam.objects.filter(author__username='dokinchan').count() == 1
+    assert Exam.objects.count() == 2
 
 
 def test_no_question():
@@ -74,7 +74,7 @@ def test_point_one_user(create_user_exam_fixture):
     There are the one wrong answer and the nineteen correct answers,
     which are 5 points each.
     """
-    ex = Exam.objects.filter(author__username='baikinman')[0]
+    ex = Exam.objects.first()
     d = Drill.objects.filter(exam=ex)[0]
     an = d.mark_set.all().order_by(
         'answer__no',

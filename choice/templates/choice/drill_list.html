@@ -1,4 +1,4 @@
- <!-- 
+<!-- 
 Copyright 2019 Acacia Shop
 This file is part of Multiple.
     Multiple is free software: you can redistribute it and/or modify
@@ -22,24 +22,43 @@ This file is part of Multiple.
 	<p>作成者</p>
       </div>
       <div class="col-9">
-	<p>{{ exam_detail.author }}</p>
+	<p>{{ exam.author }}</p>
       </div>
       <div class="col-3">
 	<p>作成日</p>
       </div>
       <div class="col-9">
-	<p>{{ exam_detail.created_date|date }}</p>
+	<p>{{ exam.created_date|date }}</p>
       </div>
-    </div>
-    <p>{{ exam_detail.title }}</p>
-
-    <p>
-      <a class="btn btn-outline-secondary" href="{% url 'choice:answer-list' exam_detail.id %}">List Answer</a>
-      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-delete' exam_detail.id %}"> delete </a>
-      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-update' exam_detail.id %}"> update </a>
-      <a class="btn btn-outline-secondary" href="{% url 'choice:exam-list' %}"> Cancel </a>
-    </p>
+      <div class="col-3">
+	<p>テスト名</p>
+      </div>
+      <div class="col-9">
+	<p>{{ exam.title }}</p>
+      </div>
+      {% if object_list %}
+      <table class="table table-sm">
+	<thead>
+	  <tr>
+	    <th scope="col">Description</th>
+	    <th scope="col">Created</th>
+	    <th scope="col">Edit</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for drill in object_list %}
+	    <tr>
+	      <td><a class="btn btn-default" href="#">{{ drill.description}}</a></td>
+	      <td>{{ drill.created }}</td>
+	      <td><a class="btn btn-outline-secondary" href="#">編集</a>
+	      <td><a class="btn btn-outline-secondary" href="#">ドリル追加</a>
+	    </tr>
+	  {% endfor %}
+	</tbody>
+      </table>
+    {% else %}
+      <p>No drill is available.</p>
+    {% endif %}
   </div>
 {% endblock %}
-
 

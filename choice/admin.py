@@ -43,15 +43,14 @@ class MarkInline(admin.TabularInline):
 
 class MyExamAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['author']}),
-        ('Contents of Exam created_date',
-         {'fields': ['created_date']}),
+        ('Contents of Exam created',
+         {'fields': ['created']}),
         ('Contents of Exam title',
          {'fields': ['title']}),
 
         ]
 
-    list_display = ('pk', 'author', 'created_date', 'title')
+    list_display = ('pk', 'created', 'title')
     inlines = [AnswerInline, DrillInline]
 
 

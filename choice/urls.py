@@ -18,36 +18,25 @@ This file is part of Multiple.
 """
 
 from django.urls import include, path
-
-
-from .views import HomeView, AboutView, ExamIndexView, ExamDetailView, \
-    ExamDeleteView, ExamUpdateView, \
-    ExamCreateView, \
-    QuestionIndexView, \
-    ExamQuestionView, vote, multiple_question_form, EditQuestionView, \
+from .views import HomeView, \
+    AboutView, \
     SuccessView, \
-    AnswerModelFormSetView, \
-    AnswerDeleteView, \
-    MarkUpdateWithInlinesView, \
-    MarkDeleteView
+    ExamListView, \
+    ExamCreateView, \
+    ExamUpdateView, \
+    DrillUpdateView, \
+    DrillListView, \
+    MarkUpdateView
 
+from .views import get_name
 
 app_name = 'choice'
 
-<<<<<<< HEAD
-extra_patterns = [
-=======
 exam_extra_patterns = [
->>>>>>> development-1
     path(
         '',
-        ExamIndexView.as_view(),
+        ExamListView.as_view(),
         name='exam-list',
-    ),
-    path(
-        '<int:pk>/',
-        ExamDetailView.as_view(),
-        name='exam-detail',
     ),
     path(
         '<int:pk>/update',
@@ -55,9 +44,14 @@ exam_extra_patterns = [
         name='exam-update'
     ),
     path(
-        '<int:pk>/delete',
-        ExamDeleteView.as_view(),
-        name='exam-delete'
+        '<int:pk>/drillupdate',
+        DrillUpdateView.as_view(),
+        name='drill-update'
+    ),
+    path(
+        '<int:pk>/drill',
+        DrillListView.as_view(),
+        name='drill-list'
     ),
     path(
         'create/',
@@ -66,54 +60,19 @@ exam_extra_patterns = [
     ),
 ]
 
-answer_extra_patterns = [
+drill_extra_patterns = [
     path(
         '<int:pk>/',
-        AnswerModelFormSetView.as_view(),
-        name='answer-list',
-    ),
-    path(
-        '<int:pk>/update',
-        AnswerModelFormSetView.as_view(),
-        name='answer-update'
-    ),
-    path(
-        '<int:pk>/delete',
-        AnswerDeleteView.as_view(),
-        name='answer-delete'
+        MarkUpdateView.as_view(),
+        name='mark-update',
     ),
 ]
-
-mark_extra_patterns = [
-    path(
-        '<int:pk>/',
-        MarkUpdateWithInlinesView.as_view(),
-        name='mark-list',
-    ),
-    path(
-        '<int:pk>/update',
-        MarkUpdateWithInlinesView.as_view(),
-        name='mark-update'
-    ),
-    path(
-        '<int:pk>/delete',
-        MarkDeleteView.as_view(),
-        name='mark-delete'
-    ),
-]
-
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('test/', get_name, name='test'),
     path('about/', AboutView.as_view(), name='about'),
-    path('exam/', include(extra_patterns)),
-    path('exam/', include(exam_extra_patterns)),
-    path('answer/', include(answer_extra_patterns)),
-    path('mark/', include(mark_extra_patterns)),
-    path('p/<int:pk>/', QuestionIndexView.as_view(), name='question-index'),
-    path('vote/<int:pk>/', vote, name='exam-vote'),
-    path('testform/', multiple_question_form, name='test-form'),
-    path('editquestion/<int:pk>', EditQuestionView.as_view(),
-         name='edit-question'),
     path('success/', SuccessView.as_view(), name='success'),
+    path('exam/', include(exam_extra_patterns)),
+    path('drill/', include(drill_extra_patterns)),
 ]

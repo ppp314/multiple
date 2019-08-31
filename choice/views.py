@@ -17,141 +17,21 @@ This file is part of Multiple.
     along with Multiple.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse, reverse_lazy
-from django.views import generic
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+
+from django.views.generic import TemplateView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django import forms
-from django.forms import inlineformset_factory
-from extra_views import CreateWithInlinesView, InlineFormSet, \
-    InlineFormSetFactory, InlineFormSetView, \
-    ModelFormSetView, \
-    UpdateWithInlinesView
-from .models import Exam, Answer
-from .forms import MultipleQuestionChoiceForm
-from .forms import MyExamForm
-
-
-class ExamIndexView(generic.ListView):
-    context_object_name = 'latest_exam_list'
-    template_name = 'choice/exam_list.html'
-
-    paginate_by = 10
-
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Exam.objects.order_by('created_date')
-
-
-class QuestionIndexView(generic.ListView):
-    model = Answer
-    context_object_name = 'question_list'
-
-    paginate_by = 10
-
-    def get_queryset(self):
-        self.exam = get_object_or_404(Exam, id=self.kwargs['pk'])
-        return Answer.objects.filter(exam=self.exam).order_by('no', 'sub_no')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['Exam'] = self.exam
-        return context
-
-
-class ExamCreateView(ModelFormSetView):
-    model = Exam
-    fields = [
-        'author',
-        'title',
-    ]
-    template_name = 'choice/exam_formset.html'
-
-
-class ExamDetailView(DetailView):
-
-    model = Exam
-    context_object_name = 'exam_detail'
-    template_name = 'choice/detail.html'
-
-
-class ExamDeleteView(DeleteView):
-
-    model = Exam
-    success_url = reverse_lazy('choice:exam-list')
-
-
-class ExamUpdateView(UpdateView):
-
-    model = Exam
-    fields = ['title', 'author']
-
-
-class ExamQuestionView(SingleObjectMixin, generic.ListView):
-    template_name = "choice/exam_question_list.html"
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Exam.objects.all())
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['exam'] = self.object
-        return context
-
-    def get_queryset(self):
-        return self.object.answer_set.order_by('no', 'sub_no')
-<<<<<<< HEAD
-=======
-
-
-class AnswerModelFormSetView(ModelFormSetView):
-    pass
-
-
-class AnswerDeleteView(generic.DeleteView):
-    pass
-
-
-class MarkUpdateWithInlinesView(UpdateWithInlinesView):
-    pass
-
-
-class MarkDeleteView(generic.DeleteView):
-    pass
->>>>>>> development-1
-
-
-def vote(request, pk):
-    exam = get_object_or_404(Exam, pk=pk)
-    try:
-        selected_question = exam.answer_set.get(pk=request.POST['question'])
-    except (KeyError, Answer.DoesNotExist):
-        return render(request, 'choice/detail.html', {
-            'exam_detail': exam,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_question.no += 1
-        return redirect('choice:exam-index')
-
-
-def multiple_question_form(request):
-    form = MultipleQuestionChoiceForm()
-
-    return render(request, 'choice/name.html', {'form': form})
-
-
-class EditQuestionView(InlineFormSetView):
-    model = Exam
-    inline_model = Answer
-    template_name = 'choice/post_form.html'
-    fields = ["no", "sub_no", "point", "answer"]
+from django.forms import ModelForm, inlineformset_factory, Form
+from extra_views import CreateWithInlinesView, \
+    UpdateWithInlinesView, \
+    InlineFormSetFactory
+from .models import Exam, Answer, Drill, Mark
+from .models import CHOICE_MARK_CHOICES
+from .forms import ExampleFormSetHelper
+from .forms import ArticleForm
 
 
 class HomeView(TemplateView):
@@ -166,20 +46,225 @@ class SuccessView(TemplateView):
     template_name = "choice/success.html"
 
 
-class ChildInLines(InlineFormSet):
+class ExamListView(ListView):
+    context_object_name = 'latest_exam_list'
+    template_name = 'choice/exam_list.html'
+
+    paginate_by = 10
+
+    def get_queryset(self):
+        """Return the object order by created."""
+        return Exam.objects.order_by('created')
+
+
+class AnswerInline(InlineFormSetFactory):
     model = Answer
-    fields = ('no', 'sub_no', 'point', )
+    fields = ['no', 'sub_no', 'point', 'correct']
 
 
-class ParentCreateView(CreateWithInlinesView):
+class ExamCreateView(CreateWithInlinesView):
     model = Exam
+    inlines = [AnswerInline]
     fields = ['title']
+    template_name = 'choice/exam_update.html'
+
+    def get_success_url(self):
+        """ Return the url when ExamCreateView succeeds."""
+        return reverse('choice:exam-list')
+
+
+class ExamUpdateView(UpdateWithInlinesView):
+    model = Exam
+    inlines = [AnswerInline]
+    fields = ['title']
+    template_name = 'choice/exam_update.html'
+
+    def get_success_url(self):
+        """ Return the url when ExamUpdateView succeeds."""
+        return reverse('choice:exam-list')
+
+
+class DrillUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Exam.
+    """
+    model = Exam
     context_object_name = 'exam'
-    inlines = ['ChildInLines', ]
-    template_name = 'choice/parent.html'
-    success_url = "/"
+    template_name = 'choice/drill_update.html'
+
+    def get_context_data(self, **kwargs):
+        """ Return context for the DetailView as well as DrillFormset and FormHelper.
+
+        Returns:
+            context: dictionary of formset and helper
+            ::
+                {
+                    'formset': DrillFormSet,
+                    'helper: crispy_forms helper,
+                }
+
+        """
+        context = super().get_context_data(**kwargs)
+
+        DrillFormSet = inlineformset_factory(
+            Exam,
+            Drill,
+            fields=('description',)
+        )
+        formset = DrillFormSet(instance=self.object)
+        context['formset'] = formset
+        helper = ExampleFormSetHelper()
+        context['helper'] = helper
+
+        return context
 
 
-class QuestionInlineFormSet(InlineFormSetFactory):
-    model = Answer
-    fields = ("no", "sub_no", "point", "answer", )
+class DrillUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing the post function."""
+    model = Exam
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        DrillFormSet = inlineformset_factory(
+            Exam,
+            Drill,
+            fields=('description',)
+        )
+        formset = DrillFormSet(request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(
+                reverse(
+                    'choice:drill-list',
+                    kwargs={'pk': self.object.pk}
+                )
+            )
+
+
+class DrillUpdateView(View):
+    """ Dispatch get and post fuction as requested."""
+    def get(self, request, *args, **kwargs):
+        view = DrillUpdateGetView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = DrillUpdatePostView.as_view()
+        return view(request, *args, **kwargs)
+
+
+class DrillListView(DetailView):
+    model = Exam
+    context_object_name = 'exam'
+    template_name = 'choice/drill_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Drill.objects.filter(exam=self.object)
+        return context
+
+
+class MarkUpdateGetView(DetailView):
+    """ The Generic class used to render initial form.
+
+    Parent class is Drill
+    """
+    model = Drill
+    context_object_name = 'drill'
+    template_name = 'choice/mark_update.html'
+
+    def get_context_data(self, **kwargs):
+        """ Return context_data as usual as well as MarkFormset.
+
+        Returns:
+            context: the dictionary of formset.
+            ::
+                {
+                    'formset': MarkFormSet,
+                }
+
+        """
+        context = super().get_context_data(**kwargs)
+        MarkFormSet = inlineformset_factory(
+            Drill,
+            Mark,
+            fields=('your_choice', 'answer')
+        )
+        formset = MarkFormSet(instance=self.object)
+        context['formset'] = formset
+
+        return context
+
+
+class MarkUpdatePostView(SingleObjectMixin, View):
+    """ The generic SingleObjct class providing post fuction."""
+    model = Drill
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        MarkFormSet = inlineformset_factory(
+            Drill,
+            Mark,
+            fields=('your_choice', 'answer')
+        )
+        formset = MarkFormSet(request.POST, instance=self.object)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(
+                reverse(
+                    'choice:drill-list',
+                    kwargs={'pk': self.object.pk}
+                )
+            )
+
+
+class MarkUpdateView(View):
+    """ Dispatch get and post fuction as requested."""
+    def get(self, request, *args, **kwargs):
+        view = MarkUpdateGetView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = MarkUpdatePostView.as_view()
+        return view(request, *args, **kwargs)
+
+
+class DrillForm(ModelForm):
+    class Meta:
+        model = Drill
+        fields = ('description',)
+
+
+ExamDetailFormSet = inlineformset_factory(
+    parent_model=Exam,
+    model=Drill,
+    form=DrillForm,
+    extra=1,
+    min_num=1,
+    validate_min=True,
+)
+
+
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ArticleForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+
+            newarticle = form.save(commit=False)
+            newarticle.headline = 'post'
+            newarticle.save()
+
+            form.save()
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('success/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ArticleForm()
+
+    return render(request, 'choice/name.html', {'form': form})
