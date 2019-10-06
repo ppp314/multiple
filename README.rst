@@ -124,7 +124,7 @@ https://devcenter.heroku.com/categories/python
 
 LICENSE
 =======
-GPL-3
+Apache-2.0
 
 
 URL organization

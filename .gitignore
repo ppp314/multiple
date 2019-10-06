@@ -108,3 +108,9 @@ venv.bak/
 
 # Emacs Desktop
 .DS_Store
+
+# Global
+GPATH
+GRTAGS
+GTAGS
+
