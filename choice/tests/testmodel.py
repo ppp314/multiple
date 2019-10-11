@@ -25,12 +25,12 @@ class QuestionModelTests(TestCase):
         pass
 
 
-class ViewTests(TestCase):
-    """ Base class for testing views"""
+class TestsViewHome(TestCase):
+    """ Test view choice:home"""
 
     expected_status_code = 200
     res = None
-    
+
     @property
     def response(self):
         raise NotImplementedError
@@ -41,6 +41,54 @@ class ViewTests(TestCase):
 
     def setUp(self):
         self.res = self.client.get(reverse("choice:home"))
+
+    def test_should_return_expected_return_code(self):
+        self.assertEqual(self.res.status_code, self.expected_status_code)
+
+
+class TestsViewAbout(TestCase):
+    """ Test view choice:about"""
+
+    expected_status_code = 200
+
+    def setUp(self):
+        self.res = self.client.get(reverse("choice:about"))
+
+    def test_should_return_expected_return_code(self):
+        self.assertEqual(self.res.status_code, self.expected_status_code)
+
+
+class TestsViewSuccess(TestCase):
+    """ Test view choice:success"""
+
+    expected_status_code = 200
+
+    def setUp(self):
+        self.res = self.client.get(reverse("choice:success"))
+
+    def test_should_return_expected_return_code(self):
+        self.assertEqual(self.res.status_code, self.expected_status_code)
+
+
+class TestsViewExamlist(TestCase):
+    """ Test view choice:exam-list"""
+
+    expected_status_code = 200
+
+    def setUp(self):
+        self.res = self.client.get(reverse("choice:exam-list"))
+
+    def test_should_return_expected_return_code(self):
+        self.assertEqual(self.res.status_code, self.expected_status_code)
+
+
+class TestsViewExamcreate(TestCase):
+    """ Test view choice:exam-create"""
+
+    expected_status_code = 200
+
+    def setUp(self):
+        self.res = self.client.get(reverse("choice:exam-create"))
 
     def test_should_return_expected_return_code(self):
         self.assertEqual(self.res.status_code, self.expected_status_code)
