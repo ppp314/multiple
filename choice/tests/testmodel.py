@@ -25,10 +25,25 @@ class QuestionModelTests(TestCase):
         pass
 
 
-class HomeViewTests(TestCase):
-    def test_home_view(self):
-        response = self.client.get(reverse('choice:home'))
-        self.assertEqual(response.status_code, 200)
+class ViewTests(TestCase):
+    """ Base class for testing views"""
+
+    expected_status_code = 200
+    res = None
+    
+    @property
+    def response(self):
+        raise NotImplementedError
+
+    @property
+    def url_to_view(self):
+        raise NotImplementedError
+
+    def setUp(self):
+        self.res = self.client.get(reverse("choice:home"))
+
+    def test_should_return_expected_return_code(self):
+        self.assertEqual(self.res.status_code, self.expected_status_code)
 
 
 def load_tests(loader, tests, ignore):
