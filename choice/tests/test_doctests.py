@@ -13,21 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-from django.test import TestCase
-from ..models import Exam
-from .factories import ExamFactory
+import doctest
+from .. import models, views
 
 
-class TestExamModel(TestCase):
-    """ Test Exam model"""
+def load_tests(loader, tests, ignore):
+    """ Load doctest modules."""
+    tests.addTests(doctest.DocTestSuite(models))
+    tests.addTests(doctest.DocTestSuite(views))
+    return tests
 
-    def setUp(self):
-        factory = ExamFactory
-        factory.create_batch(size=2)
-
-    def test_should_have_number_of_exam(self):
-        self.assertEqual(Exam.objects.count(), 2)
-
-    def test_should_not_create_model(self):
-        with self.assertRaises(TypeError):
-            Exam.objects.create(tite="")
