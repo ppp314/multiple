@@ -106,6 +106,10 @@ class TestExamModel(TestCase):
     def test_should_have_number_of_exam(self):
         self.assertEqual(Exam.objects.count(), 2)
 
+    def test_should_not_create_model(self):
+        with self.assertRaises(TypeError):
+            Exam.objects.create(tite="")
+
 
 def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(models))
