@@ -17,6 +17,8 @@ import doctest
 from django.test import TestCase
 from django.urls import reverse
 from .. import models, views
+from ..models import Exam
+from .factories import ExamFactory
 
 
 class QuestionModelTests(TestCase):
@@ -25,7 +27,7 @@ class QuestionModelTests(TestCase):
         pass
 
 
-class TestsViewHome(TestCase):
+class TestViewHome(TestCase):
     """ Test view choice:home"""
 
     expected_status_code = 200
@@ -46,7 +48,7 @@ class TestsViewHome(TestCase):
         self.assertEqual(self.res.status_code, self.expected_status_code)
 
 
-class TestsViewAbout(TestCase):
+class TestViewAbout(TestCase):
     """ Test view choice:about"""
 
     expected_status_code = 200
@@ -58,7 +60,7 @@ class TestsViewAbout(TestCase):
         self.assertEqual(self.res.status_code, self.expected_status_code)
 
 
-class TestsViewSuccess(TestCase):
+class TestViewSuccess(TestCase):
     """ Test view choice:success"""
 
     expected_status_code = 200
@@ -70,7 +72,7 @@ class TestsViewSuccess(TestCase):
         self.assertEqual(self.res.status_code, self.expected_status_code)
 
 
-class TestsViewExamlist(TestCase):
+class TestViewExamlist(TestCase):
     """ Test view choice:exam-list"""
 
     expected_status_code = 200
@@ -82,7 +84,7 @@ class TestsViewExamlist(TestCase):
         self.assertEqual(self.res.status_code, self.expected_status_code)
 
 
-class TestsViewExamcreate(TestCase):
+class TestViewExamcreate(TestCase):
     """ Test view choice:exam-create"""
 
     expected_status_code = 200
@@ -92,6 +94,17 @@ class TestsViewExamcreate(TestCase):
 
     def test_should_return_expected_return_code(self):
         self.assertEqual(self.res.status_code, self.expected_status_code)
+
+
+class TestExamModel(TestCase):
+    """ Test Exam model"""
+
+    def setUp(self):
+        factory = ExamFactory
+        factory.create_batch(size=2)
+
+    def test_should_have_number_of_exam(self):
+        self.assertEqual(Exam.objects.count(), 2)
 
 
 def load_tests(loader, tests, ignore):
