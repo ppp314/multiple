@@ -15,6 +15,7 @@
 """
 from django.test import TestCase
 from django.urls import reverse
+from .factories import ExamFactory
 
 
 class QuestionModelTests(TestCase):
@@ -91,3 +92,21 @@ class TestViewExamcreate(TestCase):
     def test_should_return_expected_return_code(self):
         self.assertEqual(self.res.status_code, self.expected_status_code)
 
+
+class TestExamListView(TestCase):
+
+    def _getTarget(self):
+        return reverse('choice:exam-list')
+
+    def test_exam_not_available(self):
+        res = self.client.get(self._getTarget())
+
+        self.assertContains(res, "No exam is available.")
+        self.assertEqual(res.status_code, 200)
+
+    def test_exam_item(self):
+        ExamFactory()
+        res = self.client.get(self._getTarget())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_list.html')

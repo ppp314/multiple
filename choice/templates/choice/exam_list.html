@@ -34,7 +34,7 @@
 	{% include 'choice/pagination.html' %}
       </div>
     </div>    
-    {% if latest_exam_list %}
+    {% if exam_list %}
       <table class="table table-striped">
 	<thead>
 	  <tr>
@@ -45,7 +45,7 @@
 	  </tr>
 	</thead>
 	<tbody>
-	  {% for exam in latest_exam_list %}
+	  {% for exam in exam_list %}
 	    <tr>
 	      <th scope="row">{{ exam.id }}</th>
 	      <td>{{ exam.title }}</td>

@@ -44,14 +44,9 @@ class SuccessView(TemplateView):
 
 
 class ExamListView(ListView):
-    context_object_name = 'latest_exam_list'
-    template_name = 'choice/exam_list.html'
-
+    """ Exam Generic ListView"""
+    model = Exam
     paginate_by = 10
-
-    def get_queryset(self):
-        """Return the object order by created."""
-        return Exam.objects.order_by('created')
 
 
 class AnswerInline(InlineFormSetFactory):

@@ -40,7 +40,7 @@ class Exam(models.Model):
 
         verbose_name = '試験'
         verbose_name_plural = '試験'
-        ordering = ['pk']
+        ordering = ['created']
 
     def __str__(self):
         return self.title
