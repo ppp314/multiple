@@ -49,6 +49,11 @@ class ExamListView(ListView):
     paginate_by = 10
 
 
+class ExamDetailView(DetailView):
+    """ Exam Generic DetailView"""
+    model = Exam
+    
+
 class AnswerInline(InlineFormSetFactory):
     model = Answer
     fields = ['no', 'sub_no', 'point', 'correct']

@@ -111,3 +111,22 @@ class TestExamListView(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_list.html')
         self.assertTemplateUsed(res, 'choice/base.html')
+
+
+class TestExamDetailView(TestCase):
+
+    def _getTarget(self, pk):
+        return reverse('choice:exam-detail', kwargs={'pk': pk})
+
+    def test_exam_not_available(self):
+        res = self.client.get(self._getTarget(1))
+        self.assertEqual(res.status_code, 404)
+
+    def test_exam_item(self):
+        exam = ExamFactory()
+        res = self.client.get(self._getTarget(exam.id))
+
+        self.assertEqual(exam.id, res.context['exam'].id)
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_detail.html')
+        self.assertTemplateUsed(res, 'choice/base.html')

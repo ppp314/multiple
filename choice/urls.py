@@ -19,6 +19,7 @@ from .views import HomeView, \
     AboutView, \
     SuccessView, \
     ExamListView, \
+    ExamDetailView, \
     ExamCreateView, \
     ExamUpdateView, \
     DrillUpdateView, \
@@ -34,6 +35,11 @@ exam_extra_patterns = [
         '',
         ExamListView.as_view(),
         name='exam-list',
+    ),
+    path(
+        '<int:pk>/',
+        ExamDetailView.as_view(),
+        name='exam-detail'
     ),
     path(
         '<int:pk>/update',
