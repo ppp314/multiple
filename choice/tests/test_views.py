@@ -26,47 +26,32 @@ class QuestionModelTests(TestCase):
 
 class TestViewHome(TestCase):
     """ Test view choice:home"""
-
-    expected_status_code = 200
-    res = None
-
-    @property
-    def response(self):
-        raise NotImplementedError
-
-    @property
-    def url_to_view(self):
-        raise NotImplementedError
-
-    def setUp(self):
-        self.res = self.client.get(reverse("choice:home"))
+    def _getTarget(self):
+        return reverse('choice:home')
 
     def test_should_return_expected_return_code(self):
-        self.assertEqual(self.res.status_code, self.expected_status_code)
+        self.res = self.client.get(self._getTarget())
+        self.assertEqual(self.res.status_code, 200)
 
 
 class TestViewAbout(TestCase):
     """ Test view choice:about"""
-
-    expected_status_code = 200
-
-    def setUp(self):
-        self.res = self.client.get(reverse("choice:about"))
+    def _getTarget(self):
+        return reverse('choice:about')
 
     def test_should_return_expected_return_code(self):
-        self.assertEqual(self.res.status_code, self.expected_status_code)
+        self.res = self.client.get(self._getTarget())
+        self.assertEqual(self.res.status_code, 200)
 
 
 class TestViewSuccess(TestCase):
     """ Test view choice:success"""
-
-    expected_status_code = 200
-
-    def setUp(self):
-        self.res = self.client.get(reverse("choice:success"))
+    def _getTarget(self):
+        return reverse('choice:success')
 
     def test_should_return_expected_return_code(self):
-        self.assertEqual(self.res.status_code, self.expected_status_code)
+        self.res = self.client.get(self._getTarget())
+        self.assertEqual(self.res.status_code, 200)
 
 
 class TestViewExamlist(TestCase):
