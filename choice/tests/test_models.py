@@ -14,19 +14,25 @@
     limitations under the License.
 """
 from django.test import TestCase
-from ..models import Exam
-from .factories import ExamFactory
+from ..models import Exam, Answer
+from .factories import ExamFactory, AnswerFactory
 
 
 class TestExamModel(TestCase):
     """ Test Exam model"""
 
     def setUp(self):
-        factory = ExamFactory
-        factory.create_batch(size=2)
+        ExamFactory()
 
     def test_should_have_number_of_exam(self):
-        self.assertEqual(Exam.objects.count(), 2)
+        exam = ExamFactory()
+        AnswerFactory.create_batch(size=20, exam=exam)
+        self.assertEqual(Answer.objects.count(), 20)
+
+    def test_should_return_absolute_url(self):
+        e = Exam.objects.first()
+        url = e.get_absolute_url()
+        self.assertEqual(url, '/exam/' + str(e.pk) + '/update')
 
     def test_should_not_create_model(self):
         with self.assertRaises(TypeError):

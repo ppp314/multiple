@@ -15,7 +15,7 @@
 """
 
 import factory
-from ..models import Exam
+from ..models import Exam, Answer, CHOICE_MARK_ONE
 
 
 class ExamFactory(factory.django.DjangoModelFactory):
@@ -24,3 +24,17 @@ class ExamFactory(factory.django.DjangoModelFactory):
 
     title = factory.Sequence(lambda n: "Exam %03d" % n)
     number_of_question = 10
+
+
+class AnswerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Answer
+
+    no = factory.Sequence(lambda n: n)
+    sub_no = 1
+
+    point = 5
+    correct = CHOICE_MARK_ONE
+
+    exam = factory.SubFactory(ExamFactory)
+
