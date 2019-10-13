@@ -46,7 +46,7 @@ class Exam(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('choice:exam-update', args=(self.pk,))
+        return reverse('choice:exam-detail', kwargs={'pk': self.pk})
 
 
 CHOICE_MARK_ONE = 'MARK1'

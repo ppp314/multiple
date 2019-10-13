@@ -32,7 +32,7 @@ class TestExamModel(TestCase):
     def test_should_return_absolute_url(self):
         e = Exam.objects.first()
         url = e.get_absolute_url()
-        self.assertEqual(url, '/exam/' + str(e.pk) + '/update')
+        self.assertEqual(url, '/exam/' + str(e.pk) + '/')
 
     def test_should_not_create_model(self):
         with self.assertRaises(TypeError):

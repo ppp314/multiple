@@ -115,3 +115,24 @@ class TestExamDetailView(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_detail.html')
         self.assertTemplateUsed(res, 'choice/base.html')
+
+
+class TestExamCreateView(TestCase):
+
+    def _getTarget(self):
+        return reverse('choice:exam-create')
+
+    def test_exam_create_get(self):
+        res = self.client.get(self._getTarget())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_form.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+
+    def test_exam_create_post(self):
+        res = self.client.post(self._getTarget(), {'no': 1, 'number_of_question': 10})
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_form.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+        

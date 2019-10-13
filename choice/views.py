@@ -17,6 +17,8 @@
 
 from django.views.generic import TemplateView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.edit import CreateView
+
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -59,15 +61,9 @@ class AnswerInline(InlineFormSetFactory):
     fields = ['no', 'sub_no', 'point', 'correct']
 
 
-class ExamCreateView(CreateWithInlinesView):
+class ExamCreateView(CreateView):
     model = Exam
-    inlines = [AnswerInline]
-    fields = ['title']
-    template_name = 'choice/exam_update.html'
-
-    def get_success_url(self):
-        """ Return the url when ExamCreateView succeeds."""
-        return reverse('choice:exam-list')
+    fields = ['title', 'number_of_question']
 
 
 class ExamUpdateView(UpdateWithInlinesView):
