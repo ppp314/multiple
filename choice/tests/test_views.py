@@ -110,3 +110,4 @@ class TestExamListView(TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_list.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
