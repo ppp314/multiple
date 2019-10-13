@@ -21,16 +21,13 @@ from .factories import ExamFactory, AnswerFactory
 class TestExamModel(TestCase):
     """ Test Exam model"""
 
-    def setUp(self):
-        ExamFactory()
-
     def test_should_have_number_of_exam(self):
         exam = ExamFactory()
         AnswerFactory.create_batch(size=20, exam=exam)
         self.assertEqual(Answer.objects.count(), 20)
 
     def test_should_return_absolute_url(self):
-        e = Exam.objects.first()
+        e = ExamFactory()
         url = e.get_absolute_url()
         self.assertEqual(url, '/exam/' + str(e.pk) + '/')
 
