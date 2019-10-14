@@ -135,4 +135,4 @@ class TestExamCreateView(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_form.html')
         self.assertTemplateUsed(res, 'choice/base.html')
-        
+
