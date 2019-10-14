@@ -17,7 +17,7 @@
 
 from django.views.generic import TemplateView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -66,11 +66,9 @@ class ExamCreateView(CreateView):
     fields = ['title', 'number_of_question']
 
 
-class ExamUpdateView(UpdateWithInlinesView):
+class ExamUpdateView(UpdateView):
     model = Exam
-    inlines = [AnswerInline]
-    fields = ['title']
-    template_name = 'choice/exam_update.html'
+    fields = ['title', 'number_of_question']
 
     def get_success_url(self):
         """ Return the url when ExamUpdateView succeeds."""

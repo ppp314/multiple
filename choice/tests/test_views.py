@@ -136,3 +136,16 @@ class TestExamCreateView(TestCase):
         self.assertTemplateUsed(res, 'choice/exam_form.html')
         self.assertTemplateUsed(res, 'choice/base.html')
 
+
+class TestExamUpdateView(TestCase):
+
+    def _getTarget(self, pk):
+        return reverse('choice:exam-update', kwargs={'pk': pk})
+
+    def test_exam_update_get(self):
+        exam = ExamFactory()
+        res = self.client.get(self._getTarget(exam.id))
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_form.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
