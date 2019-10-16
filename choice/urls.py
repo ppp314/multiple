@@ -22,6 +22,8 @@ from .views import HomeView, \
     ExamDetailView, \
     ExamCreateView, \
     ExamUpdateView, \
+    ExamAnswerCreateView, \
+    ExamAnswerUpdateView, \
     DrillUpdateView, \
     DrillListView, \
     MarkUpdateView
@@ -71,11 +73,25 @@ drill_extra_patterns = [
     ),
 ]
 
+exam_answer_extra_patterns = [
+    path(
+        '',
+        ExamAnswerCreateView.as_view(),
+        name='exam-answer-create'
+    ),
+    path(
+        '<int:pk>/',
+        ExamAnswerCreateView.as_view(),
+        name='exam-answer-update'
+    ),  
+
+]
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('test/', get_name, name='test'),
     path('about/', AboutView.as_view(), name='about'),
     path('success/', SuccessView.as_view(), name='success'),
     path('exam/', include(exam_extra_patterns)),
+    path('examanswer/', include(exam_answer_extra_patterns)),
     path('drill/', include(drill_extra_patterns)),
 ]

@@ -16,6 +16,7 @@
 
 from django import forms
 from django.forms import ModelForm, BaseInlineFormSet
+from django.forms import inlineformset_factory
 from django.utils import timezone
 from .models import Exam, Answer, Drill, Publication, Article
 from crispy_forms.helper import FormHelper
@@ -34,6 +35,16 @@ class ExamForm(forms.Form):
     class Meta:
         model = Exam
         fields = ['title', 'number_of_question']
+
+
+class AnswerForm(ModelForm):
+    class Meta:
+        model = Answer
+        exclude = ()
+
+
+AnswerFormSet = inlineformset_factory(Exam, Answer,
+                                      form=AnswerForm, extra=1)
 
 
 class QuestionForm(forms.Form):

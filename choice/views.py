@@ -19,11 +19,12 @@ from django.views.generic import TemplateView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
 from django.forms import ModelForm, inlineformset_factory, Form
+from django.db import transaction
 from extra_views import CreateWithInlinesView, \
     UpdateWithInlinesView, \
     InlineFormSetFactory
@@ -31,6 +32,7 @@ from .models import Exam, Answer, Drill, Mark
 from .models import CHOICE_MARK_CHOICES
 from .forms import ExampleFormSetHelper
 from .forms import ArticleForm
+from .forms import AnswerFormSet
 
 
 class HomeView(TemplateView):
@@ -75,6 +77,35 @@ class ExamUpdateView(UpdateView):
         return reverse('choice:exam-list')
 
 
+class ExamAnswerCreateView(ExamCreateView):
+    success_url = reverse_lazy('exam-list')
+    template_name = 'choice/exam_answer_formset.html'
+
+    def get_context_data(self, **kwargs):
+        
+        data = super(ExamAnswerCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['answers'] = AnswerFormSet(self.request.POST)
+        else:
+            data['answers'] = AnswerFormSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        answers = context['answers']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if answers.is_valid():
+                answers.instance = self.object
+                answers.save()
+        return super(ExamAnswerCreateView, self).form_valid(form)
+
+
+class ExamAnswerUpdateView(ExamUpdateView):
+    pass
+
+    
 class DrillUpdateGetView(DetailView):
     """ The Generic class used to render initial form.
 

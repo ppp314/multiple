@@ -15,7 +15,8 @@
 """
 from django.test import TestCase
 from django.urls import reverse
-from .factories import ExamFactory
+from ..models import Answer
+from .factories import ExamFactory, AnswerFactory
 
 
 class QuestionModelTests(TestCase):
@@ -148,4 +149,32 @@ class TestExamUpdateView(TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_form.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+
+
+class TestExamAnswerCreateView(TestCase):
+
+    def _getTarget(self):
+        return reverse('choice:exam-answer-create')
+
+    def test_exam_create_get(self):
+        res = self.client.get(self._getTarget())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+
+
+class TestExamAnswerUpdateView(TestCase):
+
+    def _getTarget(self, pk):
+        return reverse('choice:exam-answer-update', kwargs={'pk': pk})
+
+    def test_exam_update_get(self):
+        exam = ExamFactory()
+        AnswerFactory.create_batch(size=20, exam=exam)
+        res = self.client.get(self._getTarget(exam.id))
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
         self.assertTemplateUsed(res, 'choice/base.html')
