@@ -34,3 +34,9 @@ class TestExamModel(TestCase):
     def test_should_not_create_model(self):
         with self.assertRaises(TypeError):
             Exam.objects.create(tite="")
+
+    def test_should_have_answer_count(self):
+        exam = ExamFactory()
+        AnswerFactory.create_batch(size=20, exam=exam)
+
+        self.assertEqual(20, Exam.objects.first().answer__count)

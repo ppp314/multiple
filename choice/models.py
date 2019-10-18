@@ -14,9 +14,14 @@
     limitations under the License.
 """
 from django.db import models
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, Count
 from django.urls import reverse
 from django.utils import timezone
+
+
+class ExamManeger(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(Count('answer'))
 
 
 class Exam(models.Model):
@@ -35,6 +40,8 @@ class Exam(models.Model):
         verbose_name='問題数',
         default=1
     )
+
+    objects = ExamManeger()
 
     class Meta:
 
@@ -105,6 +112,11 @@ class Answer(models.Model):
         return str(self.no) + '-' + str(self.sub_no)
 
 
+class ExamManeger(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(Count('answer'))
+
+    
 class DrillQuerySet(models.QuerySet):
     """Manager used as Drill class manager."""
     def score(self):
