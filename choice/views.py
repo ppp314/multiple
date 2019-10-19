@@ -64,11 +64,13 @@ class AnswerInline(InlineFormSetFactory):
 
 
 class ExamCreateView(CreateView):
+    """Generic Create View for Exam class."""
     model = Exam
     fields = ['title', 'number_of_question']
 
 
 class ExamUpdateView(UpdateView):
+    """Generic Update View for Exam class."""
     model = Exam
     fields = ['title', 'number_of_question']
 
@@ -78,11 +80,11 @@ class ExamUpdateView(UpdateView):
 
 
 class ExamAnswerCreateView(ExamCreateView):
+    """Create View for Exam class with Answer formset."""
     success_url = reverse_lazy('exam-list')
     template_name = 'choice/exam_answer_formset.html'
 
     def get_context_data(self, **kwargs):
-        
         data = super(ExamAnswerCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
             data['answers'] = AnswerFormSet(self.request.POST)
@@ -103,9 +105,10 @@ class ExamAnswerCreateView(ExamCreateView):
 
 
 class ExamAnswerUpdateView(ExamUpdateView):
+    """Update View for Exam class with Answer formset."""
     pass
 
-    
+
 class DrillUpdateGetView(DetailView):
     """ The Generic class used to render initial form.
 

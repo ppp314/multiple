@@ -15,18 +15,19 @@
 """
 
 from django.urls import include, path
-from .views import HomeView, \
-    AboutView, \
-    SuccessView, \
-    ExamListView, \
-    ExamDetailView, \
-    ExamCreateView, \
-    ExamUpdateView, \
-    ExamAnswerCreateView, \
-    ExamAnswerUpdateView, \
-    DrillUpdateView, \
-    DrillListView, \
-    MarkUpdateView
+from .views import (
+    HomeView,
+    AboutView,
+    SuccessView,
+    ExamListView,
+    ExamDetailView,
+    ExamCreateView,
+    ExamUpdateView,
+    ExamAnswerCreateView,
+    DrillUpdateView,
+    DrillListView,
+    MarkUpdateView,
+)
 
 from .views import get_name
 
