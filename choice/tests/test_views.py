@@ -13,9 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+import unittest
+
 from django.test import TestCase
 from django.urls import reverse
-from ..models import Answer
+from ..models import Answer, Exam
 from .factories import ExamFactory, AnswerFactory
 
 
@@ -151,6 +153,14 @@ class TestExamUpdateView(TestCase):
         self.assertTemplateUsed(res, 'choice/exam_form.html')
         self.assertTemplateUsed(res, 'choice/base.html')
 
+    def test_exam_update_post(self):
+        exam = ExamFactory()
+        res = self.client.post(self._getTarget(exam.id), {'no': 1, 'number_of_question': 10})
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_form.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+
 
 class TestExamAnswerCreateView(TestCase):
 
@@ -175,6 +185,25 @@ class TestExamAnswerUpdateView(TestCase):
         AnswerFactory.create_batch(size=20, exam=exam)
         res = self.client.get(self._getTarget(exam.id))
 
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
+        self.assertTemplateUsed(res, 'choice/base.html')
+
+    @unittest.skip("Unable test post data. Skipping")
+    def test_exam_update_post(self):
+        exam = ExamFactory()
+        AnswerFactory.create_batch(size=20, exam=exam)
+        data = {
+            "answer_set-TOTAL_FORMS": "21",
+            "answer_set-INITIAL_FORMS": "20",
+            "answer_set-MIN_NUM_FORMS": "0",
+            "answer_set-MAX_NUM_FORMS": "1000",
+            "title": "First Test",
+        }
+        res = self.client.post(self._getTarget(exam.id), data)
+
+        e = Exam.objects.get(id=exam.id)
+        self.assertEqual("First Test", e.title)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
         self.assertTemplateUsed(res, 'choice/base.html')

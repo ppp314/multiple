@@ -81,7 +81,7 @@ class ExamUpdateView(UpdateView):
 
 class ExamAnswerCreateView(ExamCreateView):
     """Create View for Exam class with Answer formset."""
-    success_url = reverse_lazy('exam-list')
+    success_url = reverse_lazy('choice:exam-list')
     template_name = 'choice/exam_answer_formset.html'
 
     def get_context_data(self, **kwargs):
@@ -106,7 +106,27 @@ class ExamAnswerCreateView(ExamCreateView):
 
 class ExamAnswerUpdateView(ExamUpdateView):
     """Update View for Exam class with Answer formset."""
-    pass
+    success_url = reverse_lazy('choice:exam-list')
+    template_name = 'choice/exam_answer_formset.html'
+
+    def get_context_data(self, **kwargs):
+        data = super(ExamAnswerUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['answers'] = AnswerFormSet(self.request.POST, instance=self.object)
+        else:
+            data['answers'] = AnswerFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        answers = context['answers']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if answers.is_valid():
+                answers.instance = self.object
+                answers.save()
+        return super(ExamAnswerUpdateView, self).form_valid(form)
 
 
 class DrillUpdateGetView(DetailView):

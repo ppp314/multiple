@@ -24,6 +24,7 @@ from .views import (
     ExamCreateView,
     ExamUpdateView,
     ExamAnswerCreateView,
+    ExamAnswerUpdateView,
     DrillUpdateView,
     DrillListView,
     MarkUpdateView,
@@ -82,7 +83,7 @@ exam_answer_extra_patterns = [
     ),
     path(
         '<int:pk>/',
-        ExamAnswerCreateView.as_view(),
+        ExamAnswerUpdateView.as_view(),
         name='exam-answer-update'
     ),  
 
