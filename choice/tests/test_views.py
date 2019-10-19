@@ -155,11 +155,19 @@ class TestExamUpdateView(TestCase):
 
     def test_exam_update_post(self):
         exam = ExamFactory()
-        res = self.client.post(self._getTarget(exam.id), {'no': 1, 'number_of_question': 10})
+        id = exam.id
+        response = self.client.post(
+            self._getTarget(exam.id),
+            data={
+                'title': "First Test",
+                'number_of_question': 10000,
+            },
+        )
 
-        self.assertEqual(res.status_code, 200)
-        self.assertTemplateUsed(res, 'choice/exam_form.html')
-        self.assertTemplateUsed(res, 'choice/base.html')
+        result = Exam.objects.get(id=id)
+        self.assertEqual('First Test', result.title)
+        self.assertEqual(10000, result.number_of_question)
+        self.assertRedirects(response, reverse('choice:exam-list'))
 
 
 class TestExamAnswerCreateView(TestCase):
@@ -189,21 +197,23 @@ class TestExamAnswerUpdateView(TestCase):
         self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
         self.assertTemplateUsed(res, 'choice/base.html')
 
-    @unittest.skip("Unable test post data. Skipping")
     def test_exam_update_post(self):
         exam = ExamFactory()
         AnswerFactory.create_batch(size=20, exam=exam)
-        data = {
-            "answer_set-TOTAL_FORMS": "21",
-            "answer_set-INITIAL_FORMS": "20",
-            "answer_set-MIN_NUM_FORMS": "0",
-            "answer_set-MAX_NUM_FORMS": "1000",
-            "title": "First Test",
-        }
-        res = self.client.post(self._getTarget(exam.id), data)
 
-        e = Exam.objects.get(id=exam.id)
-        self.assertEqual("First Test", e.title)
-        self.assertEqual(res.status_code, 200)
-        self.assertTemplateUsed(res, 'choice/exam_answer_formset.html')
-        self.assertTemplateUsed(res, 'choice/base.html')
+        res = self.client.post(
+            self._getTarget(exam.id),
+            data={
+                "answer_set-TOTAL_FORMS": "21",
+                "answer_set-INITIAL_FORMS": "20",
+                "answer_set-MIN_NUM_FORMS": "0",
+                "answer_set-MAX_NUM_FORMS": "1000",
+                "title": "First Test",
+                "number_of_question": 100,
+            },
+            follow=True,
+        )
+
+        result = Exam.objects.get(id=exam.id)
+        self.assertEqual("First Test", result.title)
+        self.assertRedirects(res, reverse('choice:exam-list'))
