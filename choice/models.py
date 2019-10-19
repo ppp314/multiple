@@ -21,7 +21,8 @@ from django.utils import timezone
 
 class ExamManeger(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().annotate(Count('answer'))
+        return super().get_queryset().annotate(Count('answer'),
+                                               Sum('answer__point'))
 
 
 class Exam(models.Model):

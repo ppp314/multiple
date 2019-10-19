@@ -35,8 +35,17 @@ class TestExamModel(TestCase):
         with self.assertRaises(TypeError):
             Exam.objects.create(tite="")
 
-    def test_should_have_answer_count(self):
+    def test_maneger_should_have_answer_count(self):
+        size = 20
         exam = ExamFactory()
-        AnswerFactory.create_batch(size=20, exam=exam)
+        AnswerFactory.create_batch(size=size, exam=exam)
 
-        self.assertEqual(20, Exam.objects.first().answer__count)
+        self.assertEqual(size, Exam.objects.first().answer__count)
+
+    def test_manager_should_have_answer_point_sum(self):
+        size = 20
+        point = 10
+        exam = ExamFactory()
+        AnswerFactory.create_batch(size=size, point=point, exam=exam)
+
+        self.assertEqual(size*point, Exam.objects.first().answer__point__sum)
