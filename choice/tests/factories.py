@@ -16,6 +16,7 @@
 
 import factory
 from ..models import Exam, Answer, CHOICE_MARK_ONE
+from ..models import Drill
 
 
 class ExamFactory(factory.django.DjangoModelFactory):
@@ -37,4 +38,12 @@ class AnswerFactory(factory.django.DjangoModelFactory):
     correct = CHOICE_MARK_ONE
 
     exam = factory.SubFactory(ExamFactory)
+
+
+class DrillFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Drill
+
+    exam = factory.SubFactory(ExamFactory)
+    description = str(factory.Sequence(lambda n: n))
 

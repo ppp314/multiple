@@ -211,6 +211,17 @@ class Drill(models.Model):
         )
 
 
+class MarkManager(models.Manager):
+    """Mark Manager."""
+    def create_mark(self, drill, answer, your_choice=''):
+        mark = self.create(
+            drill=drill,
+            answer=answer,
+            your_choice=your_choice,
+        )
+        return mark
+
+
 class Mark(models.Model):
     """The class contains submitted answers."""
 
@@ -221,6 +232,8 @@ class Mark(models.Model):
         choices=CHOICE_MARK_CHOICES,
         blank=True,
     )
+
+    objects = MarkManager()
 
     def __str__(self):
         return f"is {self.your_choice}."
