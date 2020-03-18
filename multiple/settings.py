@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from django.core.exceptions import ImproperlyConfigured
-import django_heroku
+# import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -142,6 +142,6 @@ def get_env_var(var_name):
 SECRET_KEY = get_env_var("SECRET_KEY")
 DEBUG = get_env_var("DEBUG")
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
 
 SHELL_PLUS = "ipython"
