@@ -17,8 +17,8 @@ import unittest
 
 from django.test import TestCase
 
-from .factories import ExamFactory, AnswerFactory, DrillFactory
-from ..models import CHOICE_MARK_ONE
+from .factories import ExamFactory, AnswerFactory, DrillFactory, MarkFactory
+from ..models import CHOICE_MARK_ONE, CHOICE_MARK_TWO
 
 
 class TestExamModel(TestCase):
@@ -68,7 +68,17 @@ class TestDrillModel(TestCase):
     """Test Drill Model."""
 
     def test_should(self):
-        pass
+        from ..models import Drill
+        exam = ExamFactory()
+        answer = AnswerFactory(exam=exam)
+        drill = DrillFactory(exam=exam)
+        mark = MarkFactory(
+            drill=drill,
+            answer=answer,
+            your_choice=CHOICE_MARK_TWO
+        )
+
+        d = Drill.objects.get(pk=drill.id)
 
 
 class TestMarkModel(TestCase):

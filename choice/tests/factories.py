@@ -15,8 +15,9 @@
 """
 
 import factory
-from ..models import Exam, Answer, CHOICE_MARK_ONE
-from ..models import Drill
+from ..models import Exam, Answer
+from ..models import Drill, Mark
+from ..models import CHOICE_MARK_ONE, CHOICE_MARK_TWO
 
 
 class ExamFactory(factory.django.DjangoModelFactory):
@@ -47,3 +48,11 @@ class DrillFactory(factory.django.DjangoModelFactory):
     exam = factory.SubFactory(ExamFactory)
     description = str(factory.Sequence(lambda n: n))
 
+
+class MarkFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Mark
+
+    drill = factory.SubFactory(DrillFactory)
+    answer = factory.SubFactory(AnswerFactory)
+    your_choice = CHOICE_MARK_TWO

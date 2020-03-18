@@ -117,27 +117,33 @@ class ExamManeger(models.Manager):
     def get_queryset(self):
         return super().get_queryset().annotate(Count('answer'))
 
-    
-class DrillQuerySet(models.QuerySet):
+
+class DrillManager(models.Manager):
     """Manager used as Drill class manager."""
     def score(self):
         """Each drill queryset with a score of correct answer attribute.
-
         Each drill with score of the correct answer as
-        a `total_score` attribute.
+        a `mark_point_sum` attribute.
 
-        Returns:
-            QuerySet: the drill queryset with `total_score` attribute
-
-        Should not apply .filter() in this function.
+        Return QuerySet: the drill queryset with `total_score` attribute
         """
-        mark_c = Sum(
+        pass
+
+    def get_queryset(self):
+        mark_point_sum = Sum(
             'mark__answer__point',
+        )
+
+        """
+
             filter=Q(
                 mark__answer__correct=F('mark__your_choice')
             )
+        """
+        
+        return super().get_queryset().annotate(
+            mark_point_sum=mark_point_sum
         )
-        return self.annotate(total_score=mark_c)
 
 
 class Drill(models.Model):
@@ -157,7 +163,7 @@ class Drill(models.Model):
         null=True
     )
 
-    objects = DrillQuerySet.as_manager()
+    objects = DrillManager()
 
     def __str__(self):
         return f"is {self.description}."
@@ -214,6 +220,9 @@ class Drill(models.Model):
 class MarkManager(models.Manager):
     """Mark Manager."""
     def create_mark(self, drill, answer, your_choice=''):
+        """Create mark method.
+        Create and return mark object with drill and answer.
+        """
         mark = self.create(
             drill=drill,
             answer=answer,
