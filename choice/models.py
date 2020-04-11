@@ -27,20 +27,11 @@ class ExamManeger(models.Manager):
 
 class Exam(models.Model):
 
-    title = models.CharField(
-        verbose_name='テスト名',
-        max_length=200
-    )
+    title = models.CharField(verbose_name='テスト名', max_length=200)
 
-    created = models.DateTimeField(
-        verbose_name='作成日',
-        default=timezone.now
-    )
+    created = models.DateTimeField(verbose_name='作成日', default=timezone.now)
 
-    number_of_question = models.IntegerField(
-        verbose_name='問題数',
-        default=1
-    )
+    number_of_question = models.IntegerField(verbose_name='問題数', default=1)
 
     objects = ExamManeger()
 
@@ -76,27 +67,16 @@ class Answer(models.Model):
     """ The class which contains correct answers."""
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
-    created = models.DateTimeField(
-        verbose_name='作成日',
-        blank=True,
-        default=None,
-        null=True
-    )
+    created = models.DateTimeField(verbose_name='作成日',
+                                   blank=True,
+                                   default=None,
+                                   null=True)
 
-    no = models.IntegerField(
-        verbose_name='大問',
-        default=0
-    )
+    no = models.IntegerField(verbose_name='大問', default=0)
 
-    sub_no = models.PositiveIntegerField(
-        verbose_name='小問',
-        default=0
-    )
+    sub_no = models.PositiveIntegerField(verbose_name='小問', default=0)
 
-    point = models.PositiveIntegerField(
-        verbose_name='配点',
-        default=0
-    )
+    point = models.PositiveIntegerField(verbose_name='配点', default=0)
 
     correct = models.CharField(
         max_length=30,
@@ -130,20 +110,15 @@ class DrillManager(models.Manager):
         pass
 
     def get_queryset(self):
-        mark_point_sum = Sum(
-            'mark__answer__point',
-        )
-
+        mark_point_sum = Sum('mark__answer__point', )
         """
 
             filter=Q(
                 mark__answer__correct=F('mark__your_choice')
             )
         """
-        
-        return super().get_queryset().annotate(
-            mark_point_sum=mark_point_sum
-        )
+
+        return super().get_queryset().annotate(mark_point_sum=mark_point_sum)
 
 
 class Drill(models.Model):
@@ -151,17 +126,12 @@ class Drill(models.Model):
 
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
 
-    description = models.CharField(
-        verbose_name='ドリルの説明',
-        max_length=200
-    )
+    description = models.CharField(verbose_name='ドリルの説明', max_length=200)
 
-    created = models.DateTimeField(
-        verbose_name='作成日',
-        blank=True,
-        default=None,
-        null=True
-    )
+    created = models.DateTimeField(verbose_name='作成日',
+                                   blank=True,
+                                   default=None,
+                                   null=True)
 
     objects = DrillManager()
 
@@ -188,23 +158,15 @@ class Drill(models.Model):
             the dictionary of total: {'total': 100}
         """
         p = self.exam.answer_set.all()
-        dict = p.aggregate(
-            total=Sum('point')
-        )
+        dict = p.aggregate(total=Sum('point'))
         return dict  # {'total': 100}
 
     def point_earned(self):
         """ Return the sum of point earned."""
         qs = Mark.objects.filter(drill=self)
 
-        dict = qs.aggregate(
-            total=Sum(
-                'answer__point',
-                filter=Q(
-                    answer__correct=F('your_choice')
-                )
-            )
-        )
+        dict = qs.aggregate(total=Sum(
+            'answer__point', filter=Q(answer__correct=F('your_choice'))))
         return dict  # {'total': 100}
 
     def register_grade(self):
@@ -253,9 +215,7 @@ class Grade(models.Model):
 
     """
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE)
-    point = models.PositiveIntegerField(
-        blank=True
-    )
+    point = models.PositiveIntegerField(blank=True)
     created = models.DateTimeField(
         blank=True,
         default=None,
@@ -269,7 +229,7 @@ class Publication(models.Model):
     title = models.CharField(max_length=30)
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('title', )
 
     def __str__(self):
         return self.title
@@ -280,7 +240,7 @@ class Article(models.Model):
     publications = models.ManyToManyField(Publication)
 
     class Meta:
-        ordering = ('headline',)
+        ordering = ('headline', )
 
     def __str__(self):
         return self.headline
@@ -318,7 +278,7 @@ def factorial(n):
         raise ValueError("n must be >= 0")
     if math.floor(n) != n:
         raise ValueError("n must be exact integer")
-    if n+1 == n:  # catch a value like 1e300
+    if n + 1 == n:  # catch a value like 1e300
         raise OverflowError("n too large")
     result = 1
     factor = 2
